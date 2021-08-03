@@ -1,0 +1,344 @@
+= RESTful Notes API Guide
+Andy Wilkinson;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+[[overview]]
+= Overview
+
+[[overview-http-verbs]]
+== HTTP verbs
+
+RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its
+use of HTTP verbs.
+
+|===
+| Verb | Usage
+
+| `GET`
+| Used to retrieve a resource
+
+| `POST`
+| Used to create a new resource
+
+| `PATCH`
+| Used to update an existing resource, including partial updates
+
+| `DELETE`
+| Used to delete an existing resource
+|===
+
+[[overview-http-status-codes]]
+== HTTP status codes
+
+RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its
+use of HTTP status codes.
+
+|===
+| Status code | Usage
+
+| `200 OK`
+| The request completed successfully
+
+| `201 Created`
+| A new resource has been created successfully. The resource's URI is available from the response's
+`Location` header
+
+| `204 No Content`
+| An update to an existing resource has been applied successfully
+
+| `400 Bad Request`
+| The request was malformed. The response body will include an error providing further information
+
+| `404 Not Found`
+| The requested resource did not exist
+|===
+
+
+== 회원가입 여부 체크 [post]
+
+=== request
+
+include::{snippets}/test-sign-up-check/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-sign-up-check/http-response.adoc[]
+
+
+== 회원가입 [post]
+
+=== request
+
+include::{snippets}/test-sign-up/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-sign-up/http-response.adoc[]
+
+
+== 로그인 [post]
+
+=== request
+
+include::{snippets}/test-sign-in/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-sign-in/http-response.adoc[]
+
+
+== 프로필 생성 [post]
+
+=== request
+
+include::{snippets}/test-create-profile/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-create-profile/http-response.adoc[]
+
+
+== 버킷리스트 목록 조회 [get]
+
+=== request
+
+include::{snippets}/test-home/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-home/http-response.adoc[]
+
+
+== 디데이 버킷리스트 조회 [get]
+
+=== request
+
+include::{snippets}/test-d-day/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-d-day/http-response.adoc[]
+
+
+== 버킷리스트 달성 [post]
+
+=== request
+
+include::{snippets}/test-complete-bucketlist/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-complete-bucketlist/http-response.adoc[]
+
+
+== 버킷리스트 달성 취소 [post]
+
+=== request
+
+include::{snippets}/test-cancel-bucketlist/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-cancel-bucketlist/http-response.adoc[]
+
+
+== 버킷리스트 상단 고정 / 고정해제 [post]
+
+=== request
+
+include::{snippets}/test-pin-bucketlist/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-pin-bucketlist/http-response.adoc[]
+
+
+== 버킷리스트 등록 전 [get]
+
+=== request
+
+include::{snippets}/test-before-write/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-before-write/http-response.adoc[]
+
+
+== 버킷리스트 등록 [post]
+
+=== request
+
+include::{snippets}/test-write/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-write/http-response.adoc[]
+
+
+== 버킷리스트 상세 [get]
+
+=== request
+
+include::{snippets}/test-get-bucketlist/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-get-bucketlist/http-response.adoc[]
+
+
+== 버킷리스트 수정 [post]
+
+=== request
+
+include::{snippets}/test-modify-bucketlist/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-modify-bucketlist/http-response.adoc[]
+
+
+== 버킷리스트 삭제 [delete]
+
+=== request
+
+include::{snippets}/test-remove-bucketlist/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-remove-bucketlist/http-response.adoc[]
+
+
+== 마이페이지 [get]
+
+=== request
+
+include::{snippets}/test-my-page/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-my-page/http-response.adoc[]
+
+
+== 카테고리 상세 [get]
+
+=== request
+
+include::{snippets}/test-get-category/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-get-category/http-response.adoc[]
+
+
+== 카테고리 추가 [post]
+
+=== request
+
+include::{snippets}/test-create-category/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-create-category/http-response.adoc[]
+
+
+== 카테고리 이름 변경 [post]
+
+=== request
+
+include::{snippets}/test-modify-name-category/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-modify-name-category/http-response.adoc[]
+
+
+== 카테고리 순서 변경 [post]
+
+=== request
+
+include::{snippets}/test-modify-priority-category/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-modify-priority-category/http-response.adoc[]
+
+
+== 카테고리 삭제 [delete]
+
+=== request
+
+include::{snippets}/test-remove-category/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-remove-category/http-response.adoc[]
+
+
+== 회원탈퇴 [delete]
+
+=== request
+
+include::{snippets}/test-withdrawal/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-withdrawal/http-response.adoc[]
+
+
+== 토큰 재발급 [post]
+
+=== request
+
+include::{snippets}/test-refresh-token/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-refresh-token/http-response.adoc[]
+
+== 후원 아이템 리스트 [post]
+==== 후원하기 아이템 목록, 해당 사용자가 가장 마지막에 구입한 token정보와  총 후원금액을 함께 전달
+
+=== request
+
+include::{snippets}/test-support-items/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-support-items/http-response.adoc[]
+
+== 후원하기 [post]
+==== 후원한 아이템 ID, 사용자 ID와 token값을 저장(성공여부가 미정인 경우 N)
+
+=== request
+
+include::{snippets}/test-support/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-support/http-response.adoc[]
+
+== 후원하기 성공여부 [post]
+==== 토큰값과 사용자 ID를 key로 성공여부(susYn)을 업데이트
+
+=== request
+
+include::{snippets}/test-support-edit/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-support-edit/http-response.adoc[]
+
+== 공지사항 [get]
+
+=== request
+
+include::{snippets}/test-notice/http-request.adoc[]
+
+=== response
+
+include::{snippets}/test-notice/http-response.adoc[]
