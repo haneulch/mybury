@@ -83,7 +83,7 @@ public class HostController {
 
 	@Autowired
 	private CategoryManager categoryManager;
-	
+
 	@Autowired
 	private NoticeRepository noticeRepository;
 
@@ -127,23 +127,24 @@ public class HostController {
 		String popupPeriodStr = "1,7";
 		for (String popupPeriod : popupPeriodStr.split(",")) {
 			popupYn = bucketlistManager.existsPopupBucketlist(requestVO.getUserId(), Integer.parseInt(popupPeriod));
-			if (popupYn)
+			if (popupYn) {
 				break;
+			}
 		}
 		return new HomeResponseVO(bucketlists, popupYn);
 	}
 
-//	@AccessTokenCheck
+	// @AccessTokenCheck
 	@GetMapping(value = ApiUriConstants.D_DAY)
 	public DDayResponseVO dDay(DDayRequestVO requestVO) {
 		List<DDayResponseVO.DDayVO> dDayVOList = new ArrayList<>();
-		List<Bucketlist> dDayBucketlists = bucketlistManager.getDDayBucketlist(requestVO.getUserId(),
-				requestVO.getFilter());
+		List<Bucketlist> dDayBucketlists = bucketlistManager.getDDayBucketlist(requestVO.getUserId(), requestVO.getFilter());
 
 		int day = -1;
 		for (Bucketlist bucketlist : dDayBucketlists) {
 			if (day != bucketlist.getDDay()) {
-				List<Bucketlist> bucketlists = bucketlistManager.getBucketlistsByDDate(bucketlist.getDDate(), requestVO.getUserId());
+				List<Bucketlist> bucketlists = bucketlistManager.getBucketlistsByDDate(bucketlist.getDDate(),
+						requestVO.getUserId());
 				DDayResponseVO.DDayVO dDayVO = new DDayResponseVO.DDayVO(bucketlist.getDDay(), bucketlists);
 				dDayVOList.add(dDayVO);
 			}
@@ -175,9 +176,10 @@ public class HostController {
 		Bucketlist bucketlist = bucketlistManager.getBucketlistById(requestVO.getBucketlistId());
 		bucketlist.setUserCount(bucketlist.getUserCount() - 1);
 
-		if (bucketlist.getUserCount() < bucketlist.getGoalCount())
+		if (bucketlist.getUserCount() < bucketlist.getGoalCount()) {
 			bucketlist.setStatus(CommonCodes.BucketlistStatus.STARTED);
-
+		}
+		
 		bucketlistManager.saveBucketlist(bucketlist);
 		return BaseResponseVO.ok();
 	}
@@ -216,6 +218,7 @@ public class HostController {
 
 	/**
 	 * 버킷리스트 등록
+	 * 
 	 * @param requestVO
 	 * @return
 	 */
@@ -228,6 +231,7 @@ public class HostController {
 
 	/**
 	 * 버킷리스트 상세
+	 * 
 	 * @param id
 	 * @param userId
 	 * @return
@@ -241,6 +245,7 @@ public class HostController {
 
 	/**
 	 * 버킷리스트 수정
+	 * 
 	 * @param id
 	 * @param requestVO
 	 * @return
@@ -263,8 +268,8 @@ public class HostController {
 	@GetMapping(value = ApiUriConstants.MYPAGE)
 	public MyPageResponseVO mypage(MyPageRequestVO requstVO) {
 		User user = userManager.getUserById(requstVO.getUserId());
-		
-		if( user.getImgUrl() != null) {
+
+		if (user.getImgUrl() != null) {
 			String imgUrl = authServerAddress + user.getImgUrl();
 			user.setImgUrl(imgUrl);
 		}
@@ -299,8 +304,7 @@ public class HostController {
 					categoryCount++;
 				}
 			}
-			MyPageResponseVO.CategoryVO categoryVO = new MyPageResponseVO.CategoryVO(category.getId(),
-					category.getName(), categoryCount);
+			MyPageResponseVO.CategoryVO categoryVO = new MyPageResponseVO.CategoryVO(category.getId(), category.getName(), categoryCount);
 			categoryList.add(categoryVO);
 		}
 		return categoryList;
@@ -363,7 +367,7 @@ public class HostController {
 	 */
 	@AccessTokenCheck
 	@PostMapping(value = ApiUriConstants.SUPPORT)
-	public BaseResponseVO support( @RequestBody SupportHistoryRequestVO requestVO) {
+	public BaseResponseVO support(@RequestBody SupportHistoryRequestVO requestVO) {
 		SupportHistory history = new SupportHistory();
 		history.setItemId(requestVO.getItemId());
 		history.setUserId(requestVO.getUserId());
@@ -381,21 +385,23 @@ public class HostController {
 	 */
 	@AccessTokenCheck
 	@PostMapping(value = ApiUriConstants.SUPPORT_ITEMS)
-	public SupportItemsResponseVO supportItems( @RequestBody SupportItemRequestVO requestVO) {
+	public SupportItemsResponseVO supportItems(@RequestBody SupportItemRequestVO requestVO) {
 		SupportItemsResponseVO vo = new SupportItemsResponseVO(supportManager.findAllByOrderByItemPrice());
-		
+
 		// 성공여부가 N인 후원이력을 같이 전달한다.
 		List<SupportHistory> supportHistory = supportManager.findByUserIdAndSusYnOrderByCreatedDtDesc(requestVO.getUserId(), "N".charAt(0));
-		if( supportHistory != null) {
+		if (supportHistory != null) {
 			vo.setRecentSupport(supportHistory);
 		}
-		
+
 		String totalPrice = supportManager.getSupportTotalPrice(requestVO.getUserId());
-		if( totalPrice == null) totalPrice = "0";
-		vo.setTotalPrice( totalPrice);
+		if (totalPrice == null) {
+			totalPrice = "0";
+		}
+		vo.setTotalPrice(totalPrice);
 		return vo;
 	}
-	
+
 	/**
 	 * 후원 아이템 토큰 및 성공여부 업데이트
 	 * 
@@ -404,18 +410,18 @@ public class HostController {
 	 */
 	@AccessTokenCheck
 	@PostMapping(value = ApiUriConstants.SUPPORT_EDIT)
-	public BaseResponseVO supportEdit( @RequestBody SupportHistoryRequestVO requestVO) {
-		
+	public BaseResponseVO supportEdit(@RequestBody SupportHistoryRequestVO requestVO) {
+
 		SupportHistory supportHistory = supportManager.findOneByUserIdAndToken(requestVO.getUserId(), requestVO.getToken());
-		
-		if( supportHistory != null && !requestVO.getSusYn().equals(supportHistory.getSusYn())) {
+
+		if (supportHistory != null && !requestVO.getSusYn().equals(supportHistory.getSusYn())) {
 			supportHistory.setSusYn(requestVO.getSusYn().charAt(0));
 			supportManager.updateSupportHistory(supportHistory);
 		}
 
 		return BaseResponseVO.ok();
 	}
-	
+
 	/**
 	 * 후원 아이템 수정
 	 * 
@@ -423,24 +429,24 @@ public class HostController {
 	 * @return
 	 */
 	@PostMapping(value = ApiUriConstants.SUPPORT_ITEMS_EDIT)
-	public BaseResponseVO updateSupportItems( @RequestBody List<Map<String, String>> param) {
+	public BaseResponseVO updateSupportItems(@RequestBody List<Map<String, String>> param) {
 		List<SupportItem> vo = new ArrayList<SupportItem>();
-		for( Map<String, String> m : param) {
+		for (Map<String, String> m : param) {
 			SupportItem item = new SupportItem();
 			item.setId(m.get("id"));
 			item.setItemPrice(Integer.parseInt(m.get("item_price")));
 			item.setItemImg(m.get("item_img"));
 			item.setItemName(m.get("item_name"));
 			item.setGoogleKey(m.get("google_key"));
-			
+
 			vo.add(item);
 		}
-		
+
 		supportManager.saveSupportItem(vo);
-		
+
 		return BaseResponseVO.ok();
 	}
-	
+
 	/**
 	 * 팝업 정보
 	 * 
@@ -450,17 +456,17 @@ public class HostController {
 	@AccessTokenCheck
 	@GetMapping(value = ApiUriConstants.NOTICE)
 	public BaseResponseVO getNotice() {
-		
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		String today = sdf.format(new Date());
-		
+
 		List<Notice> notice = noticeRepository.findByStartDtLessThanEqualAndEndDtGreaterThanEqualAndDpYn(today, today, "Y".charAt(0));
-		
+
 		NoticeResponseVO vo = new NoticeResponseVO(notice);
-		
+
 		return vo;
 	}
-	
+
 	/**
 	 * 공지사항 추가
 	 * 
@@ -468,17 +474,18 @@ public class HostController {
 	 * @return
 	 */
 	@PostMapping(value = ApiUriConstants.NOTICE_SAVE)
-	public BaseResponseVO saveNotice( @RequestBody NoticeRequestVO requestVO) {
-		
+	public BaseResponseVO saveNotice(@RequestBody NoticeRequestVO requestVO) {
+
 		Notice notice = Notice
 							.builder()
-								.seq(requestVO.getSeq())
-								.title(requestVO.getTitle())
-								.content(requestVO.getContent())
-								.startDt(requestVO.getStartDt())
-								.endDt(requestVO.getEndDt())
-								.dpYn(requestVO.getDpYn().charAt(0)).build();
-		
+							.seq(requestVO.getSeq())
+							.title(requestVO.getTitle())
+							.content(requestVO.getContent())
+							.startDt(requestVO.getStartDt())
+							.endDt(requestVO.getEndDt())
+							.dpYn(requestVO.getDpYn().charAt(0))
+							.build();
+
 		noticeRepository.save(notice);
 
 		return BaseResponseVO.ok();

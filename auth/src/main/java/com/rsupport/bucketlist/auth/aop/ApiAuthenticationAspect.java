@@ -12,39 +12,38 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Slf4j
 @Aspect
 @Component
 public class ApiAuthenticationAspect {
 
-  @Autowired
-  private JwtUtils jwtUtils;
+	@Autowired
+	private JwtUtils jwtUtils;
 
-  @Autowired
-  private HttpServletRequest request;
+	@Autowired
+	private HttpServletRequest request;
 
-  @Pointcut("@annotation(com.rsupport.bucketlist.auth.annotation.AccessTokenCheck)")
-  public void accessTokenCheck() {}
+	@Pointcut("@annotation(com.rsupport.bucketlist.auth.annotation.AccessTokenCheck)")
+	public void accessTokenCheck() {
+	}
 
+	@Before("accessTokenCheck()")
+	public void beforeMethod(JoinPoint joinPoint) {
+		String accessToken = request.getHeader("X-Auth-Token");
+		jwtUtils.isValidAccessToken(accessToken, getUserId(joinPoint));
+	}
 
-  @Before("accessTokenCheck()")
-  public void beforeMethod(JoinPoint joinPoint){
-    String accessToken = request.getHeader("X-Auth-Token");
-    jwtUtils.isValidAccessToken(accessToken, getUserId(joinPoint));
-  }
+	private String getUserId(JoinPoint joinPoint) {
+		String userId = request.getParameter("userId");
+		if (StringUtils.isBlank(userId)) {
+			Object[] args = joinPoint.getArgs();
+			for (Object arg : args) {
+				if (arg instanceof HttpServletRequest) {
+					userId = ((HttpServletRequest) arg).getParameter("userId");
+					break;
+				}
+			}
+		}
 
-  private String getUserId(JoinPoint joinPoint) {
-    String userId = request.getParameter("userId");
-    if(StringUtils.isBlank(userId)) {
-      Object[] args = joinPoint.getArgs();
-      for (Object arg : args) {
-        if (arg instanceof HttpServletRequest) {
-          userId = ((HttpServletRequest)arg).getParameter("userId");
-          break;
-        }
-      }
-    }
-
-    return userId;
-  }
+		return userId;
+	}
 }
