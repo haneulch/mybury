@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-		<groupId>com.rsupport</groupId>
+		<groupId>com.mybury</groupId>
 		<artifactId>bucketlist</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	
-	<groupId>com.rsupport.bucketlist</groupId>
+	<groupId>com.mybury.bucketlist</groupId>
 	<artifactId>auth</artifactId>
 	<packaging>war</packaging>
 	
