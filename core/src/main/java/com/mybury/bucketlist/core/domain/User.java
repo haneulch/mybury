@@ -8,14 +8,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.TableGenerator;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.ColumnTransformer;
@@ -26,11 +21,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mybury.bucketlist.core.constants.ColumnEncryptionConstants;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "mt_user", uniqueConstraints = @UniqueConstraint(name = "email", columnNames = "email"))
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -59,6 +60,9 @@ public class User extends BaseTimestampEntity<String> {
 
 	@Column(name = "user_seq")
 	private int userSeq;
+	
+	@Column(length = 255)
+	private String bio;
 	
 	@JsonIgnore
 	@Column(name = "last_login_dt")
