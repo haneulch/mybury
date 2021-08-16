@@ -14,11 +14,13 @@ import com.mybury.bucketlist.core.v2.service.BadgeUserService;
 import com.mybury.bucketlist.core.v2.vo.ProfileResponse;
 import com.mybury.bucketlist.core.v2.vo.UserRequest;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.SwaggerDefinition;
 
+@Api(value = "My", tags = {"홈 > My 관련"})
 @RestController
 @RequestMapping("/v2/my")
-@ApiOperation(value = "my apis", notes = "My 관련 Controller")
 public class MyController {
 	private final UserManager userManager;
 	private final BadgeUserService badgeUserService;
@@ -29,6 +31,7 @@ public class MyController {
 	}
 
 	@PostMapping("/profile_info")
+	@ApiOperation(value = "my - 프로필 정보")
 	public ResponseEntity<Object> profileInfo(@RequestBody UserRequest request) { 
 		User user = userManager.getUserById(request.getUserId());
 		BadgeUser badgeUser = badgeUserService.findByUseYnAndUserId(request.getUserId());
