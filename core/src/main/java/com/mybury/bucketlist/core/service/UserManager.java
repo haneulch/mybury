@@ -26,4 +26,6 @@ public interface UserManager {
   Page<UserMapping> getUser(String search, Pageable page);
   
   UserMapping getUserMappingById(String userId);
+  
+  User findById(String userId);
 }

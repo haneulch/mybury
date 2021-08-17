@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mybury.bucketlist.core.domain.Badge;
 import com.mybury.bucketlist.core.util.ResponseUtils;
 import com.mybury.bucketlist.core.v2.service.BadgeService;
-import com.mybury.bucketlist.core.v2.vo.FollowRequest;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+@Api(value = "Badge", tags = {"뱃지"})
 @RestController
 @RequestMapping("/v2/badge")
-@ApiOperation(value = "badge apis", notes = "Badge 관련 Controller")
 public class BadgeController {
 	
 	private final BadgeService badgeService;

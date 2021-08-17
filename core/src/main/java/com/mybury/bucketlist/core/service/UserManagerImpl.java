@@ -117,6 +117,9 @@ public class UserManagerImpl implements UserManager {
 	public UserMapping getUserMappingById(String userId) {
 		return userRepository.findOneById(userId);
 	}
-	
-	
+
+	@Override
+	public User findById(String userId) {
+		return userRepository.findById(userId).orElse(null);
+	}
 }
