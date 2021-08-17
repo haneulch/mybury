@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mybury.bucketlist.core.domain.id.BadgeUserId;
 
 import lombok.AllArgsConstructor;
@@ -37,6 +38,7 @@ public class BadgeUser {
 	@Id
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "badge_id", referencedColumnName = "id")
+	@JsonIgnore
 	private Badge badge;
 	
 	@Column(name = "count", length = 11)

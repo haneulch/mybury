@@ -11,11 +11,12 @@ import com.mybury.bucketlist.core.v2.service.FollowService;
 import com.mybury.bucketlist.core.v2.vo.FollowRequest;
 import com.mybury.bucketlist.core.v2.vo.UserRequest;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+@Api(value = "Follow", tags = {"팔로우"})
 @RestController
 @RequestMapping("/v2/follow")
-@ApiOperation(value = "follow apis", notes = "팔로우 관련 Controller")
 public class FollowController {
 	private final FollowService followService;
 	
@@ -23,14 +24,22 @@ public class FollowController {
 		this.followService = followService;
 	}
 	
+	@ApiOperation("팔로우하기")
 	@PostMapping("/save")
 	public ResponseEntity<Object> save(@RequestBody FollowRequest request) { 
 		followService.save(request);
 		return ResponseUtils.success();
 	}
 	
+	@ApiOperation("나의 팔로잉 리스트")
 	@PostMapping("/list")
 	public ResponseEntity<Object> list(@RequestBody UserRequest request) {
+		return ResponseUtils.success(followService.findByUserId(request.getUserId()));
+	}
+	
+	@ApiOperation("나의 팔로워 리스트")
+	@PostMapping("/list_followers")
+	public ResponseEntity<Object> listFollowers(@RequestBody UserRequest request) {
 		return ResponseUtils.success(followService.findByUserId(request.getUserId()));
 	}
 }

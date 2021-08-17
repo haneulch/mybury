@@ -4,8 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-@Data
 @ApiModel(description = "현재 사용자 ID")
+@Data
 public class UserRequest {
 	
 	@ApiModelProperty("사용자 ID")
