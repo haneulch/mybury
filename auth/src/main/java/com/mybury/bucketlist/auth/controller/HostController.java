@@ -354,7 +354,7 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
-//	@AccessTokenCheck
+	@AccessTokenCheck
 	@DeleteMapping(value = ApiUriConstants.WITHDRAWAL)
 	public BaseResponseVO withdrawal(@RequestBody WithdrawalRequestVO requestVO) {
 		userManager.remove(requestVO.getUserId());

@@ -14,40 +14,39 @@ import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.lang.Nullable;
 
 @Configuration
 @EnableCaching
 public class CacheConfig implements CachingConfigurer {
 
-  public static final String EHCACHE_MANAGER_NAME = "ehCacheSpringManager";
+	public static final String EHCACHE_MANAGER_NAME = "ehCacheSpringManager";
 
-  public static final String REFRESH_TOKEN = "refreshToken";
+	public static final String REFRESH_TOKEN = "refreshToken";
 
-  @Bean(name = EHCACHE_MANAGER_NAME)
-  public CacheManager cacheManager() {
-    return new EhCacheCacheManager(ehCacheManager().getObject());
-  }
+	@Bean(name = EHCACHE_MANAGER_NAME)
+	public CacheManager cacheManager() {
+		return new EhCacheCacheManager(ehCacheManager().getObject());
+	}
 
-  @Override
-  public CacheResolver cacheResolver() {
-    return new SimpleCacheResolver();
-  }
+	@Override
+	public CacheResolver cacheResolver() {
+		return new SimpleCacheResolver();
+	}
 
-  @Override
-  public KeyGenerator keyGenerator() {
-    return new SimpleKeyGenerator();
-  }
+	@Override
+	public KeyGenerator keyGenerator() {
+		return new SimpleKeyGenerator();
+	}
 
-  @Override
-  public CacheErrorHandler errorHandler() {
-    return new SimpleCacheErrorHandler();
-  }
+	@Override
+	public CacheErrorHandler errorHandler() {
+		return new SimpleCacheErrorHandler();
+	}
 
-  @Bean
-  public EhCacheManagerFactoryBean ehCacheManager() {
-    EhCacheManagerFactoryBean cmfb = new EhCacheManagerFactoryBean();
-    cmfb.setConfigLocation(new ClassPathResource("ehCache.xml"));
-    return cmfb;
-  }
+	@Bean
+	public EhCacheManagerFactoryBean ehCacheManager() {
+		EhCacheManagerFactoryBean cmfb = new EhCacheManagerFactoryBean();
+		cmfb.setConfigLocation(new ClassPathResource("ehCache.xml"));
+		return cmfb;
+	}
 }

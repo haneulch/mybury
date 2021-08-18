@@ -11,12 +11,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @ComponentScan("com.mybury.bucketlist")
 @EntityScan("com.mybury.bucketlist.core.domain")
-@EnableJpaRepositories({"com.mybury.bucketlist.core.repository", "com.mybury.bucketlist.core.v2.repository"})
-@PropertySource(value = { "classpath:application.properties", "classpath:config.properties"}, ignoreResourceNotFound = true)
+@EnableJpaRepositories({ "com.mybury.bucketlist.core.repository", "com.mybury.bucketlist.core.v2.repository" })
+@PropertySource(value = { "classpath:application.properties", "classpath:config.properties" }, ignoreResourceNotFound = true)
 @EnableScheduling
 public class AuthApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(AuthApplication.class, args);
-  }
+	public static void main(String[] args) {
+		SpringApplication.run(AuthApplication.class, args);
+	}
 }
