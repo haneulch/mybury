@@ -13,6 +13,9 @@ import com.mybury.bucketlist.core.vo.CreateProfileRequestVO;
 import com.mybury.bucketlist.core.vo.HostSignInRequestVO;
 import com.mybury.bucketlist.core.vo.HostSignUpRequestVO;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserManagerImpl implements UserManager {
+	
+	@PersistenceContext
+	private EntityManager em;
 
 	private String authServerAddress = "https://www.my-bury.com";
 
@@ -121,5 +127,18 @@ public class UserManagerImpl implements UserManager {
 	@Override
 	public User findById(String userId) {
 		return userRepository.findById(userId).orElse(null);
+	}
+
+	@Override
+	public void updateAlarmYn(String userId) {
+		User user = em.getReference(User.class, userId);
+		
+		if(user.getAlarmYn() == 'Y') {
+			user.setAlarmYn('N');
+		} else {
+			user.setAlarmYn('Y');
+		}
+		
+		userRepository.save(user);
 	}
 }
