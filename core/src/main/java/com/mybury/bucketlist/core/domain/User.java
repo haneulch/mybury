@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -63,6 +64,10 @@ public class User extends BaseTimestampEntity<String> {
 	
 	@Column(length = 255)
 	private String bio;
+	
+	@Column(length = 1)
+	@ColumnDefault("'N'")
+	private Character alarmYn;
 	
 	@JsonIgnore
 	@Column(name = "last_login_dt")

@@ -11,21 +11,23 @@ import com.mybury.bucketlist.core.vo.HostSignUpRequestVO;
 
 public interface UserManager {
 
-  User getUserById(String userId);
+	User getUserById(String userId);
 
-  User getUserByEmail(String email);
+	User getUserByEmail(String email);
 
-  User signup(HostSignUpRequestVO requestVO);
+	User signup(HostSignUpRequestVO requestVO);
 
-  User signin(HostSignInRequestVO requestVO);
+	User signin(HostSignInRequestVO requestVO);
 
-  void createProfile(CreateProfileRequestVO requestVO);
+	void createProfile(CreateProfileRequestVO requestVO);
 
-  void remove(String userId);
+	void remove(String userId);
 
-  Page<UserMapping> getUser(String search, Pageable page);
-  
-  UserMapping getUserMappingById(String userId);
-  
-  User findById(String userId);
+	Page<UserMapping> getUser(String search, Pageable page);
+
+	UserMapping getUserMappingById(String userId);
+
+	User findById(String userId);
+
+	void updateAlarmYn(String userId);
 }
