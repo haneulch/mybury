@@ -10,4 +10,8 @@ import com.mybury.bucketlist.core.domain.Follow;
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, String> {
 	List<Follow> findByUserId(String userId);
+
+	int countByUserId(String userId);
+	
+	int countByUser_Id(String userId);
 }

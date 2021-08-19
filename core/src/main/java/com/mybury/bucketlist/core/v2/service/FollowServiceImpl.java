@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.mybury.bucketlist.core.domain.Follow;
@@ -13,6 +14,8 @@ import com.mybury.bucketlist.core.domain.User;
 import com.mybury.bucketlist.core.repository.UserRepository;
 import com.mybury.bucketlist.core.v2.repository.FollowRepository;
 import com.mybury.bucketlist.core.v2.vo.FollowRequest;
+import com.mybury.bucketlist.core.v2.vo.StateResponse;
+import com.mybury.bucketlist.core.v2.vo.UserRequest;
 
 @Service
 public class FollowServiceImpl implements FollowService {
@@ -20,14 +23,15 @@ public class FollowServiceImpl implements FollowService {
 	private EntityManager em;
 	
 	private final FollowRepository repository;
+	private final UserRepository userRepository;
 	
-	FollowServiceImpl(FollowRepository repository) {
+	FollowServiceImpl(FollowRepository repository, UserRepository userRepository) {
 		this.repository = repository;
+		this.userRepository = userRepository;
 	}
 
 	@Override
 	public List<Follow> findByUserId(String userId) {
-//		FollowId id = FollowId.builder().userId(userId).build();
 		return repository.findByUserId(userId);
 	}
 
@@ -42,5 +46,20 @@ public class FollowServiceImpl implements FollowService {
 							.build();
 		
 		em.persist(follow);
+	}
+
+	@Override
+	@Transactional
+	public StateResponse getFollowInfo(UserRequest request) {
+		int followCount = repository.countByUserId(request.getUserId());
+		int followingCount = repository.countByUser_Id(request.getUserId());
+		
+		User user = userRepository.getOne(request.getUserId());
+		
+		return StateResponse.builder()
+								.followCount(followCount)
+								.followingCount(followingCount)
+								.hasAlarm(user.getAlarmYn())
+								.build();
 	}
 }
