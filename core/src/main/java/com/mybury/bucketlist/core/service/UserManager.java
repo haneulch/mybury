@@ -1,10 +1,13 @@
 package com.mybury.bucketlist.core.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.mybury.bucketlist.core.domain.User;
 import com.mybury.bucketlist.core.domain.UserMapping;
+import com.mybury.bucketlist.core.domain.UserSummary;
 import com.mybury.bucketlist.core.vo.CreateProfileRequestVO;
 import com.mybury.bucketlist.core.vo.HostSignInRequestVO;
 import com.mybury.bucketlist.core.vo.HostSignUpRequestVO;
@@ -30,4 +33,8 @@ public interface UserManager {
 	User findById(String userId);
 
 	void updateAlarmYn(String userId);
+
+	List<UserSummary> findFollowings(String userId);
+
+	List<UserSummary> findFollowers(String userId);
 }

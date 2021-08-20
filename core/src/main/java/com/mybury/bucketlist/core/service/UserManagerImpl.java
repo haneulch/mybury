@@ -4,6 +4,7 @@ import com.mybury.bucketlist.core.domain.Category;
 import com.mybury.bucketlist.core.domain.Sequence;
 import com.mybury.bucketlist.core.domain.User;
 import com.mybury.bucketlist.core.domain.UserMapping;
+import com.mybury.bucketlist.core.domain.UserSummary;
 import com.mybury.bucketlist.core.exception.UserAlreadyExistsException;
 import com.mybury.bucketlist.core.repository.CategoryRepository;
 import com.mybury.bucketlist.core.repository.UserRepository;
@@ -12,6 +13,8 @@ import com.mybury.bucketlist.core.util.DateUtil;
 import com.mybury.bucketlist.core.vo.CreateProfileRequestVO;
 import com.mybury.bucketlist.core.vo.HostSignInRequestVO;
 import com.mybury.bucketlist.core.vo.HostSignUpRequestVO;
+
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -140,5 +143,15 @@ public class UserManagerImpl implements UserManager {
 		}
 		
 		userRepository.save(user);
+	}
+
+	@Override
+	public List<UserSummary> findFollowings(String userId) {
+		return userRepository.findFollowings(userId);
+	}
+
+	@Override
+	public List<UserSummary> findFollowers(String userId) {
+		return userRepository.findFollowers(userId);
 	}
 }
