@@ -31,7 +31,6 @@ public class SwaggerConfig {
 	public Docket api() {
 		ParameterBuilder builder = new ParameterBuilder();
 		builder.name("X-Auth-Token")
-				.description("X-Auth-Token")
 				.modelRef(new ModelRef("string"))
 				.parameterType("header")
 				.required(false)
