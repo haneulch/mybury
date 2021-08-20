@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.mybury.bucketlist.core.domain.Follow;
 import com.mybury.bucketlist.core.domain.User;
+import com.mybury.bucketlist.core.domain.UserSummary;
 import com.mybury.bucketlist.core.repository.UserRepository;
 import com.mybury.bucketlist.core.v2.repository.FollowRepository;
 import com.mybury.bucketlist.core.v2.vo.FollowRequest;
@@ -28,11 +29,6 @@ public class FollowServiceImpl implements FollowService {
 	FollowServiceImpl(FollowRepository repository, UserRepository userRepository) {
 		this.repository = repository;
 		this.userRepository = userRepository;
-	}
-
-	@Override
-	public List<Follow> findByUserId(String userId) {
-		return repository.findByUserId(userId);
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mybury.bucketlist.core.service.UserManager;
 import com.mybury.bucketlist.core.util.ResponseUtils;
 import com.mybury.bucketlist.core.v2.service.FollowService;
 import com.mybury.bucketlist.core.v2.vo.FollowRequest;
@@ -19,9 +20,13 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/v2/follow")
 public class FollowController {
 	private final FollowService followService;
+	private final UserManager userService;
 	
-	FollowController(FollowService followService) {
+	FollowController(
+			FollowService followService
+			, UserManager userService) {
 		this.followService = followService;
+		this.userService = userService;
 	}
 	
 	@ApiOperation("팔로우하기")
@@ -34,12 +39,12 @@ public class FollowController {
 	@ApiOperation("나의 팔로잉 리스트")
 	@PostMapping("/list")
 	public ResponseEntity<Object> list(@RequestBody UserRequest request) {
-		return ResponseUtils.success(followService.findByUserId(request.getUserId()));
+		return ResponseUtils.success(userService.findFollowings(request.getUserId()));
 	}
 	
 	@ApiOperation("나의 팔로워 리스트")
 	@PostMapping("/list_followers")
 	public ResponseEntity<Object> listFollowers(@RequestBody UserRequest request) {
-		return ResponseUtils.success(followService.findByUserId(request.getUserId()));
+		return ResponseUtils.success(userService.findFollowers(request.getUserId()));
 	}
 }
