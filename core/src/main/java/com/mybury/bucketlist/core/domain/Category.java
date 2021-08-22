@@ -1,14 +1,5 @@
 package com.mybury.bucketlist.core.domain;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.mybury.bucketlist.core.constants.ColumnEncryptionConstants;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnTransformer;
-import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +8,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -33,7 +33,6 @@ public class Category extends BaseTimestampEntity<String> {
 	private String id;
 
 	@Column
-	@ColumnTransformer(read = ColumnEncryptionConstants.DEC_CATEGORY_NAME, write = ColumnEncryptionConstants.ENC_COLUMN)
 	private String name;
 
 	@Column
