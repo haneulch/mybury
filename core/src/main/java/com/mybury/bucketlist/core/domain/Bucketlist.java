@@ -71,6 +71,10 @@ public class Bucketlist extends BaseTimestampEntity<String> {
 	
 	@Column(name = "completed_dt")
 	private Date completedDt;
+	
+	@Column(name = "buck_type")
+	@ColumnDefault("'O'")
+	private Character bucketType;
 
 	@Lob
 	@Column
