@@ -6,9 +6,9 @@ import com.mybury.bucketlist.core.domain.Category;
 
 public interface CategoryRepositoryCustom {
 
-  Category getDefaultCategory(String userId);
+	Category getDefaultCategory(String userId);
 
-  int getLastPriorityCategory(String userId);
+	int getLastPriorityCategory(String userId);
 
-  List<Category> getCategoryListByUserId(String userId);
+	List<Category> getCategoryListByUserId(String userId);
 }
