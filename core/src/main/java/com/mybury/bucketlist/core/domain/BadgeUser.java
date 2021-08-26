@@ -38,7 +38,7 @@ public class BadgeUser {
 	@Id
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "badge_id", referencedColumnName = "id")
-	@JsonIgnore
+//	@JsonIgnore
 	private Badge badge;
 	
 	@Column(name = "count", length = 11)

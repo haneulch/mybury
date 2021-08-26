@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mybury.bucketlist.auth.annotation.AccessTokenCheck;
 import com.mybury.bucketlist.core.domain.Badge;
 import com.mybury.bucketlist.core.util.ResponseUtils;
 import com.mybury.bucketlist.core.v2.service.BadgeService;
+import com.mybury.bucketlist.core.v2.vo.UserRequest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,5 +31,12 @@ public class BadgeController {
 	public ResponseEntity<Object> save(@RequestBody Badge badge) {
 		badgeService.save(badge);
 		return ResponseUtils.success();
+	}
+	
+	@AccessTokenCheck
+	@ApiOperation(value = "뱃지 리스트")
+	@PostMapping("/list")
+	public ResponseEntity<Object> list(@RequestBody UserRequest request) {
+		return ResponseUtils.success(badgeService.findByUserId(request.getUserId()));
 	}
 }
