@@ -30,12 +30,8 @@ public class ApiAuthenticationAspect {
 	@Autowired
 	private HttpServletRequest request;
 
-	@Pointcut("@annotation(com.mybury.bucketlist.auth.annotation.AccessTokenCheck)")
-	public void accessTokenCheck() {
-	}
-
-	@Before("accessTokenCheck()")
-	public void beforeMethod(JoinPoint joinPoint) {
+	@Before("@annotation(com.mybury.bucketlist.auth.annotation.AccessTokenCheck)")
+	public void accessTokenCheck(JoinPoint joinPoint) {
 		String accessToken = request.getHeader("X-Auth-Token");
 		jwtUtils.isValidAccessToken(accessToken, getUserId(joinPoint));
 	}
