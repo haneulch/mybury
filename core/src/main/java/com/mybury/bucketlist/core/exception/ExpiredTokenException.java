@@ -1,6 +1,6 @@
 package com.mybury.bucketlist.core.exception;
 
-import com.mybury.bucketlist.core.constants.ApiReturnCodes;
+import static com.mybury.bucketlist.core.constants.ApiReturnCodes.ERROR_EXPIRED_TOKEN;
 
 public class ExpiredTokenException extends BaseException {
 
@@ -14,6 +14,6 @@ public class ExpiredTokenException extends BaseException {
 
   @Override
   public String getExceptionCode() {
-    return ApiReturnCodes.ERROR_EXPIRED_TOKEN;
+    return ERROR_EXPIRED_TOKEN;
   }
 }
