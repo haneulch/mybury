@@ -2,6 +2,9 @@ package com.mybury.bucketlist.core.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +14,7 @@ import com.mybury.bucketlist.core.domain.Category;
 import com.mybury.bucketlist.core.domain.CategoryInfo;
 import com.mybury.bucketlist.core.repository.BucketlistRepository;
 import com.mybury.bucketlist.core.repository.CategoryRepository;
+import com.mybury.bucketlist.core.v2.vo.CategoryPriorityRequest;
 import com.mybury.bucketlist.core.vo.ModifyCategoryNameRequestVO;
 import com.mybury.bucketlist.core.vo.ModifyCategoryPriorityRequestVO;
 import com.mybury.bucketlist.core.vo.RemoveCategoryRequestVO;
@@ -20,6 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service("categoryManager")
 public class CategoryManagerImpl implements CategoryManager {
+
+	@PersistenceContext
+	private EntityManager em;
 
 	@Autowired
 	private CategoryRepository categoryRepository;
@@ -80,5 +87,19 @@ public class CategoryManagerImpl implements CategoryManager {
 	@Override
 	public List<CategoryInfo> findCategoryInfo(String userId) {
 		return categoryRepository.findCategoryInfo(userId);
+	}
+
+	@Override
+	public void updateCategoryPriority(CategoryPriorityRequest request) {
+		if(request.getCategories() != null) {
+			int priority = 0;
+			for(String categoryId : request.getCategories()) {
+				Category category = em.getReference(Category.class, categoryId);
+				category.setPriority(priority);
+				categoryRepository.save(category);
+				
+				priority ++;
+			}
+		}
 	}
 }

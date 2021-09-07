@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mybury.bucketlist.core.domain.Category;
 import com.mybury.bucketlist.core.domain.CategoryInfo;
+import com.mybury.bucketlist.core.v2.vo.CategoryPriorityRequest;
 import com.mybury.bucketlist.core.vo.ModifyCategoryNameRequestVO;
 import com.mybury.bucketlist.core.vo.ModifyCategoryPriorityRequestVO;
 import com.mybury.bucketlist.core.vo.RemoveCategoryRequestVO;
@@ -23,4 +24,6 @@ public interface CategoryManager {
 	List<Category> getCategoryListByUserId(String userId);
 	
 	List<CategoryInfo> findCategoryInfo(String userId);
+
+	void updateCategoryPriority(CategoryPriorityRequest request);
 }

@@ -19,4 +19,6 @@ public interface CategoryRepository extends JpaRepository<Category, String>, Cat
 			"	from mt_category mc" + 
 			"	where mc.user_id = :userId", nativeQuery = true)
 	List<CategoryInfo> findCategoryInfo(@Param("userId") String userId);
+	
+	void deleteByUserId(String userId);
 }
