@@ -75,5 +75,4 @@ public class MyController {
 		userManager.updateAlarmYn(request.getUserId());
 		return ResponseUtils.success();
 	}
-
 }
