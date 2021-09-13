@@ -1,7 +1,7 @@
 package com.mybury.bucketlist.auth.v2.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +26,7 @@ public class BucketlistController {
 	
 	@AccessTokenCheck
 	@ApiOperation(value = "dday별 버킷리스트")
-	@PostMapping("/dday")
+	@GetMapping("/dday")
 	public ResponseEntity<Object> dday(@RequestBody UserRequest request) {
 		return ResponseUtils.success(bucketlistManager.findBydDateIsNotNullAndUser_Id(request.getUserId()));
 	}
