@@ -1,9 +1,9 @@
 package com.mybury.bucketlist.auth.v2.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +35,13 @@ public class FollowController {
 	@PostMapping("/save")
 	public ResponseEntity<Object> save(@RequestBody FollowRequest request) { 
 		followService.save(request);
+		return ResponseUtils.success();
+	}
+	
+	@ApiOperation("팔로우 취소")
+	@DeleteMapping("/cancel")
+	public ResponseEntity<Object> cancel(@RequestBody FollowRequest request) { 
+		followService.delete(request);
 		return ResponseUtils.success();
 	}
 	
