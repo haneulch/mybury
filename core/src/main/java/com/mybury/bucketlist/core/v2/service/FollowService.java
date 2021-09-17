@@ -9,4 +9,6 @@ public interface FollowService {
 	void save(FollowRequest request);
 
 	StateResponse getFollowInfo(UserRequest request);
+
+	void delete(FollowRequest request);
 }

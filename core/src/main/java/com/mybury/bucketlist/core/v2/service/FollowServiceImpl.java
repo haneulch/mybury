@@ -54,4 +54,16 @@ public class FollowServiceImpl implements FollowService {
 								.hasAlarm(user.getAlarmYn())
 								.build();
 	}
+
+	@Override
+	public void delete(FollowRequest request) {
+		User user = em.getReference(User.class, request.getFollowingId());
+		
+		Follow follow = Follow.builder()
+				.user(user)
+				.userId(request.getUserId())
+				.build();
+		
+		repository.delete(follow);
+	}
 }

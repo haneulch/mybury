@@ -11,6 +11,6 @@ public class FollowRequest {
 	@ApiModelProperty("현재 사용자 ID")
 	private String userId;
 	
-	@ApiModelProperty("팔로우할 사용자 ID")
+	@ApiModelProperty("팔로우(취소)할 사용자 ID")
 	private String followingId;
 }
