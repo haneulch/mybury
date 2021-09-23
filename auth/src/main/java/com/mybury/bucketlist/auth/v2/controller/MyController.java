@@ -1,7 +1,8 @@
 package com.mybury.bucketlist.auth.v2.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +41,7 @@ public class MyController {
 
 	@AccessTokenCheck
 	@ApiOperation(value = "my - 프로필 정보", response = ProfileResponse.class)
-	@PostMapping("/profile_info")
+	@GetMapping("/profile_info")
 	public ResponseEntity<Object> profileInfo(@RequestBody UserRequest request) { 
 		User user = userManager.findById(request.getUserId());
 		
@@ -63,14 +64,14 @@ public class MyController {
 	
 	@AccessTokenCheck
 	@ApiOperation(value = "my - 팔로우 정보", response = StateResponse.class)
-	@PostMapping("/state")
+	@GetMapping("/state")
 	public ResponseEntity<Object> state(@RequestBody UserRequest request) {
 		return ResponseUtils.success(followService.getFollowInfo(request));
 	}
 	
 	@AccessTokenCheck
 	@ApiOperation(value = "my - 알림 유무 변경")
-	@PostMapping("/changeAlarm")
+	@PutMapping("/changeAlarm")
 	public ResponseEntity<Object> changeAlarm(@RequestBody UserRequest request) {
 		userManager.updateAlarmYn(request.getUserId());
 		return ResponseUtils.success();
