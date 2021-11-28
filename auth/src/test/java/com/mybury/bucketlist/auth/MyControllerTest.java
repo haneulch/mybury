@@ -8,6 +8,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -77,5 +78,41 @@ public class MyControllerTest {
 			)
 			.andDo(print())
 			.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testState() throws Exception {
+		String accessToken = jwtUtils.createAccessToken(TEST_USER_ID);
+		
+		UserRequest request = new UserRequest();
+		request.setUserId(TEST_USER_ID);
+		
+		this.mockMvc.perform(get("/v2/my/state")
+				.header("X-Auth-Token", accessToken)
+				.characterEncoding("UTF-8")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(request))
+				)
+		.andDo(print())
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testChangeAlarm() throws Exception {
+		String accessToken = jwtUtils.createAccessToken(TEST_USER_ID);
+		
+		UserRequest request = new UserRequest();
+		request.setUserId(TEST_USER_ID);
+		
+		this.mockMvc.perform(put("/v2/my/changeAlarm")
+				.header("X-Auth-Token", accessToken)
+				.characterEncoding("UTF-8")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(request))
+				)
+		.andDo(print())
+		.andExpect(status().isOk());
 	}
 }
