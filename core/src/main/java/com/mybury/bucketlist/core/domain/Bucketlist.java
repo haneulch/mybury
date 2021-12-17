@@ -75,6 +75,9 @@ public class Bucketlist extends BaseTimestampEntity<String> {
 	@Column(name = "buck_type")
 	@ColumnDefault("'O'")
 	private Character bucketType;
+	
+	@Column(name = "order_seq")
+	private int orderSeq;
 
 	@Lob
 	@Column

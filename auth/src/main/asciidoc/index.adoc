@@ -342,3 +342,12 @@ include::{snippets}/test-notice/http-request.adoc[]
 === response
 
 include::{snippets}/test-notice/http-response.adoc[]
+
+== 버킷리스트 순서 변경[post]
+=== request
+
+include::{snippets}/change-order/http-request.adoc[]
+
+=== response
+
+include::{snippets}/change-order/http-response.adoc[]
