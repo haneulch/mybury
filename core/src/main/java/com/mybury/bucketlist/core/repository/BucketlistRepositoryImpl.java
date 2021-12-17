@@ -19,124 +19,128 @@ import java.util.List;
 @Repository("bucketlistRepository")
 public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
 
-  @PersistenceContext
-  private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-  @Override
-  public List<Bucketlist> getBucketlists(HomeRequestVO requestVO) {
-    JPAQuery query = new JPAQuery(entityManager);
-    QBucketlist bucketlist = QBucketlist.bucketlist;
+	@Override
+	public List<Bucketlist> getBucketlists(HomeRequestVO requestVO) {
+		JPAQuery query = new JPAQuery(entityManager);
+		QBucketlist bucketlist = QBucketlist.bucketlist;
 
-    query.from(bucketlist)
-            .where(bucketlist.user().id.eq(requestVO.getUserId()));
+		query.from(bucketlist).where(bucketlist.user().id.eq(requestVO.getUserId()));
+		
+		String filter = requestVO.getFilter();
 
-    if(StringUtils.isNotBlank(requestVO.getFilter())) {
-      if (requestVO.getFilter().equals("started"))
-        query.where(bucketlist.status.eq("1"));
+		if (StringUtils.isNotBlank(filter)) {
+			if (filter.equals("started"))
+				query.where(bucketlist.status.eq("1"));
 
-      if (requestVO.getFilter().equals("completed"))
-        query.where(bucketlist.status.eq("2"));
+			if (filter.equals("completed"))
+				query.where(bucketlist.status.eq("2"));
 
-      if(requestVO.getFilter().equals("all"))
-        query.where(bucketlist.status.eq("1").or(bucketlist.status.eq("2")));
-    }
+			if (filter.equals("all")) 
+				query.where(bucketlist.status.eq("1").or(bucketlist.status.eq("2")));
+		}
+		
+		String sort = requestVO.getSort();
 
-    if(requestVO.getSort().equals("updatedDt"))
-      query.orderBy(bucketlist.updatedDt.desc());
+		if (sort.equals("updatedDt")) {
+			query.orderBy(bucketlist.updatedDt.desc());
+		}
 
-    if(requestVO.getSort().equals("createdDt"))
-      query.orderBy(bucketlist.createdDt.asc());
+		if (sort.equals("createdDt")) {
+			query.orderBy(bucketlist.createdDt.asc());
+		}
+		
+		if(sort.equals("custom")) {
+			query.orderBy(bucketlist.orderSeq.asc());
+		}
 
-    return query.list(bucketlist);
-  }
+		return query.list(bucketlist);
+	}
 
-  @Override
-  public boolean existsPopupBucketlist(String userId, int popupPeriod) {
-    JPAQuery query = new JPAQuery(entityManager);
-    QBucketlist bucketlist = QBucketlist.bucketlist;
+	@Override
+	public boolean existsPopupBucketlist(String userId, int popupPeriod) {
+		JPAQuery query = new JPAQuery(entityManager);
+		QBucketlist bucketlist = QBucketlist.bucketlist;
 
-    query.from(bucketlist)
-            .where(bucketlist.user().id.eq(userId)
-                    .and(bucketlist.dDate.eq(DateUtil.addDays(DateUtil.getToday(), popupPeriod))));
+		query.from(bucketlist).where(bucketlist.user().id.eq(userId)
+				.and(bucketlist.dDate.eq(DateUtil.addDays(DateUtil.getToday(), popupPeriod))));
 
-    return query.exists();
-  }
+		return query.exists();
+	}
 
-  @Override
-  public List<Bucketlist> getDDayBucketlist(String userId, String filter) {
-    JPAQuery query = new JPAQuery(entityManager);
-    QBucketlist bucketlist = QBucketlist.bucketlist;
+	@Override
+	public List<Bucketlist> getDDayBucketlist(String userId, String filter) {
+		JPAQuery query = new JPAQuery(entityManager);
+		QBucketlist bucketlist = QBucketlist.bucketlist;
 
-    query.from(bucketlist)
-            .where(bucketlist.user().id.eq(userId)
-                    .and(bucketlist.status.eq(CommonCodes.BucketlistStatus.STARTED))
-                    .and(bucketlist.dDate.isNotNull()));
+		query.from(bucketlist).where(bucketlist.user().id.eq(userId)
+				.and(bucketlist.status.eq(CommonCodes.BucketlistStatus.STARTED)).and(bucketlist.dDate.isNotNull()));
 
-    if(StringUtils.isNotBlank(filter)) {
-      if(StringUtils.equals(filter, "minus"))
-        query.where(bucketlist.dDate.goe(DateUtil.getDate()));
+		if (StringUtils.isNotBlank(filter)) {
+			if (StringUtils.equals(filter, "minus"))
+				query.where(bucketlist.dDate.goe(DateUtil.getDate()));
 
-      if(StringUtils.equals(filter, "plus"))
-        query.where(bucketlist.dDate.lt(DateUtil.getDate()));
-    }
+			if (StringUtils.equals(filter, "plus"))
+				query.where(bucketlist.dDate.lt(DateUtil.getDate()));
+		}
 
-    query.orderBy(bucketlist.dDate.asc());
+		query.orderBy(bucketlist.dDate.asc());
 
-    return query.list(bucketlist);
-  }
+		return query.list(bucketlist);
+	}
 
-  @Override
-  public List<Bucketlist> getBucketlistsByDDate(Date date, String userId) {
-    JPAQuery query = new JPAQuery(entityManager);
-    QBucketlist bucketlist = QBucketlist.bucketlist;
+	@Override
+	public List<Bucketlist> getBucketlistsByDDate(Date date, String userId) {
+		JPAQuery query = new JPAQuery(entityManager);
+		QBucketlist bucketlist = QBucketlist.bucketlist;
 
-    query.from(bucketlist).where(bucketlist.dDate.eq(date).and(bucketlist.user().id.eq(userId))
-            .and(bucketlist.status.eq(CommonCodes.BucketlistStatus.STARTED)));
+		query.from(bucketlist).where(bucketlist.dDate.eq(date).and(bucketlist.user().id.eq(userId))
+				.and(bucketlist.status.eq(CommonCodes.BucketlistStatus.STARTED)));
 
-    return query.list(bucketlist);
-  }
+		return query.list(bucketlist);
+	}
 
-  @Override
-  public String getLastBucketlistId() {
-    JPAQuery query = new JPAQuery(entityManager);
-    QBucketlist bucketlist = QBucketlist.bucketlist;
+	@Override
+	public String getLastBucketlistId() {
+		JPAQuery query = new JPAQuery(entityManager);
+		QBucketlist bucketlist = QBucketlist.bucketlist;
 
-    query.from(bucketlist);
+		query.from(bucketlist);
 
-    return query.singleResult(bucketlist.id);
-  }
+		return query.singleResult(bucketlist.id);
+	}
 
-  @Override
-  public int getStartedBucketlistCount(String userId) {
-    JPAQuery query = new JPAQuery(entityManager);
-    QBucketlist bucketlist = QBucketlist.bucketlist;
+	@Override
+	public int getStartedBucketlistCount(String userId) {
+		JPAQuery query = new JPAQuery(entityManager);
+		QBucketlist bucketlist = QBucketlist.bucketlist;
 
-    query.from(bucketlist).where(bucketlist.user().id.eq(userId)
-            .and(bucketlist.status.eq(CommonCodes.BucketlistStatus.STARTED)));
+		query.from(bucketlist)
+				.where(bucketlist.user().id.eq(userId).and(bucketlist.status.eq(CommonCodes.BucketlistStatus.STARTED)));
 
-    return (int)query.count();
-  }
+		return (int) query.count();
+	}
 
-  @Override
-  public int getCompletedBucketlistCount(String userId) {
-    JPAQuery query = new JPAQuery(entityManager);
-    QBucketlist bucketlist = QBucketlist.bucketlist;
+	@Override
+	public int getCompletedBucketlistCount(String userId) {
+		JPAQuery query = new JPAQuery(entityManager);
+		QBucketlist bucketlist = QBucketlist.bucketlist;
 
-    query.from(bucketlist).where(bucketlist.user().id.eq(userId)
-            .and(bucketlist.status.eq(CommonCodes.BucketlistStatus.COMPLETED)));
+		query.from(bucketlist).where(
+				bucketlist.user().id.eq(userId).and(bucketlist.status.eq(CommonCodes.BucketlistStatus.COMPLETED)));
 
-    return (int)query.count();
-  }
+		return (int) query.count();
+	}
 
-  @Override
-  public List<Bucketlist> getBucketlistByCategoryId(String categoryId) {
-    JPAQuery query = new JPAQuery(entityManager);
-    QBucketlist bucketlist = QBucketlist.bucketlist;
+	@Override
+	public List<Bucketlist> getBucketlistByCategoryId(String categoryId) {
+		JPAQuery query = new JPAQuery(entityManager);
+		QBucketlist bucketlist = QBucketlist.bucketlist;
 
-    query.from(bucketlist)
-            .where(bucketlist.category().id.eq(categoryId))
-            .orderBy(bucketlist.createdDt.asc());
+		query.from(bucketlist).where(bucketlist.category().id.eq(categoryId)).orderBy(bucketlist.createdDt.asc());
 
-    return query.list(bucketlist);
-  }
+		return query.list(bucketlist);
+	}
 }

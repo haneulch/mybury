@@ -1,5 +1,5 @@
 package com.mybury.bucketlist.core.enums;
 
 public enum FilterEnum {
-    STARTED, COMPLATED
+    START, COMPLETE, ALL, UPDATED, CREATE
 }

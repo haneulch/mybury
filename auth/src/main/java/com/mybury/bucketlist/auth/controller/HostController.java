@@ -35,11 +35,13 @@ import com.mybury.bucketlist.core.domain.User;
 import com.mybury.bucketlist.core.repository.NoticeRepository;
 import com.mybury.bucketlist.core.service.BucketlistManager;
 import com.mybury.bucketlist.core.service.CategoryManager;
+import com.mybury.bucketlist.core.service.HostService;
 import com.mybury.bucketlist.core.service.SupportManager;
 import com.mybury.bucketlist.core.service.UserManager;
 import com.mybury.bucketlist.core.util.JwtUtils;
 import com.mybury.bucketlist.core.vo.BucketlistModifyRequestVO;
 import com.mybury.bucketlist.core.vo.BucketlistWriteRequestVO;
+import com.mybury.bucketlist.core.vo.ChangeOrderListDTO;
 import com.mybury.bucketlist.core.vo.CreateProfileRequestVO;
 import com.mybury.bucketlist.core.vo.DDayRequestVO;
 import com.mybury.bucketlist.core.vo.HomeRequestVO;
@@ -53,6 +55,7 @@ import com.mybury.bucketlist.core.vo.RemoveCategoryRequestVO;
 import com.mybury.bucketlist.core.vo.SupportHistoryRequestVO;
 import com.mybury.bucketlist.core.vo.SupportItemRequestVO;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -70,6 +73,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class HostController {
 
 	private static String authServerAddress = GetPropertyUtils.getProperty("address");
@@ -77,20 +81,12 @@ public class HostController {
 	@Autowired
 	private JwtUtils jwtUtils;
 
-	@Autowired
-	private UserManager userManager;
-
-	@Autowired
-	private BucketlistManager bucketlistManager;
-
-	@Autowired
-	private CategoryManager categoryManager;
-
-	@Autowired
-	private NoticeRepository noticeRepository;
-
-	@Autowired
-	private SupportManager supportManager;
+	private final UserManager userManager;
+	private final BucketlistManager bucketlistManager;
+	private final CategoryManager categoryManager;
+	private final NoticeRepository noticeRepository;
+	private final SupportManager supportManager;
+	private final HostService hostService;
 
 	@PostMapping(value = ApiUriConstants.SIGNUP_CHECK)
 	public HostSignUpCheckResponseVO signUpCheck(@RequestBody HostSignUpCheckRequestVO requestVO) {
@@ -421,6 +417,18 @@ public class HostController {
 			supportHistory.setSusYn(requestVO.getSusYn().charAt(0));
 			supportManager.updateSupportHistory(supportHistory);
 		}
+
+		return BaseResponseVO.ok();
+	}
+	
+	/**
+	 * 버킷리스트 순서 변경
+	 * 
+	 */
+	@AccessTokenCheck
+	@GetMapping("/change_order")
+	public BaseResponseVO changeOrder(@RequestBody ChangeOrderListDTO requestVO) {
+		hostService.changeOrder(requestVO);
 
 		return BaseResponseVO.ok();
 	}
