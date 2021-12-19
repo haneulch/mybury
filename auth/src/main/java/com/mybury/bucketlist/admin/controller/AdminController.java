@@ -107,7 +107,6 @@ public class AdminController {
 	@PostMapping("/json/findSupportHistory")
 	public ResponseEntity<Object> findSupportHistory(
 			@RequestBody(required=false) Map<String, Object> m) {
-		
 		Pageable page = PageRequest.of( Integer.parseInt(m.getOrDefault("page", "0") + ""), 20);
 		String search = m.getOrDefault("search", "") + "";
 		

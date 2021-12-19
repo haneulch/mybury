@@ -1,5 +1,7 @@
 package com.mybury.bucketlist.auth.v2.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +16,7 @@ import com.mybury.bucketlist.core.v2.service.FollowService;
 import com.mybury.bucketlist.core.v2.vo.FollowRequest;
 import com.mybury.bucketlist.core.v2.vo.UserRequest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-@Api(value = "Follow", tags = {"팔로우"})
+@Tag(name = "Follow", description = "팔로우")
 @RestController
 @RequestMapping("/v2/follow")
 public class FollowController {
@@ -31,27 +30,27 @@ public class FollowController {
 		this.userService = userService;
 	}
 	
-	@ApiOperation("팔로우하기")
+	@Operation(summary = "팔로우하기")
 	@PostMapping("/save")
 	public ResponseEntity<Object> save(@RequestBody FollowRequest request) { 
 		followService.save(request);
 		return ResponseUtils.success();
 	}
 	
-	@ApiOperation("팔로우 취소")
+	@Operation(summary = "팔로우 취소")
 	@DeleteMapping("/cancel")
 	public ResponseEntity<Object> cancel(@RequestBody FollowRequest request) { 
 		followService.delete(request);
 		return ResponseUtils.success();
 	}
 	
-	@ApiOperation("나의 팔로잉 리스트")
+	@Operation(summary = "나의 팔로잉 리스트")
 	@GetMapping("/list")
 	public ResponseEntity<Object> list(@RequestBody UserRequest request) {
 		return ResponseUtils.success(userService.findFollowings(request.getUserId()));
 	}
 	
-	@ApiOperation("나의 팔로워 리스트")
+	@Operation(summary = "나의 팔로워 리스트")
 	@GetMapping("/list_followers")
 	public ResponseEntity<Object> listFollowers(@RequestBody UserRequest request) {
 		return ResponseUtils.success(userService.findFollowers(request.getUserId()));

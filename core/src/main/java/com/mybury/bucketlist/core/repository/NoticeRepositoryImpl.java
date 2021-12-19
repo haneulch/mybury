@@ -2,7 +2,7 @@ package com.mybury.bucketlist.core.repository;
 
 import org.springframework.stereotype.Repository;
 
-@Repository("noticeRepository")
+@Repository
 public class NoticeRepositoryImpl {
 
 }

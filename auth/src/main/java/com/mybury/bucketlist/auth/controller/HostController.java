@@ -55,6 +55,8 @@ import com.mybury.bucketlist.core.vo.RemoveCategoryRequestVO;
 import com.mybury.bucketlist.core.vo.SupportHistoryRequestVO;
 import com.mybury.bucketlist.core.vo.SupportItemRequestVO;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +76,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "마이버리", description = "마이버리 API")
 public class HostController {
 
 	private static String authServerAddress = GetPropertyUtils.getProperty("address");
@@ -425,6 +428,7 @@ public class HostController {
 	 * 버킷리스트 순서 변경
 	 * 
 	 */
+	@Operation(summary = "버킷리스트 순서 변경")
 	@AccessTokenCheck
 	@GetMapping("/change_order")
 	public BaseResponseVO changeOrder(@RequestBody ChangeOrderListDTO requestVO) {

@@ -4,7 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
-@Repository("supportItemRepository")
+@Repository
 public class SupportItemRepositoryImpl implements SupportItemRepositoryCustom{
 
 	@PersistenceContext

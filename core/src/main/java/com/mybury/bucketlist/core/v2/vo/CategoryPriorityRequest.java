@@ -1,18 +1,17 @@
 package com.mybury.bucketlist.core.v2.vo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-@ApiModel(description = "카테고리 변경된 순서")
 @Data
+@Schema(description = "카테고리 변경된 순서")
 public class CategoryPriorityRequest {
 
-	@ApiModelProperty("사용자 ID")
+	@Schema(description = "사용자 ID")
 	private String userId;
-	
-	@ApiModelProperty("카테고리 ID 리스트")
+
+	@Schema(description = "카테고리 ID 리스트")
 	private List<String> categories;
 }

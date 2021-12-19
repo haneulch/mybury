@@ -11,7 +11,7 @@ import com.mybury.bucketlist.core.domain.QSupportItem;
 import com.mybury.bucketlist.core.domain.SupportItem;
 import com.mysema.query.jpa.impl.JPAQuery;
 
-@Repository("supportHistoryRepository")
+@Repository
 public class SupportHistoryRepositoryImpl implements SupportHistoryRepositoryCustom{
 
 	@PersistenceContext

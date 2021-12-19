@@ -16,7 +16,7 @@ import javax.persistence.PersistenceContext;
 import java.util.Date;
 import java.util.List;
 
-@Repository("bucketlistRepository")
+@Repository
 public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
 
 	@PersistenceContext

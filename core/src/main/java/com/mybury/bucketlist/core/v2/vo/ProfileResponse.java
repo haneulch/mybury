@@ -1,16 +1,16 @@
 package com.mybury.bucketlist.core.v2.vo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.annotation.Nullable;
 
 import com.mybury.bucketlist.core.domain.Badge;
 
-import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@ApiModel(description = "My > 프로필")
+@Schema(description = "My > 프로필")
 @Data
 @Builder
 @NoArgsConstructor

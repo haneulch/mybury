@@ -1,13 +1,12 @@
 package com.mybury.bucketlist.core.v2.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@ApiModel(description = "My > 팔로우")
+@Schema(description = "My > 팔로우")
 @Data
 @Builder
 @NoArgsConstructor
@@ -17,7 +16,7 @@ public class StateResponse {
 	private int followCount;
 	
 	private int followingCount;
-	
-	@ApiModelProperty("알림유무")
+
+	@Schema(description = "알림유무")
 	private Character hasAlarm;
 }
