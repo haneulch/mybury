@@ -1,7 +1,6 @@
 package com.mybury.bucketlist.core.domain;
 
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -12,7 +11,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mybury.bucketlist.core.domain.id.BadgeUserId;
 
 import lombok.AllArgsConstructor;

@@ -9,7 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import com.mybury.bucketlist.core.domain.Badge;
-import com.mybury.bucketlist.core.domain.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

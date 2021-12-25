@@ -3,7 +3,6 @@ package com.mybury.bucketlist.core.repository;
 import com.mybury.bucketlist.core.constants.CommonCodes;
 import com.mybury.bucketlist.core.domain.Bucketlist;
 import com.mybury.bucketlist.core.util.DateUtil;
-import com.mybury.bucketlist.core.vo.DDayRequestVO;
 import com.mybury.bucketlist.core.vo.HomeRequestVO;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mybury.bucketlist.core.domain.QBucketlist;

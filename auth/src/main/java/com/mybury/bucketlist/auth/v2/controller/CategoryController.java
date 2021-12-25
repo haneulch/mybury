@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mybury.bucketlist.auth.annotation.AccessTokenCheck;
-import com.mybury.bucketlist.core.domain.CategoryInfo;
 import com.mybury.bucketlist.core.util.ResponseUtils;
 import com.mybury.bucketlist.core.v2.service.CategoryService;
 import com.mybury.bucketlist.core.v2.vo.CategoryPriorityRequest;

@@ -1,7 +1,6 @@
 package com.mybury.bucketlist.core.vo;
 
 import java.util.Date;
-import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,12 +1,8 @@
 package com.mybury.bucketlist.auth.common;
 
-import com.mybury.bucketlist.core.domain.Bucketlist;
-import com.mybury.bucketlist.core.domain.Category;
-import com.mybury.bucketlist.core.domain.User;
 import com.mybury.bucketlist.core.repository.BucketlistRepository;
 import com.mybury.bucketlist.core.repository.CategoryRepository;
 import com.mybury.bucketlist.core.repository.UserRepository;
-import com.mybury.bucketlist.core.util.DateUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;

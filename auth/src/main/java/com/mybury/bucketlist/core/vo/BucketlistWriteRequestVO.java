@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mybury.bucketlist.core.base.BaseRequestVO;
 
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
