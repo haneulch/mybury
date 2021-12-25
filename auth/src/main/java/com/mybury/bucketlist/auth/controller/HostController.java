@@ -56,10 +56,13 @@ import com.mybury.bucketlist.core.vo.SupportHistoryRequestVO;
 import com.mybury.bucketlist.core.vo.SupportItemRequestVO;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,7 +82,8 @@ import java.util.Map;
 @Tag(name = "마이버리", description = "마이버리 API")
 public class HostController {
 
-	private static String authServerAddress = GetPropertyUtils.getProperty("address");
+	@Value("${mybury.address}")
+	private String authServerAddress;
 
 	@Autowired
 	private JwtUtils jwtUtils;
@@ -96,6 +100,8 @@ public class HostController {
 	public HostSignUpCheckResponseVO signUpCheck(@RequestBody HostSignUpCheckRequestVO requestVO) {
 		User user = userManager.getUserByEmail(requestVO.getEmail());
 		boolean signUp = (user != null);
+
+		log.info("???" + authServerAddress);
 		return new HostSignUpCheckResponseVO(signUp, user);
 	}
 
@@ -440,7 +446,9 @@ public class HostController {
 	 * 버킷리스트 순서 변경
 	 * 
 	 */
-	@Operation(summary = "버킷리스트 순서 변경")
+	@Operation(summary = "버킷리스트 순서 변경",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "버킷리스트 순서 변겨 request", required = true,
+			content = @Content(schema=@Schema(implementation = ChangeOrderListDTO.class))))
 	@AccessTokenCheck
 	@GetMapping("/change_order")
 	public BaseResponseVO changeOrder(@RequestBody ChangeOrderListDTO requestVO) {

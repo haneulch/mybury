@@ -5,20 +5,18 @@ import com.mybury.bucketlist.core.domain.SupportItem;
 import com.mybury.bucketlist.core.repository.SupportHistoryRepository;
 import com.mybury.bucketlist.core.repository.SupportItemRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
-@Service("supportManager")
+@Service
+@RequiredArgsConstructor
 public class SupportManagerImpl implements SupportManager {
-	
-	@Autowired
-	SupportHistoryRepository supportHistoryRepository;
-	
-	@Autowired
-	SupportItemRepository supportItemRepository;
+
+	private final SupportHistoryRepository supportHistoryRepository;
+	private final SupportItemRepository supportItemRepository;
 
 	@Override
 	public List<SupportItem> getSupportItems() {

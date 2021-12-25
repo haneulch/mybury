@@ -2,10 +2,11 @@ package com.mybury.bucketlist.core.repository;
 
 import com.mybury.bucketlist.core.domain.PushMessage;
 import com.mysema.query.jpa.impl.JPAQuery;
-import com.mybury.bucketlist.core.domain.QPushMessage;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import com.mybury.bucketlist.core.domain.QPushMessage;
 
 public class PushMessageRepositoryImpl implements PushMessageRepositoryCustom {
 

@@ -5,14 +5,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.springframework.stereotype.Repository;
-
 import com.mybury.bucketlist.core.domain.QSupportItem;
 import com.mybury.bucketlist.core.domain.SupportItem;
 import com.mysema.query.jpa.impl.JPAQuery;
+import org.springframework.stereotype.Repository;
 
 @Repository
-public class SupportHistoryRepositoryImpl implements SupportHistoryRepositoryCustom{
+public class SupportHistoryRepositoryImpl implements SupportHistoryRepositoryCustom {
 
 	@PersistenceContext
 	private EntityManager entityManager;

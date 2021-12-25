@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.mybury.bucketlist.core.domain.SupportHistory;
 
-public interface SupportHistoryRepository extends JpaRepository<SupportHistory, Integer>, SupportHistoryRepositoryCustom{
+public interface SupportHistoryRepository extends JpaRepository<SupportHistory, Integer>, SupportHistoryRepositoryCustom {
 	@Query(value = "select sum(msi.item_price) as total_price from mt_support_history msh, mt_support_item msi where msh.user_id = :userId and msh.item_id = msi.id and msh.sus_yn = 'Y'", nativeQuery=true)
 	String getSupportTotalPrice(@Param("userId") String userId);
 	
