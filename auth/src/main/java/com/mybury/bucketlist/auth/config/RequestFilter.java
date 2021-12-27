@@ -9,28 +9,16 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-public class RequestFilter implements Filter {
+public class RequestFilter extends OncePerRequestFilter {
+
 	@Override
-	public void doFilter(
-			ServletRequest request
-			, ServletResponse response
-			, FilterChain chain) throws IOException, ServletException {
-		RereadableRequestWrapper wrapper 
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+		FilterChain filterChain) throws ServletException, IOException {
+		RereadableRequestWrapper wrapper
 				= new RereadableRequestWrapper((HttpServletRequest) request);
-		
-		chain.doFilter(wrapper, response);
-	}
-
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void destroy() {
-		// TODO Auto-generated method stub
-		
+			filterChain.doFilter(wrapper, response);
 	}
 }

@@ -10,7 +10,7 @@ public class HomeController {
 
 	@GetMapping("/")
 	public String index() {
-		return "hello";
+		return "index";
 	}
 
 	@RequestMapping(value = ApiUriConstants.PRIVACY_POLICY)

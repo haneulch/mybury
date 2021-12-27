@@ -21,15 +21,11 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 				response.sendRedirect("/admin/page/main");
 				return false;
 			} else {
-				session.invalidate();
-			}
-		} else {
-			if( !isAdmin) {
-				response.sendRedirect("/admin");
-				return false;
+//				session.invalidate();
 			}
 		}
-		
-		return super.preHandle(request, response, handler);
+
+//		response.sendRedirect("/admin");
+		return true;
 	}
 }

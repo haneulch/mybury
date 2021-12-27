@@ -150,6 +150,12 @@
       <version>5.2.12.Final</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <version>2.1.11</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <build>
