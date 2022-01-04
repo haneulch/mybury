@@ -1,8 +1,6 @@
 package com.mybury.bucketlist.auth.controller;
 
 import com.mybury.bucketlist.auth.annotation.AccessTokenCheck;
-import com.mybury.bucketlist.auth.constants.ApiUriConstants;
-import com.mybury.bucketlist.auth.util.GetPropertyUtils;
 import com.mybury.bucketlist.auth.vo.BeforeWriteResponseVO;
 import com.mybury.bucketlist.auth.vo.BucketlistRemoveRequestVO;
 import com.mybury.bucketlist.auth.vo.BucketlistViewResponseVO;
@@ -56,10 +54,13 @@ import com.mybury.bucketlist.core.vo.SupportHistoryRequestVO;
 import com.mybury.bucketlist.core.vo.SupportItemRequestVO;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,7 +80,8 @@ import java.util.Map;
 @Tag(name = "마이버리", description = "마이버리 API")
 public class HostController {
 
-	private static String authServerAddress = GetPropertyUtils.getProperty("address");
+	@Value("${mybury.address}")
+	private String authServerAddress;
 
 	@Autowired
 	private JwtUtils jwtUtils;
@@ -91,20 +93,25 @@ public class HostController {
 	private final SupportManager supportManager;
 	private final HostService hostService;
 
-	@PostMapping(value = ApiUriConstants.SIGNUP_CHECK)
+	@Operation(summary = "회원가입 여부 체크")
+	@PostMapping(value = "/signup_check")
 	public HostSignUpCheckResponseVO signUpCheck(@RequestBody HostSignUpCheckRequestVO requestVO) {
 		User user = userManager.getUserByEmail(requestVO.getEmail());
 		boolean signUp = (user != null);
+
+		log.info("???" + authServerAddress);
 		return new HostSignUpCheckResponseVO(signUp, user);
 	}
 
-	@PostMapping(value = ApiUriConstants.SIGNUP)
+	@Operation(summary = "회원가입")
+	@PostMapping(value = "/signup")
 	public HostSignUpResponseVO signUp(@RequestBody HostSignUpRequestVO requestVO) {
 		User user = userManager.signup(requestVO);
 		return new HostSignUpResponseVO(user);
 	}
 
-	@PostMapping(value = ApiUriConstants.SIGNIN)
+	@Operation(summary = "로그인")
+	@PostMapping(value = "/signin")
 	public HostSignInResponseVO signIn(@RequestBody HostSignInRequestVO requestVO) {
 		User user = userManager.signin(requestVO);
 		String accessToken = jwtUtils.createAccessToken(user.getId());
@@ -112,15 +119,18 @@ public class HostController {
 		return new HostSignInResponseVO(accessToken, refreshToken);
 	}
 
+	@Operation(summary = "프로필 생성")
 	@AccessTokenCheck
-	@PostMapping(value = ApiUriConstants.PROFILE)
+	@PostMapping(value = "/profile")
 	public BaseResponseVO createProfile(CreateProfileRequestVO requestVO) {
 		userManager.createProfile(requestVO);
 		return BaseResponseVO.ok();
 	}
 
+	@Operation(summary = "홈", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "버킷리스트 목록 request", required = true,
+		content = @Content(schema=@Schema(implementation = HomeRequestVO.class))))
 	@AccessTokenCheck
-	@GetMapping(value = ApiUriConstants.HOME)
+	@GetMapping(value = "/home")
 	public HomeResponseVO home(HomeRequestVO requestVO) {
 		List<Bucketlist> bucketlists = bucketlistManager.getBucketlists(requestVO);
 
@@ -135,8 +145,9 @@ public class HostController {
 		return new HomeResponseVO(bucketlists, popupYn);
 	}
 
-	// @AccessTokenCheck
-	@GetMapping(value = ApiUriConstants.D_DAY)
+	@Operation(summary = "dday별 버킷리스트 조회")
+	@AccessTokenCheck
+	@GetMapping(value = "/dDay")
 	public DDayResponseVO dDay(DDayRequestVO requestVO) {
 		List<DDayResponseVO.DDayVO> dDayVOList = new ArrayList<>();
 		List<Bucketlist> dDayBucketlists = bucketlistManager.getDDayBucketlist(requestVO.getUserId(), requestVO.getFilter());
@@ -156,8 +167,9 @@ public class HostController {
 		return new DDayResponseVO(dDayVOList);
 	}
 
+	@Operation(summary = "버킷리스트 완료")
 	@AccessTokenCheck
-	@PostMapping(value = ApiUriConstants.BUCKETLIST_COMPLETE)
+	@PostMapping(value = "/complete")
 	public BaseResponseVO completeBucketlist(@RequestBody CompleteBucketlistRequestVO requestVO) {
 		Bucketlist bucketlist = bucketlistManager.getBucketlistById(requestVO.getBucketlistId());
 		bucketlist.setUserCount(bucketlist.getUserCount() + 1);
@@ -171,8 +183,9 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
+	@Operation(description = "버킷리스트 완료 취소")
 	@AccessTokenCheck
-	@PostMapping(value = ApiUriConstants.BUCKETLIST_CANCEL)
+	@PostMapping(value = "/cancel")
 	public BaseResponseVO cancelBucketlist(@RequestBody CancelBucketlistRequestVO requestVO) {
 		Bucketlist bucketlist = bucketlistManager.getBucketlistById(requestVO.getBucketlistId());
 		bucketlist.setUserCount(bucketlist.getUserCount() - 1);
@@ -185,8 +198,9 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
+	@Operation(description = "다시 도전하기")
 	@AccessTokenCheck
-	@PostMapping(value = ApiUriConstants.BUCKETLIST_REDO)
+	@PostMapping(value = "/redo")
 	public BaseResponseVO redoBucketlist(@RequestBody RedoBucketlistRequestVO requestVO) {
 		Bucketlist bucketlist = this.bucketlistManager.getBucketlistById(requestVO.getBucketlistId());
 		bucketlist.setUserCount(0);
@@ -195,8 +209,9 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
+	@Operation(description = "??")
 	@AccessTokenCheck
-	@PostMapping(value = ApiUriConstants.BUCKETLIST_PIN)
+	@PostMapping(value = "/pin")
 	public BaseResponseVO pin(@RequestBody PinBucketlistRequestVO requestVO) {
 		Bucketlist bucketlist = bucketlistManager.getBucketlistById(requestVO.getBucketlistId());
 		if (bucketlist.isPin()) {
@@ -209,8 +224,9 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
+	@Operation(description = "사용자별 카테고리 정보")
 	@AccessTokenCheck
-	@GetMapping(value = ApiUriConstants.BUCKETLIST_BEFORE_WRITE)
+	@GetMapping(value = "/beforeWrite")
 	public BeforeWriteResponseVO beforeWrite(String userId) {
 		User user = userManager.getUserById(userId);
 		List<Category> categoryList = categoryManager.getCategoryListByUserId(user.getId());
@@ -223,8 +239,9 @@ public class HostController {
 	 * @param requestVO
 	 * @return
 	 */
+	@Operation(description = "버킷리스트 등록")
 	@AccessTokenCheck
-	@PostMapping(value = ApiUriConstants.BUCKETLIST_WRITE)
+	@PostMapping(value = "/write")
 	public BaseResponseVO writeBucketlist(BucketlistWriteRequestVO requestVO) {
 		bucketlistManager.writeBucketlist(requestVO);
 		return BaseResponseVO.ok();
@@ -237,8 +254,9 @@ public class HostController {
 	 * @param userId
 	 * @return
 	 */
+	@Operation(description = "버킷리스트 상세")
 	@AccessTokenCheck
-	@GetMapping(value = ApiUriConstants.BUCKETLIST_CRUD)
+	@GetMapping(value = "/bucketlist/{id}")
 	public BucketlistViewResponseVO getBucketlist(@PathVariable String id, String userId) {
 		Bucketlist bucketlist = bucketlistManager.getBucketlistById(id);
 		return new BucketlistViewResponseVO(bucketlist);
@@ -252,21 +270,22 @@ public class HostController {
 	 * @return
 	 */
 	@AccessTokenCheck
-	@PostMapping(value = ApiUriConstants.BUCKETLIST_CRUD)
+	@PostMapping(value = "/bucketlist/{id}")
 	public BaseResponseVO modifyBucketlist(@PathVariable String id, BucketlistModifyRequestVO requestVO) {
 		bucketlistManager.modifyBucketlist(requestVO);
 		return BaseResponseVO.ok();
 	}
 
+	@Operation(description = "버킷리스트 삭제")
 	@AccessTokenCheck
-	@DeleteMapping(value = ApiUriConstants.BUCKETLIST_CRUD)
+	@DeleteMapping(value = "/bucketlist/{id}")
 	public BaseResponseVO removeBucketlist(@PathVariable String id, @RequestBody BucketlistRemoveRequestVO requestVO) {
 		bucketlistManager.deleteBucketlist(id);
 		return BaseResponseVO.ok();
 	}
 
 	@AccessTokenCheck
-	@GetMapping(value = ApiUriConstants.MYPAGE)
+	@GetMapping(value = "/mypage")
 	public MyPageResponseVO mypage(MyPageRequestVO requstVO) {
 		User user = userManager.getUserById(requstVO.getUserId());
 
@@ -312,14 +331,14 @@ public class HostController {
 	}
 
 	@AccessTokenCheck
-	@GetMapping(value = ApiUriConstants.CATEGORY)
+	@GetMapping(value = "/category")
 	public CategoryResponseVO getCategory(CategoryRequestVO requestVO) {
 		List<Bucketlist> bucketlists = bucketlistManager.getBucketlistByCategoryId(requestVO.getCategoryId());
 		return new CategoryResponseVO(bucketlists);
 	}
 
 	@AccessTokenCheck
-	@PostMapping(value = ApiUriConstants.CATEGORY)
+	@PostMapping(value = "/category")
 	public BaseResponseVO createCategory(@RequestBody CreateCategoryRequestVO requestVO) {
 		User user = userManager.getUserById(requestVO.getUserId());
 
@@ -333,28 +352,28 @@ public class HostController {
 	}
 
 	@AccessTokenCheck
-	@PostMapping(value = ApiUriConstants.CATEGORY_EDIT_NAME)
-	public BaseResponseVO modifyCategoryName(@RequestBody ModifyCategoryNameRequestVO requestVO) {
-		categoryManager.modifyName(requestVO);
-		return BaseResponseVO.ok();
-	}
-
-	@AccessTokenCheck
-	@PostMapping(value = ApiUriConstants.CATEGORY_EDIT_PRIORITY)
-	public BaseResponseVO modifyCategoryPriority(@RequestBody ModifyCategoryPriorityRequestVO requestVO) {
-		categoryManager.modifyPriority(requestVO);
-		return BaseResponseVO.ok();
-	}
-
-	@AccessTokenCheck
-	@DeleteMapping(value = ApiUriConstants.CATEGORY)
+	@DeleteMapping(value = "/category")
 	public BaseResponseVO removeCategory(@RequestBody RemoveCategoryRequestVO requestVO) {
 		categoryManager.remove(requestVO);
 		return BaseResponseVO.ok();
 	}
 
 	@AccessTokenCheck
-	@DeleteMapping(value = ApiUriConstants.WITHDRAWAL)
+	@PostMapping(value = "/category/edit_name")
+	public BaseResponseVO modifyCategoryName(@RequestBody ModifyCategoryNameRequestVO requestVO) {
+		categoryManager.modifyName(requestVO);
+		return BaseResponseVO.ok();
+	}
+
+	@AccessTokenCheck
+	@PostMapping(value = "/category/edit_priority")
+	public BaseResponseVO modifyCategoryPriority(@RequestBody ModifyCategoryPriorityRequestVO requestVO) {
+		categoryManager.modifyPriority(requestVO);
+		return BaseResponseVO.ok();
+	}
+
+	@AccessTokenCheck
+	@DeleteMapping(value = "/withdrawal")
 	public BaseResponseVO withdrawal(@RequestBody WithdrawalRequestVO requestVO) {
 		userManager.remove(requestVO.getUserId());
 		return BaseResponseVO.ok();
@@ -366,15 +385,11 @@ public class HostController {
 	 * @param requestVO
 	 * @return
 	 */
+	@Operation(description = "버킷리스트 수정")
 	@AccessTokenCheck
-	@PostMapping(value = ApiUriConstants.SUPPORT)
+	@PostMapping(value = "/support")
 	public BaseResponseVO support(@RequestBody SupportHistoryRequestVO requestVO) {
-		SupportHistory history = requestVO.toEntity(); 
-//				new SupportHistory();
-//		history.setItemId(requestVO.getItemId());
-//		history.setUserId(requestVO.getUserId());
-//		history.setToken(requestVO.getToken());
-//		history.setSusYn(requestVO.getSusYn().charAt(0));
+		SupportHistory history = requestVO.toEntity();
 		supportManager.saveSupportHistory(history);
 		return BaseResponseVO.ok();
 	}
@@ -385,8 +400,9 @@ public class HostController {
 	 * @param requestVO
 	 * @return
 	 */
+	@Operation(description = "후원 아이템 리스트")
 	@AccessTokenCheck
-	@PostMapping(value = ApiUriConstants.SUPPORT_ITEMS)
+	@PostMapping(value = "/support_items")
 	public SupportItemsResponseVO supportItems(@RequestBody SupportItemRequestVO requestVO) {
 		SupportItemsResponseVO vo = new SupportItemsResponseVO(supportManager.findAllByOrderByItemPrice());
 
@@ -410,8 +426,9 @@ public class HostController {
 	 * @param requestVO
 	 * @return
 	 */
+	@Operation(description = "후원 아이템 토큰 및 성공여부 업데이트")
 	@AccessTokenCheck
-	@PostMapping(value = ApiUriConstants.SUPPORT_EDIT)
+	@PostMapping(value = "/support_edit")
 	public BaseResponseVO supportEdit(@RequestBody SupportHistoryRequestVO requestVO) {
 
 		SupportHistory supportHistory = supportManager.findOneByUserIdAndToken(requestVO.getUserId(), requestVO.getToken());
@@ -428,7 +445,9 @@ public class HostController {
 	 * 버킷리스트 순서 변경
 	 * 
 	 */
-	@Operation(summary = "버킷리스트 순서 변경")
+	@Operation(summary = "버킷리스트 순서 변경",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "버킷리스트 순서 변겨 request", required = true,
+			content = @Content(schema=@Schema(implementation = ChangeOrderListDTO.class))))
 	@AccessTokenCheck
 	@GetMapping("/change_order")
 	public BaseResponseVO changeOrder(@RequestBody ChangeOrderListDTO requestVO) {
@@ -440,10 +459,10 @@ public class HostController {
 	/**
 	 * 후원 아이템 수정
 	 * 
-	 * @param requestVO
+	 * @param param
 	 * @return
 	 */
-	@PostMapping(value = ApiUriConstants.SUPPORT_ITEMS_EDIT)
+	@PostMapping(value = "/support_items_edit")
 	public BaseResponseVO updateSupportItems(@RequestBody List<Map<String, String>> param) {
 		List<SupportItem> vo = new ArrayList<SupportItem>();
 		for (Map<String, String> m : param) {
@@ -464,12 +483,11 @@ public class HostController {
 
 	/**
 	 * 팝업 정보
-	 * 
-	 * @param requestVO
 	 * @return
 	 */
+	@Operation(description = "팝업 정보")
 	@AccessTokenCheck
-	@GetMapping(value = ApiUriConstants.NOTICE)
+	@GetMapping(value = "/notice")
 	public BaseResponseVO getNotice() {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -488,7 +506,7 @@ public class HostController {
 	 * @param requestVO
 	 * @return
 	 */
-	@PostMapping(value = ApiUriConstants.NOTICE_SAVE)
+	@PostMapping(value = "/save_notice")
 	public BaseResponseVO saveNotice(@RequestBody NoticeRequestVO requestVO) {
 
 		Notice notice = Notice

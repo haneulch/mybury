@@ -19,7 +19,6 @@ import com.mybury.bucketlist.core.v2.service.BadgeUserService;
 import com.mybury.bucketlist.core.v2.service.FollowService;
 import com.mybury.bucketlist.core.v2.vo.ErrorResponse;
 import com.mybury.bucketlist.core.v2.vo.ProfileResponse;
-import com.mybury.bucketlist.core.v2.vo.StateResponse;
 import com.mybury.bucketlist.core.v2.vo.UserRequest;
 
 @Tag(name = "My", description = "홈 > My")
