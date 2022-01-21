@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.mybury.bucketlist.core.constants.ColumnEncryptionConstants;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -36,6 +38,9 @@ public class Category extends BaseTimestampEntity<String> {
 
 	@Column
 	private int priority;
+
+	@Column(name = "is_default")
+	private Character isDefault;
 
 	@JsonIgnore
 	@ManyToOne

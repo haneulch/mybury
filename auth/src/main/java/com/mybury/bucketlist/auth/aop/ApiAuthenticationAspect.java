@@ -3,14 +3,18 @@ package com.mybury.bucketlist.auth.aop;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mybury.bucketlist.core.util.JwtUtils;
 import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -34,19 +38,25 @@ public class ApiAuthenticationAspect {
 		String userId = "";
 
 		try {
-			BufferedReader br = request.getReader();
 
-			String content = br.lines().collect(Collectors.joining());
+			userId = request.getParameter("userId");
 
-			br.close();
+			if(userId == null) {
 
-			ObjectMapper mapper = new ObjectMapper();
-			Map<String, String> map = mapper.readValue(content, Map.class);
+				if(request.getContentType().contains(MediaType.MULTIPART_FORM_DATA_VALUE)) {
+					return "SKIP";
+				}
 
-			userId = map.get("userId");
+				ObjectMapper mapper = new ObjectMapper();
+				Map<String, String> map = mapper.readValue(IOUtils.toString(request.getReader()), Map.class);
+
+				userId = map.get("userId");
+			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e.getMessage());
+			return "SKIP";
 		}
 
 		return userId;

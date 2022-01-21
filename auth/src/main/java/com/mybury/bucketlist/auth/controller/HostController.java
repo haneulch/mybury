@@ -1,5 +1,10 @@
 package com.mybury.bucketlist.auth.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import com.mybury.bucketlist.auth.annotation.AccessTokenCheck;
 import com.mybury.bucketlist.auth.vo.BeforeWriteResponseVO;
 import com.mybury.bucketlist.auth.vo.BucketlistRemoveRequestVO;
@@ -19,6 +24,7 @@ import com.mybury.bucketlist.auth.vo.NoticeRequestVO;
 import com.mybury.bucketlist.auth.vo.NoticeResponseVO;
 import com.mybury.bucketlist.auth.vo.PinBucketlistRequestVO;
 import com.mybury.bucketlist.auth.vo.RedoBucketlistRequestVO;
+import com.mybury.bucketlist.auth.vo.SearchRequestDTO;
 import com.mybury.bucketlist.auth.vo.SupportItemsResponseVO;
 import com.mybury.bucketlist.auth.vo.WithdrawalRequestVO;
 import com.mybury.bucketlist.core.base.BaseResponseVO;
@@ -37,6 +43,7 @@ import com.mybury.bucketlist.core.service.HostService;
 import com.mybury.bucketlist.core.service.SupportManager;
 import com.mybury.bucketlist.core.service.UserManager;
 import com.mybury.bucketlist.core.util.JwtUtils;
+import com.mybury.bucketlist.core.util.ResponseUtils;
 import com.mybury.bucketlist.core.vo.BucketlistModifyRequestVO;
 import com.mybury.bucketlist.core.vo.BucketlistWriteRequestVO;
 import com.mybury.bucketlist.core.vo.ChangeOrderListDTO;
@@ -50,17 +57,18 @@ import com.mybury.bucketlist.core.vo.ModifyCategoryNameRequestVO;
 import com.mybury.bucketlist.core.vo.ModifyCategoryPriorityRequestVO;
 import com.mybury.bucketlist.core.vo.MyPageResponseVO;
 import com.mybury.bucketlist.core.vo.RemoveCategoryRequestVO;
+import com.mybury.bucketlist.core.vo.SearchResponseVO;
 import com.mybury.bucketlist.core.vo.SupportHistoryRequestVO;
 import com.mybury.bucketlist.core.vo.SupportItemRequestVO;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,12 +76,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
+/**
+ * The type Host controller.
+ */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -83,9 +88,7 @@ public class HostController {
 	@Value("${mybury.address}")
 	private String authServerAddress;
 
-	@Autowired
-	private JwtUtils jwtUtils;
-
+	private final JwtUtils jwtUtils;
 	private final UserManager userManager;
 	private final BucketlistManager bucketlistManager;
 	private final CategoryManager categoryManager;
@@ -93,7 +96,15 @@ public class HostController {
 	private final SupportManager supportManager;
 	private final HostService hostService;
 
-	@Operation(summary = "회원가입 여부 체크")
+	/**
+	 * Sign up check host sign up check response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the host sign up check response vo
+	 */
+	@Operation(summary = "회원가입 여부 체크",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "회원가입 여부 체크 request",
+			content = @Content(schema=@Schema(implementation = HostSignUpCheckRequestVO.class))))
 	@PostMapping(value = "/signup_check")
 	public HostSignUpCheckResponseVO signUpCheck(@RequestBody HostSignUpCheckRequestVO requestVO) {
 		User user = userManager.getUserByEmail(requestVO.getEmail());
@@ -103,14 +114,30 @@ public class HostController {
 		return new HostSignUpCheckResponseVO(signUp, user);
 	}
 
-	@Operation(summary = "회원가입")
+	/**
+	 * Sign up host sign up response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the host sign up response vo
+	 */
+	@Operation(summary = "회원가입",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "회원가입  request",
+			content = @Content(schema=@Schema(implementation = HostSignUpRequestVO.class))))
 	@PostMapping(value = "/signup")
 	public HostSignUpResponseVO signUp(@RequestBody HostSignUpRequestVO requestVO) {
 		User user = userManager.signup(requestVO);
 		return new HostSignUpResponseVO(user);
 	}
 
-	@Operation(summary = "로그인")
+	/**
+	 * Sign in host sign in response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the host sign in response vo
+	 */
+	@Operation(summary = "로그인",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "로그인  request",
+			content = @Content(schema=@Schema(implementation = HostSignInRequestVO.class))))
 	@PostMapping(value = "/signin")
 	public HostSignInResponseVO signIn(@RequestBody HostSignInRequestVO requestVO) {
 		User user = userManager.signin(requestVO);
@@ -119,7 +146,15 @@ public class HostController {
 		return new HostSignInResponseVO(accessToken, refreshToken);
 	}
 
-	@Operation(summary = "프로필 생성")
+	/**
+	 * Create profile base response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the base response vo
+	 */
+	@Operation(summary = "프로필 생성",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "프로필 생성  request",
+			content = @Content(schema=@Schema(implementation = CreateProfileRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/profile")
 	public BaseResponseVO createProfile(CreateProfileRequestVO requestVO) {
@@ -127,7 +162,14 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
-	@Operation(summary = "홈", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "버킷리스트 목록 request", required = true,
+	/**
+	 * Home home response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the home response vo
+	 */
+	@Operation(summary = "홈",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "버킷리스트 목록 request",
 		content = @Content(schema=@Schema(implementation = HomeRequestVO.class))))
 	@AccessTokenCheck
 	@GetMapping(value = "/home")
@@ -145,7 +187,15 @@ public class HostController {
 		return new HomeResponseVO(bucketlists, popupYn);
 	}
 
-	@Operation(summary = "dday별 버킷리스트 조회")
+	/**
+	 * D day d day response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the d day response vo
+	 */
+	@Operation(summary = "dday별 버킷리스트 조회",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "dday별 버킷리스트 조회 request",
+			content = @Content(schema=@Schema(implementation = DDayRequestVO.class))))
 	@AccessTokenCheck
 	@GetMapping(value = "/dDay")
 	public DDayResponseVO dDay(DDayRequestVO requestVO) {
@@ -167,7 +217,15 @@ public class HostController {
 		return new DDayResponseVO(dDayVOList);
 	}
 
-	@Operation(summary = "버킷리스트 완료")
+	/**
+	 * Complete bucketlist base response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the base response vo
+	 */
+	@Operation(summary = "버킷리스트 완료",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "버킷리스트 완료 request",
+			content = @Content(schema=@Schema(implementation = CompleteBucketlistRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/complete")
 	public BaseResponseVO completeBucketlist(@RequestBody CompleteBucketlistRequestVO requestVO) {
@@ -183,7 +241,15 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
-	@Operation(description = "버킷리스트 완료 취소")
+	/**
+	 * Cancel bucketlist base response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the base response vo
+	 */
+	@Operation(summary = "버킷리스트 완료 취소",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "버킷리스트 완료 취소 request",
+			content = @Content(schema=@Schema(implementation = CancelBucketlistRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/cancel")
 	public BaseResponseVO cancelBucketlist(@RequestBody CancelBucketlistRequestVO requestVO) {
@@ -193,12 +259,20 @@ public class HostController {
 		if (bucketlist.getUserCount() < bucketlist.getGoalCount()) {
 			bucketlist.setStatus(CommonCodes.BucketlistStatus.STARTED);
 		}
-		
+
 		bucketlistManager.saveBucketlist(bucketlist);
 		return BaseResponseVO.ok();
 	}
 
-	@Operation(description = "다시 도전하기")
+	/**
+	 * Redo bucketlist base response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the base response vo
+	 */
+	@Operation(summary = "다시 도전하기",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "다시 도전하기 request",
+			content = @Content(schema=@Schema(implementation = RedoBucketlistRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/redo")
 	public BaseResponseVO redoBucketlist(@RequestBody RedoBucketlistRequestVO requestVO) {
@@ -209,7 +283,15 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
-	@Operation(description = "??")
+	/**
+	 * Pin base response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the base response vo
+	 */
+	@Operation(summary = "고정",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "고정 request",
+			content = @Content(schema=@Schema(implementation = PinBucketlistRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/pin")
 	public BaseResponseVO pin(@RequestBody PinBucketlistRequestVO requestVO) {
@@ -224,7 +306,13 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
-	@Operation(description = "사용자별 카테고리 정보")
+	/**
+	 * Before write before write response vo.
+	 *
+	 * @param userId the user id
+	 * @return the before write response vo
+	 */
+	@Operation(summary = "사용자별 카테고리 정보")
 	@AccessTokenCheck
 	@GetMapping(value = "/beforeWrite")
 	public BeforeWriteResponseVO beforeWrite(String userId) {
@@ -235,11 +323,13 @@ public class HostController {
 
 	/**
 	 * 버킷리스트 등록
-	 * 
-	 * @param requestVO
-	 * @return
+	 *
+	 * @param requestVO the request vo
+	 * @return base response vo
 	 */
-	@Operation(description = "버킷리스트 등록")
+	@Operation(summary = "버킷리스트 등록",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "버킷리스트 등록 request",
+			content = @Content(schema=@Schema(implementation = BucketlistWriteRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/write")
 	public BaseResponseVO writeBucketlist(BucketlistWriteRequestVO requestVO) {
@@ -249,12 +339,12 @@ public class HostController {
 
 	/**
 	 * 버킷리스트 상세
-	 * 
-	 * @param id
-	 * @param userId
-	 * @return
+	 *
+	 * @param id     the id
+	 * @param userId the user id
+	 * @return bucketlist
 	 */
-	@Operation(description = "버킷리스트 상세")
+	@Operation(summary = "버킷리스트 상세")
 	@AccessTokenCheck
 	@GetMapping(value = "/bucketlist/{id}")
 	public BucketlistViewResponseVO getBucketlist(@PathVariable String id, String userId) {
@@ -264,11 +354,14 @@ public class HostController {
 
 	/**
 	 * 버킷리스트 수정
-	 * 
-	 * @param id
-	 * @param requestVO
-	 * @return
+	 *
+	 * @param id        the id
+	 * @param requestVO the request vo
+	 * @return base response vo
 	 */
+	@Operation(summary = "버킷리스트 수정",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "버킷리스트 수정 request",
+			content = @Content(schema=@Schema(implementation = BucketlistModifyRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/bucketlist/{id}")
 	public BaseResponseVO modifyBucketlist(@PathVariable String id, BucketlistModifyRequestVO requestVO) {
@@ -276,7 +369,16 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
-	@Operation(description = "버킷리스트 삭제")
+	/**
+	 * Remove bucketlist base response vo.
+	 *
+	 * @param id        the id
+	 * @param requestVO the request vo
+	 * @return the base response vo
+	 */
+	@Operation(summary = "버킷리스트 삭제",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "버킷리스트 삭제 request",
+			content = @Content(schema=@Schema(implementation = BucketlistRemoveRequestVO.class))))
 	@AccessTokenCheck
 	@DeleteMapping(value = "/bucketlist/{id}")
 	public BaseResponseVO removeBucketlist(@PathVariable String id, @RequestBody BucketlistRemoveRequestVO requestVO) {
@@ -284,6 +386,15 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
+	/**
+	 * Mypage my page response vo.
+	 *
+	 * @param requstVO the requst vo
+	 * @return the my page response vo
+	 */
+	@Operation(summary = "마이페이지",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "마이페이지 request",
+			content = @Content(schema=@Schema(implementation = MyPageRequestVO.class))))
 	@AccessTokenCheck
 	@GetMapping(value = "/mypage")
 	public MyPageResponseVO mypage(MyPageRequestVO requstVO) {
@@ -324,12 +435,24 @@ public class HostController {
 					categoryCount++;
 				}
 			}
-			MyPageResponseVO.CategoryVO categoryVO = new MyPageResponseVO.CategoryVO(category.getId(), category.getName(), categoryCount);
-			categoryList.add(categoryVO);
+			if(!(categoryCount == 0 && category.getIsDefault() == 'Y')) {
+				MyPageResponseVO.CategoryVO categoryVO =
+					new MyPageResponseVO.CategoryVO(category.getId(), category.getName(), categoryCount);
+				categoryList.add(categoryVO);
+			}
 		}
 		return categoryList;
 	}
 
+	/**
+	 * Gets category.
+	 *
+	 * @param requestVO the request vo
+	 * @return the category
+	 */
+	@Operation(summary = "카테고리별 버킷리스트 목록 조회",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리별 버킷리스트 목록 조회 request",
+			content = @Content(schema=@Schema(implementation = CategoryRequestVO.class))))
 	@AccessTokenCheck
 	@GetMapping(value = "/category")
 	public CategoryResponseVO getCategory(CategoryRequestVO requestVO) {
@@ -337,6 +460,15 @@ public class HostController {
 		return new CategoryResponseVO(bucketlists);
 	}
 
+	/**
+	 * Create category base response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the base response vo
+	 */
+	@Operation(summary = "카테고리 추가",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리 추가 request",
+			content = @Content(schema=@Schema(implementation = CreateCategoryRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/category")
 	public BaseResponseVO createCategory(@RequestBody CreateCategoryRequestVO requestVO) {
@@ -351,6 +483,15 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
+	/**
+	 * Remove category base response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the base response vo
+	 */
+	@Operation(summary = "카테고리 삭제",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리 삭제 request",
+			content = @Content(schema=@Schema(implementation = RemoveCategoryRequestVO.class))))
 	@AccessTokenCheck
 	@DeleteMapping(value = "/category")
 	public BaseResponseVO removeCategory(@RequestBody RemoveCategoryRequestVO requestVO) {
@@ -358,6 +499,15 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
+	/**
+	 * Modify category name base response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the base response vo
+	 */
+	@Operation(summary = "카테고리명 변경",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리명 변경 request",
+			content = @Content(schema=@Schema(implementation = ModifyCategoryNameRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/category/edit_name")
 	public BaseResponseVO modifyCategoryName(@RequestBody ModifyCategoryNameRequestVO requestVO) {
@@ -365,6 +515,15 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
+	/**
+	 * Modify category priority base response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the base response vo
+	 */
+	@Operation(summary = "카테고리 순서 변경",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리 순서 변경 request",
+			content = @Content(schema=@Schema(implementation = ModifyCategoryPriorityRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/category/edit_priority")
 	public BaseResponseVO modifyCategoryPriority(@RequestBody ModifyCategoryPriorityRequestVO requestVO) {
@@ -372,6 +531,15 @@ public class HostController {
 		return BaseResponseVO.ok();
 	}
 
+	/**
+	 * Withdrawal base response vo.
+	 *
+	 * @param requestVO the request vo
+	 * @return the base response vo
+	 */
+	@Operation(summary = "회원탈퇴",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "회원탈퇴 request",
+			content = @Content(schema=@Schema(implementation = WithdrawalRequestVO.class))))
 	@AccessTokenCheck
 	@DeleteMapping(value = "/withdrawal")
 	public BaseResponseVO withdrawal(@RequestBody WithdrawalRequestVO requestVO) {
@@ -381,11 +549,13 @@ public class HostController {
 
 	/**
 	 * 후원
-	 * 
-	 * @param requestVO
-	 * @return
+	 *
+	 * @param requestVO the request vo
+	 * @return base response vo
 	 */
-	@Operation(description = "버킷리스트 수정")
+	@Operation(summary = "후원하기",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "후원하기 request",
+			content = @Content(schema=@Schema(implementation = SupportHistoryRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/support")
 	public BaseResponseVO support(@RequestBody SupportHistoryRequestVO requestVO) {
@@ -396,11 +566,13 @@ public class HostController {
 
 	/**
 	 * 후원 아이템 리스트
-	 * 
-	 * @param requestVO
-	 * @return
+	 *
+	 * @param requestVO the request vo
+	 * @return support items response vo
 	 */
-	@Operation(description = "후원 아이템 리스트")
+	@Operation(summary = "후원 아이템 리스트",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "후원 아이템 리스트 request",
+			content = @Content(schema=@Schema(implementation = SupportItemRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/support_items")
 	public SupportItemsResponseVO supportItems(@RequestBody SupportItemRequestVO requestVO) {
@@ -422,11 +594,13 @@ public class HostController {
 
 	/**
 	 * 후원 아이템 토큰 및 성공여부 업데이트
-	 * 
-	 * @param requestVO
-	 * @return
+	 *
+	 * @param requestVO the request vo
+	 * @return base response vo
 	 */
-	@Operation(description = "후원 아이템 토큰 및 성공여부 업데이트")
+	@Operation(summary = "후원 아이템 토큰 및 성공여부 업데이트",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "후원 아이템 토큰 및 성공여부 업데이트 request",
+			content = @Content(schema=@Schema(implementation = SupportHistoryRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/support_edit")
 	public BaseResponseVO supportEdit(@RequestBody SupportHistoryRequestVO requestVO) {
@@ -440,27 +614,42 @@ public class HostController {
 
 		return BaseResponseVO.ok();
 	}
-	
+
 	/**
 	 * 버킷리스트 순서 변경
-	 * 
+	 *
+	 * @param requestVO the request vo
+	 * @return the base response vo
 	 */
 	@Operation(summary = "버킷리스트 순서 변경",
-		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "버킷리스트 순서 변겨 request", required = true,
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "버킷리스트 순서 변경 request",
+			required = true,
 			content = @Content(schema=@Schema(implementation = ChangeOrderListDTO.class))))
 	@AccessTokenCheck
-	@GetMapping("/change_order")
+	@PostMapping("/change_order")
 	public BaseResponseVO changeOrder(@RequestBody ChangeOrderListDTO requestVO) {
 		hostService.changeOrder(requestVO);
-
 		return BaseResponseVO.ok();
+	}
+
+	@Operation(summary = "버킷리스트 검색",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "버킷리스트 검색 request",
+		required = true, content = @Content(schema=@Schema(implementation = SearchRequestDTO.class))),
+		responses = {
+			@ApiResponse(responseCode = "200", description = "검색", content = @Content(schema =
+			@Schema(implementation = SearchResponseVO.class)))
+		})
+//	@AccessTokenCheck
+	@PostMapping("/search")
+	public ResponseEntity<Object> search(@RequestBody SearchRequestDTO request) {
+		return ResponseUtils.success(hostService.searchBucketlist(request));
 	}
 
 	/**
 	 * 후원 아이템 수정
-	 * 
-	 * @param param
-	 * @return
+	 *
+	 * @param param the param
+	 * @return base response vo
 	 */
 	@PostMapping(value = "/support_items_edit")
 	public BaseResponseVO updateSupportItems(@RequestBody List<Map<String, String>> param) {
@@ -483,9 +672,10 @@ public class HostController {
 
 	/**
 	 * 팝업 정보
-	 * @return
+	 *
+	 * @return notice
 	 */
-	@Operation(description = "팝업 정보")
+	@Operation(summary = "팝업 정보")
 	@AccessTokenCheck
 	@GetMapping(value = "/notice")
 	public BaseResponseVO getNotice() {
@@ -502,9 +692,9 @@ public class HostController {
 
 	/**
 	 * 공지사항 추가
-	 * 
-	 * @param requestVO
-	 * @return
+	 *
+	 * @param requestVO the request vo
+	 * @return base response vo
 	 */
 	@PostMapping(value = "/save_notice")
 	public BaseResponseVO saveNotice(@RequestBody NoticeRequestVO requestVO) {

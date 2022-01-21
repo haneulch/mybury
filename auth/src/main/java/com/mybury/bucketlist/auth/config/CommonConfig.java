@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-@Configuration
+//@Configuration
 public class CommonConfig {
 	private final String[] urls = {"/profile", "/home", "/dDay", "/complete", "/cancel", "/redo"
-		, "/pin", "/beforeWrite", "/write", "/bucketlist/{id}", "/bucketlist/{id}","/bucketlist/{id}",
+		, "/pin", "/beforeWrite", "/bucketlist/{id}", "/bucketlist/{id}","/bucketlist/{id}",
 		"/mypage", "/category", "/category/*", "/withdrawal", "/support", "/support_items", "/support_edit",
 		"/change_order", "/notice"};
 	@Bean

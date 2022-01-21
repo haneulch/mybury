@@ -2,6 +2,7 @@ package com.mybury.bucketlist.core.base;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,4 +18,13 @@ public class ExceptionHandlerAdvice {
 		ErrorResponse response = new ErrorResponse(ex.getMessage());
 		return response;
 	}
+
+	@ResponseBody
+	@ExceptionHandler(Exception.class)
+	public ErrorResponse exception(Exception ex) {
+		ex.printStackTrace();
+		ErrorResponse response = new ErrorResponse(ex.getMessage());
+		return response;
+	}
+
 }

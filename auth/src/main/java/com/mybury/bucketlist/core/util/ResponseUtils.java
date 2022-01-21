@@ -1,5 +1,6 @@
 package com.mybury.bucketlist.core.util;
 
+import com.mybury.bucketlist.core.vo.CommonResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
