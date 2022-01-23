@@ -1,35 +1,30 @@
 package com.mybury.bucketlist.core.service;
 
 import javax.persistence.EntityManager;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import com.mybury.bucketlist.auth.vo.BucketlistViewResponseVO;
+import com.mybury.bucketlist.auth.dto.BucketlistResDTO;
+import com.mybury.bucketlist.auth.dto.CategoryResDTO;
+import com.mybury.bucketlist.auth.dto.SearchResDTO;
 import com.mybury.bucketlist.auth.vo.SearchRequestDTO;
-import com.mybury.bucketlist.core.domain.Category;
-import com.mybury.bucketlist.core.domain.CategoryId;
-import com.mybury.bucketlist.core.domain.CategoryInfo;
+import com.mybury.bucketlist.core.domain.Bucketlist;
 import com.mybury.bucketlist.core.repository.BucketlistRepository;
 import com.mybury.bucketlist.core.repository.CategoryRepository;
 import com.mybury.bucketlist.core.vo.BucketlistVO;
-import com.mybury.bucketlist.core.vo.SearchResponseVO;
+import com.mybury.bucketlist.core.vo.CategoryVO;
+import com.mybury.bucketlist.core.vo.ChangeOrderListDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.mybury.bucketlist.core.domain.Bucketlist;
-import com.mybury.bucketlist.core.vo.ChangeOrderListDTO;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class HostService {
-	
+
 	private final EntityManager em;
 	private final BucketlistRepository bucketlistRepository;
 	private final CategoryRepository categoryRepository;
-	
+
 	@Transactional
 	public void changeOrder(ChangeOrderListDTO dto) {
 		if(!dto.getOrders().isEmpty()) {
@@ -42,24 +37,42 @@ public class HostService {
 		}
 	}
 
-  public SearchResponseVO searchBucketlist(SearchRequestDTO request) {
-		SearchResponseVO searchResponseVO = new SearchResponseVO();
+  public SearchResDTO searchBucketlist(SearchRequestDTO request) {
+		SearchResDTO searchResponseVO = new SearchResDTO();
+		List<CategoryVO> categoryVOS = null;
+		List<CategoryResDTO> categoryResDTOS = null;
+		List<BucketlistVO> bucketlistVOS = null;
+		List<BucketlistResDTO> bucketlistResDTOS = null;
+
 		switch (request.getFilter()) {
 			case "category" :
-				searchResponseVO.setCategories(categoryRepository.findByUser_IdAndNameContaining(request.getUserId(),
-					request.getSearchText()));
+				categoryVOS = categoryRepository.findByUser_IdAndNameContaining(request.getUserId(), request.getSearchText());
+				categoryResDTOS = categoryVOS.stream()
+					.map(c -> new CategoryResDTO(c.getId(), c.getName(), bucketlistRepository.countByCategory_Id(c.getId())))
+					.collect(Collectors.toList());
+				searchResponseVO.setCategories(categoryResDTOS);
 				break;
 			case "dday" :
-				List<BucketlistVO> bucketlists =
-					bucketlistRepository.findProjectionByTitleContainingAndUser_Id(request.getSearchText(),
-				request.getUserId());
-				searchResponseVO.setBucketlists(bucketlists.stream().filter(v -> v.getDDate() != null).collect(Collectors.toList()));
+				bucketlistVOS = bucketlistRepository.findByTitleContainingAndUser_Id(request.getSearchText(), request.getUserId());
+				bucketlistVOS = bucketlistVOS.stream().filter(v -> v.getDDate() != null).collect(Collectors.toList());
+				bucketlistResDTOS = bucketlistVOS.stream()
+					.map(b -> new BucketlistResDTO(b).init())
+					.collect(Collectors.toList());
+				searchResponseVO.setBucketlists(bucketlistResDTOS);
 				break;
 			default:
-				searchResponseVO.setCategories(categoryRepository.findByUser_IdAndNameContaining(request.getUserId(),
-					request.getSearchText()));
-				searchResponseVO.setBucketlists(bucketlistRepository.findProjectionByTitleContainingAndUser_Id(request.getSearchText(),
-					request.getUserId()));
+				categoryVOS = categoryRepository.findByUser_IdAndNameContaining(request.getUserId(), request.getSearchText());
+				categoryResDTOS = categoryVOS.stream()
+					.map(c -> new CategoryResDTO(c.getId(), c.getName(), bucketlistRepository.countByCategory_Id(c.getId())))
+					.collect(Collectors.toList());
+				searchResponseVO.setCategories(categoryResDTOS);
+
+				bucketlistVOS = bucketlistRepository.findByTitleContainingAndUser_Id(request.getSearchText(), request.getUserId());
+				bucketlistVOS = bucketlistVOS.stream().filter(v -> v.getDDate() != null).collect(Collectors.toList());
+				bucketlistResDTOS = bucketlistVOS.stream()
+					.map(b -> new BucketlistResDTO(b).init())
+					.collect(Collectors.toList());
+				searchResponseVO.setBucketlists(bucketlistResDTOS);
 				break;
 		}
 		return searchResponseVO;

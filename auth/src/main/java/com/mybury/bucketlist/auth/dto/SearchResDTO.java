@@ -1,7 +1,6 @@
-package com.mybury.bucketlist.core.vo;
+package com.mybury.bucketlist.auth.dto;
 
 import java.util.List;
-import com.mybury.bucketlist.core.domain.Bucketlist;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,10 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "검색 Response")
-public class SearchResponseVO {
+public class SearchResDTO {
   @Schema(description = "버킷리스트 목록")
-  List<BucketlistVO> bucketlists;
+  List<BucketlistResDTO> bucketlists;
 
   @Schema(description = "카테고리 목록")
-  List<CategoryVO> categories;
+  List<CategoryResDTO> categories;
 }

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import com.mybury.bucketlist.auth.annotation.AccessTokenCheck;
+import com.mybury.bucketlist.auth.dto.SearchResDTO;
 import com.mybury.bucketlist.auth.vo.BeforeWriteResponseVO;
 import com.mybury.bucketlist.auth.vo.BucketlistRemoveRequestVO;
 import com.mybury.bucketlist.auth.vo.BucketlistViewResponseVO;
@@ -57,7 +58,6 @@ import com.mybury.bucketlist.core.vo.ModifyCategoryNameRequestVO;
 import com.mybury.bucketlist.core.vo.ModifyCategoryPriorityRequestVO;
 import com.mybury.bucketlist.core.vo.MyPageResponseVO;
 import com.mybury.bucketlist.core.vo.RemoveCategoryRequestVO;
-import com.mybury.bucketlist.core.vo.SearchResponseVO;
 import com.mybury.bucketlist.core.vo.SupportHistoryRequestVO;
 import com.mybury.bucketlist.core.vo.SupportItemRequestVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -637,7 +637,7 @@ public class HostController {
 		required = true, content = @Content(schema=@Schema(implementation = SearchRequestDTO.class))),
 		responses = {
 			@ApiResponse(responseCode = "200", description = "검색", content = @Content(schema =
-			@Schema(implementation = SearchResponseVO.class)))
+			@Schema(implementation = SearchResDTO.class)))
 		})
 //	@AccessTokenCheck
 	@PostMapping("/search")

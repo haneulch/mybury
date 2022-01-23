@@ -49,4 +49,12 @@ public class DateUtil {
     c.add(Calendar.DAY_OF_MONTH, amount);
     return c.getTime();
   }
+
+  public static int getDday(Date date) {
+    long now = new Date().getTime();
+    long ddate = date.getTime();
+    int divider = 1000 * 60 * 60 * 24;
+
+    return (int) ((now - ddate) / divider);
+  }
 }

@@ -1,25 +1,22 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-		pageEncoding="EUC-KR"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-	<head>	
-		<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<html lang="ko">
+	<head>
 		<title>Mybury Admin</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link href="../../static/css/bootstrap/bootstrap.min.css" rel="stylesheet">
 		<link href="../../static/css/bootstrap/dashboard.css" rel="stylesheet">
 	</head>
 	<body>
 		<div id="content">
 			<header-menu></header-menu>
-		
+
 			<div class="container-fluid">
 				<div class="row">
 					<left-menu></left-menu>
-					
+
 					<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 pt-3">
-					
+
 						<menu-name :menu-name="menuName" :is-search="false" :search-url="link"></menu-name>
-								
+
 						<div class="col-md-8 order-md-1">
 							<form class="needs-validation" novalidate>
 								<div class="row">
@@ -28,35 +25,35 @@
 										<input type="text" class="form-control" id="id" :value="user.id" required readonly>
 									</div>
 									<div class="col-md-6 mb-3">
-										<label for="name">¿Ã∏ß</label>
+										<label for="name">Ïù¥Î¶Ñ</label>
 										<input type="text" class="form-control" id="name" :value="user.name" required readonly>
 									</div>
 								</div>
-								
+
 								<div class="row">
 									<div class="col-md-6 mb-3">
 										<label for="email">Email</label>
 										<input type="text" class="form-control" id="email" :value="user.email" required readonly>
 									</div>
 									<div class="col-md-6 mb-3">
-										<label for="lastLoginDt">√÷¡æ ∑Œ±◊¿œ ¿œΩ√</label>
+										<label for="lastLoginDt">ÏµúÏ¢Ö Î°úÍ∑∏Ïùº ÏùºÏãú</label>
 										<input type="text" class="form-control" id="lastLoginDt" :value="user.lastLoginDt | date" required readonly>
 									</div>
 								</div>
-								
+
 								<hr class="mb-4">
-								<h4 class="mb-3">±∏∏≈ ≥ªø™</h4>
-				
+								<h4 class="mb-3">Íµ¨Îß§ ÎÇ¥Ïó≠</h4>
+
 								<div class="table-responsive">
 									<table class="table table-striped text-center">
 										<thead>
 											<tr>
 												<th>#</th>
 												<th>token</th>
-												<th>æ∆¿Ã≈€∏Ì</th>
-												<th>º∫∞¯ø©∫Œ</th>
-												<th>ªË¡¶ø©∫Œ</th>
-												<th>±∏∏≈¿œΩ√</th>
+												<th>ÏïÑÏù¥ÌÖúÎ™Ö</th>
+												<th>ÏÑ±Í≥µÏó¨Î∂Ä</th>
+												<th>ÏÇ≠Ï†úÏó¨Î∂Ä</th>
+												<th>Íµ¨Îß§ÏùºÏãú</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -71,27 +68,27 @@
 										</tbody>
 									</table>
 								</div>
-				
+
 								<hr class="mb-4">
-								<a href="javascript:void(0)" class="btn btn-primary" @click="toList">µ⁄∑Œ</a>
+								<a href="javascript:void(0)" class="btn btn-primary" @click="toList">Îí§Î°ú</a>
 							</form>
 						</div>
 					</main>
 				</div>
 			</div>
 		</div>
-		
+
 		<script src="../../static/js/vue/vue.js"></script>
 		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-		
+
 		<script src="../../static/js/bootstrap/bootstrap.bundle.min.js"></script>
-				
+
 		<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 
 		<script type="module" src="../../static/js/vue/vue_user_detail.js"></script>
-				
-		<jsp:include page="./template_sources.jsp"/>
+
+<!--		<jsp:include page="./template_sources.html"/>-->
 	</body>
-	
-	
+
+
 </html>
