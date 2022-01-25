@@ -435,7 +435,7 @@ public class HostController {
 					categoryCount++;
 				}
 			}
-			if(!(categoryCount == 0 && category.getIsDefault() == 'Y')) {
+			if(!(categoryCount == 0 && category.getName().equals("없음"))) {
 				MyPageResponseVO.CategoryVO categoryVO =
 					new MyPageResponseVO.CategoryVO(category.getId(), category.getName(), categoryCount);
 				categoryList.add(categoryVO);
@@ -639,7 +639,7 @@ public class HostController {
 			@ApiResponse(responseCode = "200", description = "검색", content = @Content(schema =
 			@Schema(implementation = SearchResDTO.class)))
 		})
-//	@AccessTokenCheck
+	@AccessTokenCheck
 	@PostMapping("/search")
 	public ResponseEntity<Object> search(@RequestBody SearchRequestDTO request) {
 		return ResponseUtils.success(hostService.searchBucketlist(request));

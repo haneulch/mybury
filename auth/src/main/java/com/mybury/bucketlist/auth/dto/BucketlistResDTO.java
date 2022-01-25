@@ -32,7 +32,7 @@ public class BucketlistResDTO extends CommonDTO {
   private Date dDate;
 
   @Schema(description = "d-day")
-  private int dday;
+  private int dDay;
 
   @Schema(description = "달성횟수")
   private int userCount;
@@ -54,7 +54,7 @@ public class BucketlistResDTO extends CommonDTO {
   }
 
   public BucketlistResDTO init() {
-    setDday(DateUtil.getDday(getDDate()));
+    setDDay(DateUtil.getDday(getDDate()));
     return this;
   }
 }
