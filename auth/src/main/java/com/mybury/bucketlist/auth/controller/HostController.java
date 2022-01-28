@@ -637,8 +637,7 @@ public class HostController {
 		required = true, content = @Content(schema=@Schema(implementation = SearchRequestDTO.class))),
 		responses = {
 			@ApiResponse(responseCode = "200", description = "검색", content = @Content(schema =
-			@Schema(implementation = SearchResDTO.class)))
-		})
+			@Schema(implementation = SearchResDTO.class)))})
 	@AccessTokenCheck
 	@PostMapping("/search")
 	public ResponseEntity<Object> search(@RequestBody SearchRequestDTO request) {
@@ -683,7 +682,8 @@ public class HostController {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		String today = sdf.format(new Date());
 
-		List<Notice> notice = noticeRepository.findByStartDtLessThanEqualAndEndDtGreaterThanEqualAndDpYn(today, today, "Y".charAt(0));
+		List<Notice> notice = noticeRepository.findByStartDtLessThanEqualAndEndDtGreaterThanEqualAndDpYn(today, today,
+			"Y".charAt(0));
 
 		NoticeResponseVO vo = new NoticeResponseVO(notice);
 
@@ -699,15 +699,14 @@ public class HostController {
 	@PostMapping(value = "/save_notice")
 	public BaseResponseVO saveNotice(@RequestBody NoticeRequestVO requestVO) {
 
-		Notice notice = Notice
-							.builder()
-							.seq(requestVO.getSeq())
-							.title(requestVO.getTitle())
-							.content(requestVO.getContent())
-							.startDt(requestVO.getStartDt())
-							.endDt(requestVO.getEndDt())
-							.dpYn(requestVO.getDpYn().charAt(0))
-							.build();
+		Notice notice = Notice.builder()
+			.seq(requestVO.getSeq())
+			.title(requestVO.getTitle())
+			.content(requestVO.getContent())
+			.startDt(requestVO.getStartDt())
+			.endDt(requestVO.getEndDt())
+			.dpYn(requestVO.getDpYn().charAt(0))
+			.build();
 
 		noticeRepository.save(notice);
 

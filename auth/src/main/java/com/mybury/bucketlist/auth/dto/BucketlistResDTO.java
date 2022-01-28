@@ -1,6 +1,7 @@
 package com.mybury.bucketlist.auth.dto;
 
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mybury.bucketlist.core.util.DateUtil;
 import com.mybury.bucketlist.core.vo.BucketlistVO;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,9 +29,11 @@ public class BucketlistResDTO extends CommonDTO {
   @Schema(description = "상태")
   private String status;
 
+  @JsonProperty("dDate")
   @Schema(description = "d-date")
   private Date dDate;
 
+  @JsonProperty("dDay")
   @Schema(description = "d-day")
   private int dDay;
 

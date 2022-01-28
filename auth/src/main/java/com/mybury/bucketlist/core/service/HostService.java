@@ -27,13 +27,14 @@ public class HostService {
 
 	@Transactional
 	public void changeOrder(ChangeOrderListDTO dto) {
-		if(!dto.getOrders().isEmpty()) {
-			int i = 1;
-			for(String id : dto.getOrders()) {
-				Bucketlist bucketlist = em.find(Bucketlist.class, id);
-				bucketlist.setOrderSeq(i);
-				i ++;
-			}
+		if (dto.getOrders().isEmpty()) {
+			return;
+		}
+		int i = 1;
+		for(String id : dto.getOrders()) {
+			Bucketlist bucketlist = em.find(Bucketlist.class, id);
+			bucketlist.setOrderSeq(i);
+			i ++;
 		}
 	}
 
@@ -53,8 +54,7 @@ public class HostService {
 				searchResponseVO.setCategories(categoryResDTOS);
 				break;
 			case "dday" :
-				bucketlistVOS = bucketlistRepository.findByTitleContainingAndUser_Id(request.getSearchText(), request.getUserId());
-				bucketlistVOS = bucketlistVOS.stream().filter(v -> v.getDDate() != null).collect(Collectors.toList());
+				bucketlistVOS = bucketlistRepository.findBydDateNotNullAndTitleContainingAndUser_Id(request.getSearchText(), request.getUserId());
 				bucketlistResDTOS = bucketlistVOS.stream()
 					.map(b -> new BucketlistResDTO(b).init())
 					.collect(Collectors.toList());
@@ -67,8 +67,7 @@ public class HostService {
 					.collect(Collectors.toList());
 				searchResponseVO.setCategories(categoryResDTOS);
 
-				bucketlistVOS = bucketlistRepository.findByTitleContainingAndUser_Id(request.getSearchText(), request.getUserId());
-				bucketlistVOS = bucketlistVOS.stream().filter(v -> v.getDDate() != null).collect(Collectors.toList());
+				bucketlistVOS = bucketlistRepository.findBydDateNotNullAndTitleContainingAndUser_Id(request.getSearchText(), request.getUserId());
 				bucketlistResDTOS = bucketlistVOS.stream()
 					.map(b -> new BucketlistResDTO(b).init())
 					.collect(Collectors.toList());
