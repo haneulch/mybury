@@ -2,6 +2,8 @@ package com.mybury.bucketlist.core.repository;
 
 import java.util.List;
 
+import com.mybury.bucketlist.core.domain.CategoryId;
+import com.mybury.bucketlist.core.vo.CategoryVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +23,12 @@ public interface CategoryRepository extends JpaRepository<Category, String>, Cat
 	List<CategoryInfo> findCategoryInfo(@Param("userId") String userId);
 	
 	void deleteByUserId(String userId);
+
+	Category findByIsDefaultAndUser_id(Character isDefault, String userId);
+
+	void deleteByIsDefaultIsNotAndUser_Id(Character isDefault, String userId);
+
+	Category findTopByUser_IdOrderByPriorityDesc(String userId);
+
+	List<CategoryVO> findByUser_IdAndNameContaining(String userId, String name);
 }

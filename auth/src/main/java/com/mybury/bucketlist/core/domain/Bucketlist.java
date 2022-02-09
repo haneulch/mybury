@@ -40,7 +40,6 @@ public class Bucketlist extends BaseTimestampEntity<String> {
 
 	@Lob
 	@Column(nullable = false)
-	@ColumnTransformer(read = ColumnEncryptionConstants.DEC_BUCKETLIST_TITLE, write = ColumnEncryptionConstants.ENC_COLUMN)
 	private String title;
 
 	@Column
@@ -54,7 +53,7 @@ public class Bucketlist extends BaseTimestampEntity<String> {
 	@Column
 	private String status;
 
-	@JsonIgnore
+//	@JsonIgnore
 	@Column(name = "d_date")
 	private Date dDate;
 
@@ -81,19 +80,15 @@ public class Bucketlist extends BaseTimestampEntity<String> {
 
 	@Lob
 	@Column
-	@ColumnTransformer(read = ColumnEncryptionConstants.DEC_BUCKETLIST_MEMO, write = ColumnEncryptionConstants.ENC_COLUMN)
 	private String memo;
 
 	@Column(name = "img_url_1")
-	@ColumnTransformer(read = ColumnEncryptionConstants.DEC_BUCKETLIST_IMG_URL_1, write = ColumnEncryptionConstants.ENC_COLUMN)
 	private String imgUrl1;
 
 	@Column(name = "img_url_2")
-	@ColumnTransformer(read = ColumnEncryptionConstants.DEC_BUCKETLIST_IMG_URL_2, write = ColumnEncryptionConstants.ENC_COLUMN)
 	private String imgUrl2;
 
 	@Column(name = "img_url_3")
-	@ColumnTransformer(read = ColumnEncryptionConstants.DEC_BUCKETLIST_IMG_URL_3, write = ColumnEncryptionConstants.ENC_COLUMN)
 	private String imgUrl3;
 
 	@OneToOne

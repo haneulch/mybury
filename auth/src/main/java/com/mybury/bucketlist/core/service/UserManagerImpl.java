@@ -82,6 +82,7 @@ public class UserManagerImpl implements UserManager {
 		category.setName("없음");
 		category.setPriority(0);
 		category.setUser(user);
+		category.setIsDefault('Y');
 		categoryRepository.save(category);
 
 		return userRepository.save(user);

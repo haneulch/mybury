@@ -2,25 +2,27 @@ package com.mybury.bucketlist.core.repository;
 
 import java.util.Date;
 import java.util.List;
-
+import com.mybury.bucketlist.auth.dto.BucketlistResDTO;
 import com.mybury.bucketlist.core.domain.Bucketlist;
 import com.mybury.bucketlist.core.vo.HomeRequestVO;
 
 public interface BucketlistRepositoryCustom {
 
-	List<Bucketlist> getBucketlists(HomeRequestVO requestVO);
+  List<BucketlistResDTO> getBucketlistResDTO(HomeRequestVO requestVO);
 
-	boolean existsPopupBucketlist(String userId, int popupPeriod);
+  List<Bucketlist> getBucketlists(HomeRequestVO requestVO);
 
-	List<Bucketlist> getDDayBucketlist(String userId, String filter);
+  boolean existsPopupBucketlist(String userId, int popupPeriod);
 
-	List<Bucketlist> getBucketlistsByDDate(Date date, String userId);
+  List<Bucketlist> getDDayBucketlist(String userId, String filter);
 
-	String getLastBucketlistId();
+  List<Bucketlist> getBucketlistsByDDate(Date date, String userId);
 
-	int getStartedBucketlistCount(String userId);
+  String getLastBucketlistId();
 
-	int getCompletedBucketlistCount(String userId);
+  int getStartedBucketlistCount(String userId);
 
-	List<Bucketlist> getBucketlistByCategoryId(String categoryId);
+  int getCompletedBucketlistCount(String userId);
+
+  List<Bucketlist> getBucketlistByCategoryId(String categoryId);
 }

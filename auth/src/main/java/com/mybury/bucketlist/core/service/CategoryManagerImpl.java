@@ -41,7 +41,12 @@ public class CategoryManagerImpl implements CategoryManager {
 
 	@Override
 	public int getLastPriorityCategory(String userId) {
-		return categoryRepository.getLastPriorityCategory(userId);
+		Category category = categoryRepository.findTopByUser_IdOrderByPriorityDesc(userId);
+		if(category == null) {
+			return 0;
+		}
+		return category.getPriority();
+//		return categoryRepository.getLastPriorityCategory(userId);
 	}
 
 	@Override
@@ -66,7 +71,8 @@ public class CategoryManagerImpl implements CategoryManager {
 	@Override
 	@Transactional
 	public void remove(RemoveCategoryRequestVO requestVO) {
-		Category defaultCategory = categoryRepository.getDefaultCategory(requestVO.getUserId());
+//		Category defaultCategory = categoryRepository.getDefaultCategory(requestVO.getUserId());
+		Category defaultCategory = categoryRepository.findByIsDefaultAndUser_id('Y', requestVO.getUserId());
 
 		List<String> categoryIdList = requestVO.getCategoryIdList();
 		for (String categoryId : categoryIdList) {

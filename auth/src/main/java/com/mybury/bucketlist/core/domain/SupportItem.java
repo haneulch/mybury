@@ -44,7 +44,6 @@ public class SupportItem extends BaseTimestampEntity<String> {
 	private String itemImg;
 	
 	@Column(name="item_name")
-	@ColumnTransformer(read = ColumnEncryptionConstants.DEC_ITEM_NAME, write = ColumnEncryptionConstants.ENC_COLUMN)
 	private String itemName;
 	
 	@Column(name="google_key")
