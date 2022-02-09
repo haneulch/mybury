@@ -3,8 +3,7 @@ package com.mybury.bucketlist.core.service;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import com.mybury.bucketlist.auth.vo.SearchRequestDTO;
+import com.mybury.bucketlist.auth.dto.BucketlistResDTO;
 import com.mybury.bucketlist.core.domain.Bucketlist;
 import com.mybury.bucketlist.core.vo.BucketlistModifyRequestVO;
 import com.mybury.bucketlist.core.vo.BucketlistWriteRequestVO;
@@ -39,4 +38,6 @@ public interface BucketlistManager {
   String getLastBucketlistId();
 
   Map<String, List<Bucketlist>> findBydDateIsNotNullAndUser_Id(String userId);
+
+  List<BucketlistResDTO> getBucketlistResDTO(HomeRequestVO requestVO);
 }

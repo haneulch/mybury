@@ -2,11 +2,13 @@ package com.mybury.bucketlist.core.repository;
 
 import java.util.Date;
 import java.util.List;
-
+import com.mybury.bucketlist.auth.dto.BucketlistResDTO;
 import com.mybury.bucketlist.core.domain.Bucketlist;
 import com.mybury.bucketlist.core.vo.HomeRequestVO;
 
 public interface BucketlistRepositoryCustom {
+
+  List<BucketlistResDTO> getBucketlistResDTO(HomeRequestVO requestVO);
 
   List<Bucketlist> getBucketlists(HomeRequestVO requestVO);
 

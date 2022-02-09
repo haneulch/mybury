@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import com.mybury.bucketlist.auth.annotation.AccessTokenCheck;
+import com.mybury.bucketlist.auth.dto.BucketlistResDTO;
+import com.mybury.bucketlist.auth.dto.SearchResDTO;
 import com.mybury.bucketlist.auth.vo.BeforeWriteResponseVO;
 import com.mybury.bucketlist.auth.vo.BucketlistRemoveRequestVO;
 import com.mybury.bucketlist.auth.vo.BucketlistViewResponseVO;
@@ -57,7 +59,6 @@ import com.mybury.bucketlist.core.vo.ModifyCategoryNameRequestVO;
 import com.mybury.bucketlist.core.vo.ModifyCategoryPriorityRequestVO;
 import com.mybury.bucketlist.core.vo.MyPageResponseVO;
 import com.mybury.bucketlist.core.vo.RemoveCategoryRequestVO;
-import com.mybury.bucketlist.core.vo.SearchResponseVO;
 import com.mybury.bucketlist.core.vo.SupportHistoryRequestVO;
 import com.mybury.bucketlist.core.vo.SupportItemRequestVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -174,15 +175,12 @@ public class HostController {
 	@AccessTokenCheck
 	@GetMapping(value = "/home")
 	public HomeResponseVO home(HomeRequestVO requestVO) {
-		List<Bucketlist> bucketlists = bucketlistManager.getBucketlists(requestVO);
+		List<BucketlistResDTO> bucketlists = bucketlistManager.getBucketlistResDTO(requestVO);
 
 		boolean popupYn = false;
-		String popupPeriodStr = "1,7";
-		for (String popupPeriod : popupPeriodStr.split(",")) {
-			popupYn = bucketlistManager.existsPopupBucketlist(requestVO.getUserId(), Integer.parseInt(popupPeriod));
-			if (popupYn) {
-				break;
-			}
+		for(BucketlistResDTO bucketlistResDTO : bucketlists) {
+			popupYn = bucketlistResDTO.getDDay() == 1 || bucketlistResDTO.getDDay() == 7;
+			if(popupYn) break;
 		}
 		return new HomeResponseVO(bucketlists, popupYn);
 	}
@@ -435,7 +433,7 @@ public class HostController {
 					categoryCount++;
 				}
 			}
-			if(!(categoryCount == 0 && category.getIsDefault() == 'Y')) {
+			if(!(categoryCount == 0 && category.getName().equals("없음"))) {
 				MyPageResponseVO.CategoryVO categoryVO =
 					new MyPageResponseVO.CategoryVO(category.getId(), category.getName(), categoryCount);
 				categoryList.add(categoryVO);
@@ -637,9 +635,8 @@ public class HostController {
 		required = true, content = @Content(schema=@Schema(implementation = SearchRequestDTO.class))),
 		responses = {
 			@ApiResponse(responseCode = "200", description = "검색", content = @Content(schema =
-			@Schema(implementation = SearchResponseVO.class)))
-		})
-//	@AccessTokenCheck
+			@Schema(implementation = SearchResDTO.class)))})
+	@AccessTokenCheck
 	@PostMapping("/search")
 	public ResponseEntity<Object> search(@RequestBody SearchRequestDTO request) {
 		return ResponseUtils.success(hostService.searchBucketlist(request));
@@ -683,7 +680,8 @@ public class HostController {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		String today = sdf.format(new Date());
 
-		List<Notice> notice = noticeRepository.findByStartDtLessThanEqualAndEndDtGreaterThanEqualAndDpYn(today, today, "Y".charAt(0));
+		List<Notice> notice = noticeRepository.findByStartDtLessThanEqualAndEndDtGreaterThanEqualAndDpYn(today, today,
+			"Y".charAt(0));
 
 		NoticeResponseVO vo = new NoticeResponseVO(notice);
 
@@ -699,15 +697,14 @@ public class HostController {
 	@PostMapping(value = "/save_notice")
 	public BaseResponseVO saveNotice(@RequestBody NoticeRequestVO requestVO) {
 
-		Notice notice = Notice
-							.builder()
-							.seq(requestVO.getSeq())
-							.title(requestVO.getTitle())
-							.content(requestVO.getContent())
-							.startDt(requestVO.getStartDt())
-							.endDt(requestVO.getEndDt())
-							.dpYn(requestVO.getDpYn().charAt(0))
-							.build();
+		Notice notice = Notice.builder()
+			.seq(requestVO.getSeq())
+			.title(requestVO.getTitle())
+			.content(requestVO.getContent())
+			.startDt(requestVO.getStartDt())
+			.endDt(requestVO.getEndDt())
+			.dpYn(requestVO.getDpYn().charAt(0))
+			.build();
 
 		noticeRepository.save(notice);
 

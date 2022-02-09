@@ -1,25 +1,64 @@
 package com.mybury.bucketlist.core.repository;
 
-import com.mybury.bucketlist.core.constants.CommonCodes;
-import com.mybury.bucketlist.core.domain.Bucketlist;
-import com.mybury.bucketlist.core.util.DateUtil;
-import com.mybury.bucketlist.core.vo.HomeRequestVO;
-import com.mysema.query.jpa.impl.JPAQuery;
-import com.mybury.bucketlist.core.domain.QBucketlist;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Date;
 import java.util.List;
+import com.mybury.bucketlist.auth.dto.BucketlistResDTO;
+import com.mybury.bucketlist.auth.dto.QBucketlistResDTO;
+import com.mybury.bucketlist.core.constants.CommonCodes;
+import com.mybury.bucketlist.core.domain.Bucketlist;
+import com.mybury.bucketlist.core.domain.QBucketlist;
+import com.mybury.bucketlist.core.util.DateUtil;
+import com.mybury.bucketlist.core.vo.HomeRequestVO;
+import com.mysema.query.jpa.impl.JPAQuery;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
 
   @PersistenceContext
   private EntityManager entityManager;
+
+  @Override
+  public List<BucketlistResDTO> getBucketlistResDTO(HomeRequestVO requestVO) {
+    JPAQuery query = new JPAQuery(entityManager);
+    QBucketlist bucketlist = QBucketlist.bucketlist;
+    QBucketlistResDTO result = new QBucketlistResDTO(bucketlist.id, bucketlist.title, bucketlist.pin,
+      bucketlist.status, bucketlist.dDate, bucketlist.userCount, bucketlist.goalCount, bucketlist.completedDt,
+      bucketlist.orderSeq, bucketlist.category().name);
+
+    query.from(bucketlist).where(bucketlist.user().id.eq(requestVO.getUserId()));
+
+    String filter = requestVO.getFilter();
+
+    if (StringUtils.isNotBlank(filter)) {
+      if (filter.equals("started"))
+        query.where(bucketlist.status.eq("1"));
+
+      if (filter.equals("completed"))
+        query.where(bucketlist.status.eq("2"));
+
+      if (filter.equals("all"))
+        query.where(bucketlist.status.eq("1").or(bucketlist.status.eq("2")));
+    }
+
+    String sort = requestVO.getSort();
+
+    if (sort.equals("updatedDt")) {
+      query.orderBy(bucketlist.updatedDt.desc());
+    }
+
+    if (sort.equals("createdDt")) {
+      query.orderBy(bucketlist.createdDt.asc());
+    }
+
+    if (sort.equals("custom")) {
+      query.orderBy(bucketlist.orderSeq.asc());
+    }
+    return query.list(result);
+  }
 
   @Override
   public List<Bucketlist> getBucketlists(HomeRequestVO requestVO) {

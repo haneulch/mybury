@@ -5,11 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.mybury.bucketlist.auth.vo.SearchRequestDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.mybury.bucketlist.auth.dto.BucketlistResDTO;
 import com.mybury.bucketlist.core.domain.Bucketlist;
 import com.mybury.bucketlist.core.domain.Category;
 import com.mybury.bucketlist.core.domain.User;
@@ -20,6 +16,8 @@ import com.mybury.bucketlist.core.util.DateUtil;
 import com.mybury.bucketlist.core.vo.BucketlistModifyRequestVO;
 import com.mybury.bucketlist.core.vo.BucketlistWriteRequestVO;
 import com.mybury.bucketlist.core.vo.HomeRequestVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class BucketlistManagerImpl implements BucketlistManager {
@@ -213,5 +211,9 @@ public class BucketlistManagerImpl implements BucketlistManager {
       .stream()
       .collect(Collectors.groupingBy(n -> sdf.format(n.getDDate())));
     return map;
+  }
+
+  @Override public List<BucketlistResDTO> getBucketlistResDTO(HomeRequestVO requestVO) {
+    return bucketlistRepository.getBucketlistResDTO(requestVO);
   }
 }

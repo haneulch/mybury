@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
 	@RequestMapping(value = "/privacy_policy")
 	public String privacyPolicy() {
-		return "privacy_policy";
+		return "/privacy_policy";
 	}
 
 	@RequestMapping(value = "/terms_of_use")
 	public String termsOfUse() {
-		return "terms_of_use";
+		return "/terms_of_use";
 	}
 }
