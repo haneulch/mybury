@@ -67,7 +67,7 @@ public class HostService {
 					.collect(Collectors.toList());
 				searchResponseVO.setCategories(categoryResDTOS);
 
-				bucketlistVOS = bucketlistRepository.findBydDateNotNullAndTitleContainingAndUser_Id(request.getSearchText(), request.getUserId());
+				bucketlistVOS = bucketlistRepository.findByTitleContainingAndUser_Id(request.getSearchText(), request.getUserId());
 				bucketlistResDTOS = bucketlistVOS.stream()
 					.map(b -> new BucketlistResDTO(b).init())
 					.collect(Collectors.toList());
