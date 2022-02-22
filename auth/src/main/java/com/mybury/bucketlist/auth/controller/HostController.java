@@ -143,7 +143,7 @@ public class HostController {
 	public HostSignInResponseVO signIn(@RequestBody HostSignInRequestVO requestVO) {
 		User user = userManager.signin(requestVO);
 		String accessToken = jwtUtils.createAccessToken(user.getId());
-		String refreshToken = jwtUtils.createRefreshToken(accessToken);
+		String refreshToken = jwtUtils.createRefreshToken(user.getId());
 		return new HostSignInResponseVO(accessToken, refreshToken);
 	}
 
