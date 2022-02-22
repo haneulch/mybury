@@ -1,7 +1,14 @@
 package com.mybury.bucketlist.auth.v2.controller;
 
+import com.mybury.bucketlist.auth.annotation.AccessTokenCheck;
+import com.mybury.bucketlist.core.util.ResponseUtils;
+import com.mybury.bucketlist.core.v2.service.CategoryService;
+import com.mybury.bucketlist.core.v2.vo.CategoryPriorityRequest;
+import com.mybury.bucketlist.core.v2.vo.CategoryRequest;
+import com.mybury.bucketlist.core.v2.vo.UserRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,23 +18,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mybury.bucketlist.auth.annotation.AccessTokenCheck;
-import com.mybury.bucketlist.core.util.ResponseUtils;
-import com.mybury.bucketlist.core.v2.service.CategoryService;
-import com.mybury.bucketlist.core.v2.vo.CategoryPriorityRequest;
-import com.mybury.bucketlist.core.v2.vo.CategoryRequest;
-import com.mybury.bucketlist.core.v2.vo.UserRequest;
-
 @Tag(name = "Category", description = "카테고리")
 @RestController
 @RequestMapping("/v2/category")
+@RequiredArgsConstructor
 public class CategoryController {
-	
-	private final CategoryService categoryService; 
-	
-	CategoryController(CategoryService categoryService) {
-		this.categoryService = categoryService;
-	}
+	private final CategoryService categoryService;
 
 	@AccessTokenCheck
 	@Operation(summary = "my - category별 정보")
@@ -35,7 +31,7 @@ public class CategoryController {
 	public ResponseEntity<Object> category(@RequestBody UserRequest request) {
 		return ResponseUtils.success(categoryService.findCategoryInfo(request.getUserId()));
 	}
-	
+
 	@AccessTokenCheck
 	@Operation(summary = "category 순서 변경")
 	@PutMapping("/edit_priority")
@@ -43,7 +39,7 @@ public class CategoryController {
 		categoryService.updateCategoryPriority(request);
 		return ResponseUtils.success();
 	}
-	
+
 	@AccessTokenCheck
 	@Operation(summary = "category 명칭 변경")
 	@PutMapping("/edit_name")
@@ -51,7 +47,7 @@ public class CategoryController {
 		categoryService.updateCategoryName(request);
 		return ResponseUtils.success();
 	}
-	
+
 	@AccessTokenCheck
 	@Operation(summary = "category 삭제")
 	@DeleteMapping("/delete")
@@ -59,7 +55,7 @@ public class CategoryController {
 		categoryService.delete(request.getId());
 		return ResponseUtils.success();
 	}
-	
+
 	@AccessTokenCheck
 	@Operation(summary = "category 추가")
 	@PostMapping("/save")
