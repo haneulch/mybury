@@ -179,7 +179,8 @@ public class HostController {
 
 		boolean popupYn = false;
 		for(BucketlistResDTO bucketlistResDTO : bucketlists) {
-			popupYn = bucketlistResDTO.getDDay() == 1 || bucketlistResDTO.getDDay() == 7;
+			popupYn = bucketlistResDTO.getDDay() != null
+				&& (bucketlistResDTO.getDDay() == 1 || bucketlistResDTO.getDDay() == 7);
 			if(popupYn) break;
 		}
 		return new HomeResponseVO(bucketlists, popupYn);
