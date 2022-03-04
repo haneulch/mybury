@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class JwtUtils {
-  private static final String SECRET = "mybury";
+  private static final String SECRET = "!AKDLQJFLTLZMFLTZL123";
   private static final int EXPIRE_SECONDS = 60 * 60;
 
   private final CacheManager cacheManager;
@@ -36,22 +36,13 @@ public class JwtUtils {
       .compact();
   }
 
-  public void isValidAccessToken(String token, String userId) {
+  public String isValidAccessToken(String token) {
     try {
-
-      if (userId.equals("SKIP")) {
-        return;
-      }
-
-      String jwtUserId = Jwts.parser()
+      return Jwts.parser()
         .setSigningKey(SECRET)
         .parseClaimsJws(token)
         .getBody()
         .getSubject();
-
-      if (!jwtUserId.equals(userId)) {
-        throw new InvalidTokenException(MessageConstants.INVALID_TOKEN);
-      }
 
     } catch (ExpiredJwtException e) {
       log.warn(String.format("jwt expired [token : %s] [error : %s]", token, e.getMessage()));
@@ -64,9 +55,11 @@ public class JwtUtils {
 
   public boolean isValidateRefreshToken(RefreshTokenRequestVO requestVO) {
     Cache cache = cacheManager.getCache(TOKEN_CACHE);
-    if (cache == null) return false;
+    if (cache == null)
+      return false;
     String cachedRefreshToken = (String) cache.get(requestVO.getUserId()).get();
-    if (cachedRefreshToken == null) return false;
+    if (cachedRefreshToken == null)
+      return false;
     return requestVO.getRefreshToken().equals(cachedRefreshToken);
   }
 
