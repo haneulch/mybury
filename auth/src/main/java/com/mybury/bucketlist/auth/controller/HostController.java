@@ -364,7 +364,7 @@ public class HostController {
 			content = @Content(schema=@Schema(implementation = BucketlistModifyRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/bucketlist/{id}")
-	public BaseResponseVO modifyBucketlist(@PathVariable String id, @ModelAttribute BucketlistModifyRequestVO requestVO) {
+	public BaseResponseVO modifyBucketlist(@PathVariable String id, BucketlistModifyRequestVO requestVO) {
 		bucketlistManager.modifyBucketlist(requestVO);
 		return BaseResponseVO.ok();
 	}

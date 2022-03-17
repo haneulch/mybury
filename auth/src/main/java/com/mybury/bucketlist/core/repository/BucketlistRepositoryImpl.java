@@ -64,7 +64,6 @@ public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
           break;
       }
     }
-
     return query.list(result);
   }
 
