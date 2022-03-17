@@ -41,7 +41,7 @@ public class BucketlistManagerImpl implements BucketlistManager {
     List<Bucketlist> bucketlists = bucketlistRepository.getBucketlists(requestVO);
     for (Bucketlist bucketlist : bucketlists) {
       if (bucketlist.getDDate() != null) {
-        bucketlist.setDDay(DateUtil.getDateDiffDay(bucketlist.getDDate(), DateUtil.getToday()));
+        bucketlist.setDDay(DateUtil.getDday(bucketlist.getDDate()));
       }
     }
 
@@ -53,7 +53,7 @@ public class BucketlistManagerImpl implements BucketlistManager {
     List<Bucketlist> bucketlists = bucketlistRepository.getBucketlistByCategoryId(categoryId);
     for (Bucketlist bucketlist : bucketlists) {
       if (bucketlist.getDDate() != null) {
-        bucketlist.setDDay(DateUtil.getDateDiffDay(bucketlist.getDDate(), DateUtil.getToday()));
+        bucketlist.setDDay(DateUtil.getDday(bucketlist.getDDate()));
       }
     }
 
@@ -70,7 +70,7 @@ public class BucketlistManagerImpl implements BucketlistManager {
     List<Bucketlist> bucketlists = bucketlistRepository.getDDayBucketlist(userId, filter);
 
     for (Bucketlist bucketlist : bucketlists) {
-      bucketlist.setDDay(DateUtil.getDateDiffDay(bucketlist.getDDate(), DateUtil.getToday()));
+      bucketlist.setDDay(DateUtil.getDday(bucketlist.getDDate()));
     }
 
     return bucketlists;

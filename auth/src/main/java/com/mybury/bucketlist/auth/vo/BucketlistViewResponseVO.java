@@ -1,16 +1,14 @@
 package com.mybury.bucketlist.auth.vo;
 
+import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mybury.bucketlist.core.base.BaseResponseVO;
 import com.mybury.bucketlist.core.constants.ApiReturnCodes;
 import com.mybury.bucketlist.core.domain.Bucketlist;
 import com.mybury.bucketlist.core.util.DateUtil;
-
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Date;
 
 @Getter
 @Setter
@@ -63,7 +61,7 @@ public class BucketlistViewResponseVO extends BaseResponseVO {
 		this.category = bucketlist.getCategory().getName();
 		this.dDate = bucketlist.getDDate();
 		if (bucketlist.getDDate() != null)
-			this.dDay = DateUtil.getDateDiffDay(bucketlist.getDDate(), DateUtil.getToday());
+			this.dDay = DateUtil.getDday(bucketlist.getDDate());
 		this.completedDt = bucketlist.getCompletedDt();
 		this.userCount = bucketlist.getUserCount();
 		this.goalCount = bucketlist.getGoalCount();

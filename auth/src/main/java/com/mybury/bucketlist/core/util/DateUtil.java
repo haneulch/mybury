@@ -55,6 +55,6 @@ public class DateUtil {
     long ddate = date.getTime();
     int divider = 1000 * 60 * 60 * 24;
 
-    return (int) ((now - ddate) / divider);
+    return (int) ((ddate - now) / divider);
   }
 }
