@@ -33,30 +33,38 @@ public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
 
     String filter = requestVO.getFilter();
 
-    if (StringUtils.isNotBlank(filter)) {
-      if (filter.equals("started"))
-        query.where(bucketlist.status.eq("1"));
-
-      if (filter.equals("completed"))
-        query.where(bucketlist.status.eq("2"));
-
-      if (filter.equals("all"))
-        query.where(bucketlist.status.eq("1").or(bucketlist.status.eq("2")));
+    if (filter != null) {
+      switch (filter) {
+        case "started":
+          query.where(bucketlist.status.eq("1"));
+          break;
+        case "completed":
+          query.where(bucketlist.status.eq("2"));
+        case "all":
+          query.where(bucketlist.status.eq("1").or(bucketlist.status.eq("2")));
+        default:
+          break;
+      }
     }
 
     String sort = requestVO.getSort();
 
-    if (sort.equals("updatedDt")) {
-      query.orderBy(bucketlist.updatedDt.desc());
+    if (sort != null) {
+      switch (sort) {
+        case "updatedDt" :
+          query.orderBy(bucketlist.updatedDt.desc());
+          break;
+        case "createdDt" :
+          query.orderBy(bucketlist.createdDt.asc());
+          break;
+        case "custom" :
+          query.orderBy(bucketlist.orderSeq.asc());
+          break;
+        default:
+          break;
+      }
     }
 
-    if (sort.equals("createdDt")) {
-      query.orderBy(bucketlist.createdDt.asc());
-    }
-
-    if (sort.equals("custom")) {
-      query.orderBy(bucketlist.orderSeq.asc());
-    }
     return query.list(result);
   }
 

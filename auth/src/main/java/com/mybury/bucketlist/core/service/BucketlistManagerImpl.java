@@ -21,9 +21,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BucketlistManagerImpl implements BucketlistManager {
-
-  private String authServerAddress = "https://www.my-bury.com";
-
   @Autowired
   private BucketlistRepository bucketlistRepository;
 
@@ -213,7 +210,8 @@ public class BucketlistManagerImpl implements BucketlistManager {
     return map;
   }
 
-  @Override public List<BucketlistResDTO> getBucketlistResDTO(HomeRequestVO requestVO) {
+  @Override
+  public List<BucketlistResDTO> getBucketlistResDTO(HomeRequestVO requestVO) {
     return bucketlistRepository.getBucketlistResDTO(requestVO);
   }
 }
