@@ -72,6 +72,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -158,7 +159,7 @@ public class HostController {
 			content = @Content(schema=@Schema(implementation = CreateProfileRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/profile")
-	public BaseResponseVO createProfile(CreateProfileRequestVO requestVO) {
+	public BaseResponseVO createProfile(@ModelAttribute CreateProfileRequestVO requestVO) {
 		userManager.createProfile(requestVO);
 		return BaseResponseVO.ok();
 	}
@@ -331,7 +332,7 @@ public class HostController {
 			content = @Content(schema=@Schema(implementation = BucketlistWriteRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/write")
-	public BaseResponseVO writeBucketlist(BucketlistWriteRequestVO requestVO) {
+	public BaseResponseVO writeBucketlist(@ModelAttribute BucketlistWriteRequestVO requestVO) {
 		bucketlistManager.writeBucketlist(requestVO);
 		return BaseResponseVO.ok();
 	}
@@ -363,7 +364,7 @@ public class HostController {
 			content = @Content(schema=@Schema(implementation = BucketlistModifyRequestVO.class))))
 	@AccessTokenCheck
 	@PostMapping(value = "/bucketlist/{id}")
-	public BaseResponseVO modifyBucketlist(@PathVariable String id, BucketlistModifyRequestVO requestVO) {
+	public BaseResponseVO modifyBucketlist(@PathVariable String id, @ModelAttribute BucketlistModifyRequestVO requestVO) {
 		bucketlistManager.modifyBucketlist(requestVO);
 		return BaseResponseVO.ok();
 	}

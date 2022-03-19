@@ -1,5 +1,8 @@
 package com.mybury.bucketlist.core.service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
 import com.mybury.bucketlist.core.domain.Category;
 import com.mybury.bucketlist.core.domain.Sequence;
 import com.mybury.bucketlist.core.domain.User;
@@ -7,18 +10,12 @@ import com.mybury.bucketlist.core.domain.UserMapping;
 import com.mybury.bucketlist.core.domain.UserSummary;
 import com.mybury.bucketlist.core.exception.UserAlreadyExistsException;
 import com.mybury.bucketlist.core.repository.CategoryRepository;
-import com.mybury.bucketlist.core.repository.UserRepository;
 import com.mybury.bucketlist.core.repository.SequenceRepository;
+import com.mybury.bucketlist.core.repository.UserRepository;
 import com.mybury.bucketlist.core.util.DateUtil;
 import com.mybury.bucketlist.core.vo.CreateProfileRequestVO;
 import com.mybury.bucketlist.core.vo.HostSignInRequestVO;
 import com.mybury.bucketlist.core.vo.HostSignUpRequestVO;
-
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,15 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserManagerImpl implements UserManager {
-	
+
 	@PersistenceContext
 	private EntityManager em;
 
-	private String authServerAddress = "https://www.my-bury.com";
-
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private SequenceRepository sequenceRepository;
 
@@ -64,18 +59,18 @@ public class UserManagerImpl implements UserManager {
 		User user = new User();
 		user.setAccountType(requestVO.getAccountType());
 		user.setEmail(requestVO.getEmail());
-		
+
 		Sequence userSeq = sequenceRepository.getOne("userSeq");
-		
+
 		if(userSeq == null) {
 			userSeq = new Sequence("userSeq", 1);
 			sequenceRepository.save(userSeq);
 		}
-		
+
 		int nextVal = userSeq.getNextVal() + 1;
 		userSeq.setNextVal(nextVal);
 		sequenceRepository.save(userSeq);
-		
+
 		user.setUserSeq(nextVal);
 
 		Category category = new Category();
@@ -136,13 +131,13 @@ public class UserManagerImpl implements UserManager {
 	@Override
 	public void updateAlarmYn(String userId) {
 		User user = em.getReference(User.class, userId);
-		
+
 		if(user.getAlarmYn() == 'Y') {
 			user.setAlarmYn('N');
 		} else {
 			user.setAlarmYn('Y');
 		}
-		
+
 		userRepository.save(user);
 	}
 

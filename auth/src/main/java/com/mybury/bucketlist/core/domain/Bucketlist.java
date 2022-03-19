@@ -1,16 +1,5 @@
 package com.mybury.bucketlist.core.domain;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.mybury.bucketlist.core.constants.ColumnEncryptionConstants;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.ColumnTransformer;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,6 +12,16 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.util.Date;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -30,6 +29,8 @@ import java.util.List;
 @Table(name = "mt_bucketlist")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE)
+@DynamicInsert
+@DynamicUpdate
 public class Bucketlist extends BaseTimestampEntity<String> {
 
 	@Id
@@ -67,14 +68,14 @@ public class Bucketlist extends BaseTimestampEntity<String> {
 	@Column(name = "goal_count")
 	@ColumnDefault("1")
 	private int goalCount;
-	
+
 	@Column(name = "completed_dt")
 	private Date completedDt;
-	
+
 	@Column(name = "buck_type")
 	@ColumnDefault("'O'")
 	private Character bucketType;
-	
+
 	@Column(name = "order_seq")
 	private int orderSeq;
 

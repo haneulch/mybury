@@ -13,9 +13,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BucketlistViewResponseVO extends BaseResponseVO {
-
-	private static String authServerAddress = "https://www.my-bury.com";
-
 	@JsonProperty
 	private String title;
 
@@ -55,6 +52,8 @@ public class BucketlistViewResponseVO extends BaseResponseVO {
 	private String imgUrl3;
 
 	public BucketlistViewResponseVO(Bucketlist bucketlist) {
+
+
 		super(ApiReturnCodes.OK);
 		this.title = bucketlist.getTitle();
 		this.open = bucketlist.isOpen();
@@ -66,6 +65,9 @@ public class BucketlistViewResponseVO extends BaseResponseVO {
 		this.userCount = bucketlist.getUserCount();
 		this.goalCount = bucketlist.getGoalCount();
 		this.memo = bucketlist.getMemo();
+
+		final String authServerAddress = System.getProperty("imageUrl");
+
 		this.imgUrl1 = bucketlist.getImgUrl1() != null ? authServerAddress + bucketlist.getImgUrl1() : "";
 		this.imgUrl2 = bucketlist.getImgUrl2() != null ? authServerAddress + bucketlist.getImgUrl2() : "";
 		this.imgUrl3 = bucketlist.getImgUrl3() != null ? authServerAddress + bucketlist.getImgUrl3() : "";
