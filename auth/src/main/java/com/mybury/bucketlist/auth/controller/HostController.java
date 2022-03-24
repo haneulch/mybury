@@ -607,7 +607,7 @@ public class HostController {
 
 		SupportHistory supportHistory = supportManager.findOneByUserIdAndToken(requestVO.getUserId(), requestVO.getToken());
 
-		if (supportHistory != null && !requestVO.getSusYn().equals(supportHistory.getSusYn())) {
+		if (supportHistory != null && !requestVO.getSusYn().equals(supportHistory.getSusYn().toString())) {
 			supportHistory.setSusYn(requestVO.getSusYn().charAt(0));
 			supportManager.updateSupportHistory(supportHistory);
 		}
