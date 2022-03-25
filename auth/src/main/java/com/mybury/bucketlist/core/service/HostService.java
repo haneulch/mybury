@@ -8,8 +8,11 @@ import com.mybury.bucketlist.auth.dto.CategoryResDTO;
 import com.mybury.bucketlist.auth.dto.SearchResDTO;
 import com.mybury.bucketlist.auth.vo.SearchRequestDTO;
 import com.mybury.bucketlist.core.domain.Bucketlist;
+import com.mybury.bucketlist.core.domain.Category;
+import com.mybury.bucketlist.core.domain.SupportItem;
 import com.mybury.bucketlist.core.repository.BucketlistRepository;
 import com.mybury.bucketlist.core.repository.CategoryRepository;
+import com.mybury.bucketlist.core.repository.SupportItemRepository;
 import com.mybury.bucketlist.core.vo.BucketlistVO;
 import com.mybury.bucketlist.core.vo.CategoryVO;
 import com.mybury.bucketlist.core.vo.ChangeOrderListDTO;
@@ -24,6 +27,8 @@ public class HostService {
 	private final EntityManager em;
 	private final BucketlistRepository bucketlistRepository;
 	private final CategoryRepository categoryRepository;
+
+	private final SupportItemRepository supportItemRepository;
 
 	@Transactional
 	public void changeOrder(ChangeOrderListDTO dto) {
@@ -76,4 +81,18 @@ public class HostService {
 		}
 		return searchResponseVO;
   }
+
+	public List<CategoryVO> findCategoryByUserId(String userId) {
+		return categoryRepository.findDDByUser_IdOrderByPriority(userId);
+	}
+
+	public int countByCategoryId(String categoryId) {
+		return bucketlistRepository.countByCategory_Id(categoryId);
+	}
+
+	@Transactional
+	public List<SupportItem> findAllSupportItem() {
+		List<SupportItem> lit =  supportItemRepository.findByOrderByItemPrice();
+		return lit;
+	}
 }

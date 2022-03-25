@@ -48,6 +48,7 @@ import com.mybury.bucketlist.core.util.JwtUtils;
 import com.mybury.bucketlist.core.util.ResponseUtils;
 import com.mybury.bucketlist.core.vo.BucketlistModifyRequestVO;
 import com.mybury.bucketlist.core.vo.BucketlistWriteRequestVO;
+import com.mybury.bucketlist.core.vo.CategoryVO;
 import com.mybury.bucketlist.core.vo.ChangeOrderListDTO;
 import com.mybury.bucketlist.core.vo.CreateProfileRequestVO;
 import com.mybury.bucketlist.core.vo.DDayRequestVO;
@@ -427,14 +428,16 @@ public class HostController {
 
 	private List<MyPageResponseVO.CategoryVO> setCategoryList(User user) {
 		List<MyPageResponseVO.CategoryVO> categoryList = new ArrayList<>();
-		List<Category> userCategoryList = categoryManager.getCategoryListByUserId(user.getId());
+		// List<CategoryVO> userCategoryList = hostService.findCategoryByUserId(user.getId());
+		List<Category> userCategoryList = user.getCategoryList();
+		//categoryManager.getCategoryListByUserId(user.getId());
 		for (Category category : userCategoryList) {
-			int categoryCount = 0;
-			for (Bucketlist bucketlist : user.getBucketlists()) {
-				if (category.equals(bucketlist.getCategory())) {
-					categoryCount++;
-				}
-			}
+			int categoryCount = hostService.countByCategoryId(category.getId());
+			// for (Bucketlist bucketlist : user.getBucketlists()) {
+			// 	if (category.getId().equals(bucketlist.getCategory().getId())) {
+			// 		categoryCount ++;
+			// 	}
+			// }
 			if(!(categoryCount == 0 && category.getName().equals("없음"))) {
 				MyPageResponseVO.CategoryVO categoryVO =
 					new MyPageResponseVO.CategoryVO(category.getId(), category.getName(), categoryCount);
@@ -573,10 +576,9 @@ public class HostController {
 	@Operation(summary = "후원 아이템 리스트",
 		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "후원 아이템 리스트 request",
 			content = @Content(schema=@Schema(implementation = SupportItemRequestVO.class))))
-	@AccessTokenCheck
 	@PostMapping(value = "/support_items")
 	public SupportItemsResponseVO supportItems(@RequestBody SupportItemRequestVO requestVO) {
-		SupportItemsResponseVO vo = new SupportItemsResponseVO(supportManager.findAllByOrderByItemPrice());
+		SupportItemsResponseVO vo = new SupportItemsResponseVO(hostService.findAllSupportItem());
 
 		// 성공여부가 N인 후원이력을 같이 전달한다.
 		List<SupportHistory> supportHistory = supportManager.findByUserIdAndSusYnOrderByCreatedDtDesc(requestVO.getUserId(), "N".charAt(0));

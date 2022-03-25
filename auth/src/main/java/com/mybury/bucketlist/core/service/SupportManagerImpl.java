@@ -22,7 +22,7 @@ public class SupportManagerImpl implements SupportManager {
 	public List<SupportItem> getSupportItems() {
 		return supportHistoryRepository.getSupportItems();
 	}
-	
+
 	@Override
 	public void saveSupportHistory(SupportHistory vo) {
 		long count = supportHistoryRepository.countByUserIdAndToken(vo.getUserId(), vo.getToken());
@@ -30,7 +30,7 @@ public class SupportManagerImpl implements SupportManager {
 			supportHistoryRepository.save(vo);
 		}
 	}
-	
+
 	@Override
 	public void updateSupportHistory(SupportHistory vo) {
 		supportHistoryRepository.save(vo);
@@ -45,19 +45,19 @@ public class SupportManagerImpl implements SupportManager {
 	public void saveSupportItem(List<SupportItem> list) {
 		supportItemRepository.deleteAll();
 		supportItemRepository.saveAll(list);
-		
+
 	}
 
 	@Override
 	public List<SupportItem> findAllByOrderByItemPrice() {
-		return supportItemRepository.findAllByOrderByItemPrice();
+		return supportItemRepository.findByOrderByItemPrice();
 	}
 
 	@Override
 	public SupportHistory findFirstByUserIdOrderByCreatedDtDesc(String userId) {
 		return supportHistoryRepository.findFirstByUserIdOrderByCreatedDtDesc(userId);
 	}
-	
+
 	@Override
 	public SupportHistory findOneByUserIdAndToken(String userId, String token) {
 		return supportHistoryRepository.findOneByUserIdAndToken(userId, token);
@@ -72,12 +72,12 @@ public class SupportManagerImpl implements SupportManager {
 	public List<SupportHistory> getSupportHistoryByUserId(String userId) {
 		return supportHistoryRepository.findByUserIdOrderBySeqDesc(userId);
 	}
-	
+
 	@Override
 	public void updateSusYn(int seq, String susYn) {
 		SupportHistory supportHistory = supportHistoryRepository.getOne(seq);
 		supportHistory.setSusYn(susYn.charAt(0));
-		
+
 		supportHistoryRepository.save(supportHistory);
 	}
 
