@@ -14,19 +14,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		
-		registry.addResourceHandler("/**").addResourceLocations("file:///" + storagePath + "/");
+		registry.addResourceHandler("/20**/**").addResourceLocations("file:///" + storagePath + "/");
 		registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-		
-		/* swagger */
-		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+		registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
+		registry.addResourceHandler("/").addResourceLocations("/");
 	}
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new CommonInterceptor())
+			.excludePathPatterns("/**")
 			.addPathPatterns("/admin/**");
-		
+
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}
 }

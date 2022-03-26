@@ -1,7 +1,14 @@
 import Common from '../common.js';
 
 export default {
-	template: '#pagination-template',
+	template: '\n' +
+		'\t<div id="pagination">\n' +
+		'\t\t<nav aria-label="Page navigation example">\n' +
+		'\t\t\t<ul class="pagination justify-content-center">\n' +
+		'\t\t\t\t<li class="page-item" v-for="i in pagearr" v-bind:key="i" v-bind:class="{active : i == number + 1}"><a class="page-link" @click="pageChange(i)">{{i}}</a></li>\n' +
+		'\t\t\t</ul>\n' +
+		'\t\t</nav>\n' +
+		'\t</div>',
 	props: ['total-pages', 'number', 'link'],
 	data() {
 		return {

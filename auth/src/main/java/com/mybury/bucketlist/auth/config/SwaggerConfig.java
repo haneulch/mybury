@@ -1,56 +1,45 @@
 package com.mybury.bucketlist.auth.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springdoc.core.GroupedOpenApi;
+import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.mybury.bucketlist.auth.util.GetPropertyUtils;
-
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.ParameterBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Parameter;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
 @Configuration
-@EnableSwagger2
+@OpenAPIDefinition
 public class SwaggerConfig {
-	
-	private static final String HOST = GetPropertyUtils.getProperty("address"); 
-	
-	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder()
-						.title("MYBURY 2.0 - API")
-						.build();
-	}
-	
-	@Bean
-	public Docket api() {
-		ParameterBuilder builder = new ParameterBuilder();
-		builder.name("X-Auth-Token")
-				.modelRef(new ModelRef("string"))
-				.parameterType("header")
-				.required(false)
-				.build();
-		
-		List<Parameter> builders = new ArrayList<Parameter>();
-		builders.add(builder.build());
-		
-		return new Docket(DocumentationType.SWAGGER_2)
-						.host(HOST)
-						.globalOperationParameters(builders)
-						.useDefaultResponseMessages(false)
-						.apiInfo(this.apiInfo())
-						.select()
-			            .apis(RequestHandlerSelectors.basePackage("com.mybury.bucketlist.auth.v2.controller"))
-			            .paths(PathSelectors.any())
-						.build();
-	}	
+  @Bean
+  public GroupedOpenApi SecurityGroupOpenApi() {
+    return GroupedOpenApi
+      .builder()
+      .group("Mybury")
+      .pathsToExclude("/v2/**", "/")
+      .addOpenApiCustomiser(buildSecurityOpenApi())
+      .build();
+  }
+
+  @Bean
+  public GroupedOpenApi NonSecurityGroupOpenApi() {
+    return GroupedOpenApi
+      .builder()
+      .group("BerryBucket")
+      .pathsToMatch("/v2/**")
+      .addOpenApiCustomiser(buildSecurityOpenApi())
+      .build();
+  }
+
+  public OpenApiCustomiser buildSecurityOpenApi() {
+    SecurityScheme securityScheme = new SecurityScheme()
+      .name("X-Auth-Token")
+      .type(SecurityScheme.Type.APIKEY)
+      .in(SecurityScheme.In.HEADER)
+      .name("X-Auth-Token");
+
+    return OpenApi -> OpenApi
+      .addSecurityItem(new SecurityRequirement().addList("apiKeyScheme"))
+      .getComponents().addSecuritySchemes("apiKeyScheme", securityScheme);
+  }
 }
