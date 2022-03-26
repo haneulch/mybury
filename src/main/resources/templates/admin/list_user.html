@@ -1,0 +1,63 @@
+<html lang="ko">
+	<head>
+		<title>Mybury Admin</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link href="../../static/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+		<link href="../../static/css/bootstrap/dashboard.css" rel="stylesheet">
+	</head>
+	<body>
+		<div id="content">
+			<header-menu></header-menu>
+
+
+			<div class="container-fluid">
+				<div class="row">
+					<left-menu></left-menu>
+
+					<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 pt-3">
+
+						<menu-name :menu-name="menuName" :is-search="true" :search-url="link"></menu-name>
+
+						<div class="table-responsive">
+							<table class="table table-striped text-center">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>이름</th>
+										<th>EMAIL</th>
+										<th>최근 로그인 일시</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="item in content">
+										<td><a href="javascript:void(0);" @click="toDetail(item.id)">{{item.id}}</a></td>
+										<td>{{item.name}}</td>
+										<td>{{item.email}}</td>
+										<td>{{item.lastLoginDt | datetime}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<pagination @childs-event="parentMethod" :total-pages="totalPages" :number="number" :link="link"></pagination>
+					</main>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../static/js/vue/vue.js"></script>
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+
+		<script src="../../static/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+		<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+		<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script> -->
+
+		<script type="module" src="../../static/js/vue/vue_user.js"></script>
+
+<!--		<jsp:include page="./template_sources.jsp"/>-->
+		<template src="./template_sources.html"></template>
+	</body>
+
+
+</html>
