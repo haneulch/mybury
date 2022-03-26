@@ -26,3 +26,6 @@
 /.nb-gradle/
 
 build/
+
+*.properties
+*.yml
