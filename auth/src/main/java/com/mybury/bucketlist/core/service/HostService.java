@@ -8,7 +8,6 @@ import com.mybury.bucketlist.auth.dto.CategoryResDTO;
 import com.mybury.bucketlist.auth.dto.SearchResDTO;
 import com.mybury.bucketlist.auth.vo.SearchRequestDTO;
 import com.mybury.bucketlist.core.domain.Bucketlist;
-import com.mybury.bucketlist.core.domain.Category;
 import com.mybury.bucketlist.core.domain.SupportItem;
 import com.mybury.bucketlist.core.repository.BucketlistRepository;
 import com.mybury.bucketlist.core.repository.CategoryRepository;
@@ -27,7 +26,6 @@ public class HostService {
 	private final EntityManager em;
 	private final BucketlistRepository bucketlistRepository;
 	private final CategoryRepository categoryRepository;
-
 	private final SupportItemRepository supportItemRepository;
 
 	@Transactional
@@ -61,6 +59,7 @@ public class HostService {
 			case "dday" :
 				bucketlistVOS = bucketlistRepository.findBydDateNotNullAndTitleContainingAndUser_Id(request.getSearchText(), request.getUserId());
 				bucketlistResDTOS = bucketlistVOS.stream()
+					.filter(b -> b.getCompletedDt() == null)
 					.map(b -> new BucketlistResDTO(b).init())
 					.collect(Collectors.toList());
 				searchResponseVO.setBucketlists(bucketlistResDTOS);
@@ -92,7 +91,6 @@ public class HostService {
 
 	@Transactional
 	public List<SupportItem> findAllSupportItem() {
-		List<SupportItem> lit =  supportItemRepository.findByOrderByItemPrice();
-		return lit;
+		return supportItemRepository.findByOrderByItemPrice();
 	}
 }

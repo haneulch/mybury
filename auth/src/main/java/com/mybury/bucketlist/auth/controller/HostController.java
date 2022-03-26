@@ -48,7 +48,6 @@ import com.mybury.bucketlist.core.util.JwtUtils;
 import com.mybury.bucketlist.core.util.ResponseUtils;
 import com.mybury.bucketlist.core.vo.BucketlistModifyRequestVO;
 import com.mybury.bucketlist.core.vo.BucketlistWriteRequestVO;
-import com.mybury.bucketlist.core.vo.CategoryVO;
 import com.mybury.bucketlist.core.vo.ChangeOrderListDTO;
 import com.mybury.bucketlist.core.vo.CreateProfileRequestVO;
 import com.mybury.bucketlist.core.vo.DDayRequestVO;
@@ -428,19 +427,16 @@ public class HostController {
 
 	private List<MyPageResponseVO.CategoryVO> setCategoryList(User user) {
 		List<MyPageResponseVO.CategoryVO> categoryList = new ArrayList<>();
-		// List<CategoryVO> userCategoryList = hostService.findCategoryByUserId(user.getId());
 		List<Category> userCategoryList = user.getCategoryList();
-		//categoryManager.getCategoryListByUserId(user.getId());
 		for (Category category : userCategoryList) {
-			int categoryCount = hostService.countByCategoryId(category.getId());
-			// for (Bucketlist bucketlist : user.getBucketlists()) {
-			// 	if (category.getId().equals(bucketlist.getCategory().getId())) {
-			// 		categoryCount ++;
-			// 	}
-			// }
+			long categoryCount =
+				user.getBucketlists().stream()
+					.filter(b -> b.getCategory().getId().equals(category.getId()))
+					.count();
+
 			if(!(categoryCount == 0 && category.getName().equals("없음"))) {
 				MyPageResponseVO.CategoryVO categoryVO =
-					new MyPageResponseVO.CategoryVO(category.getId(), category.getName(), categoryCount);
+					new MyPageResponseVO.CategoryVO(category.getId(), category.getName(), Long.valueOf(categoryCount).intValue());
 				categoryList.add(categoryVO);
 			}
 		}
