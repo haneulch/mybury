@@ -1,0 +1,77 @@
+<html lang="ko">
+<head>
+    <title>Mybury Notice</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0; charset=UTF-8">
+</head>
+<style>
+    body {
+        max-width: 480px;
+        margin: auto;
+    }
+
+    table {
+        width: 100%;
+        border-spacing: 0;
+    }
+
+    td {
+        border-bottom: 1px #dddddd solid;
+        padding: 0;
+    }
+
+    p {
+        padding: 0;
+        margin: 0;
+    }
+
+    #content {
+        height: 100%;
+        border: 1px #dddddd solid;
+    }
+
+    .list {
+        padding: 24px 24px 28px;
+    }
+
+    .title {
+        min-height: 24px;
+        max-height: 48px;
+        line-height: 24px;
+        margin-bottom: 12px;
+        font-size: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .date {
+        height: 20px;
+        line-height: 20px;
+        font-size: 13px;
+        color: #b4b4b4;
+    }
+</style>
+
+<script src="../../static/js/vue/vue.js"></script>
+<script src="../../static/js/jquery-3.5.1.slim.min.js"></script>
+
+<body>
+<div id="content">
+    <table>
+        <tbody>
+            <tr v-for="item in content">
+                <td @click="toDetail(item.seq)">
+                    <div class="list">
+                        <p class="title">{{item.title}}</p>
+                        <p class="date">{{item.createdDt | datetime}}</p>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script type="module" src="../../static/js/vue/vue_notice.js"></script>
+</body>
+</html>

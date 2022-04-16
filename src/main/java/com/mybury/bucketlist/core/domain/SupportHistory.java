@@ -19,6 +19,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @Setter
@@ -31,6 +33,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@DynamicInsert
+@DynamicUpdate
 public class SupportHistory extends BaseTimestampEntity<String> {
 
 	@Id
@@ -39,19 +43,19 @@ public class SupportHistory extends BaseTimestampEntity<String> {
 
 	@Column(name = "user_id")
 	private String userId;
-	
+
 	@Column(name = "token")
 	private String token;
-	
+
 	@Column(name="sus_yn")
 	private Character susYn;
-	
+
 	@Column(name="del_yn")
 	private Character delYn;
-	
+
 	@Column(name="created_dt")
 	private Date createdDt;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "item_id", referencedColumnName = "id")
 	SupportItem item;

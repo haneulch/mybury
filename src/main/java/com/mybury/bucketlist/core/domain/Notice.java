@@ -31,26 +31,30 @@ public class Notice extends BaseTimestampEntity<String> {
 
 	@Column(name="title")
 	private String title;
-	
+
 	@Column(name="content")
 	private String content;
-	
+
 	@Column(name="start_dt")
 	private String startDt;
-	
+
 	@Column(name="end_dt")
 	private String endDt;
-	
+
 	@Column(name="dp_yn")
 	private Character dpYn;
-	
+
+	@Column(name = "faq_yn")
+	private Character faqYn;
+
 	@Builder
-	public Notice(int seq, String title, String content, String startDt, String endDt, Character dpYn) {
+	public Notice(int seq, String title, String content, String startDt, String endDt, Character dpYn, Character faqYn) {
 		this.seq = seq;
 		this.title = title;
 		this.content = content;
 		this.startDt = startDt;
 		this.endDt = endDt;
 		this.dpYn = dpYn;
+		this.faqYn = faqYn;
 	}
 }

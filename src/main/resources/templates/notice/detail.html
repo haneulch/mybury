@@ -1,0 +1,90 @@
+<html lang="ko">
+<head>
+    <title>Mybury Notice</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+    body {
+        max-width: 480px;
+        margin: auto;
+    }
+
+    .title {
+        display: contents;
+    }
+
+    .title p {
+        margin: 28px 24px 17px 24px;
+        min-height: 30px;
+        font-size: 20px;
+        font-weight: bold;
+        line-height: 30px;
+    }
+
+    .content {
+        margin: 0 24px;
+        font-size: 16px;
+        color: #666666;
+        line-height: 26px;
+    }
+
+    .content pre {
+        margin: 0;
+        white-space: break-spaces;
+    }
+
+    #content {
+        min-height: 100%;
+        height: fit-content;
+        border: 1px #dddddd solid;
+    }
+
+    .title {
+        height: 24px;
+        line-height: 24px;
+        margin-bottom: 12px;
+        font-size: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .faq {
+        margin: 40px 24px;
+        border: 1px #222 solid;
+        border-radius: 8px;
+        padding: 16px 17px;
+    }
+
+    .faq p {
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .hide {
+        display: none;
+    }
+</style>
+
+<script src="../../static/js/vue/vue.js"></script>
+<script src="../../static/js/jquery-3.5.1.slim.min.js"></script>
+
+<body>
+<div id="content">
+    <div class="title">
+        <p>{{notice.title}}</p>
+    </div>
+    <div class="content">
+        <pre>{{notice.content}}</pre>
+    </div>
+    <div class="faq" v-bind:class="{hide : notice.isFaq}" @click="sendMail(notice.title)">
+        <p>문의하기</p>
+    </div>
+</div>
+
+<script type="module" src="../../static/js/vue/vue_notice_detail.js"></script>
+</body>
+</html>
