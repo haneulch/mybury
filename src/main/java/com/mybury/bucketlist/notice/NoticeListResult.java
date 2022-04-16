@@ -9,6 +9,10 @@ import java.util.Date;
  */
 public interface NoticeListResult {
   int getSeq();
+
+  String getTag();
+
   String getTitle();
+
   Date getCreatedDt();
 }
