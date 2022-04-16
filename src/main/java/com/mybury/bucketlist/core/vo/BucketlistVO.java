@@ -11,7 +11,7 @@ public class BucketlistVO {
   private String title;
   private boolean pin;
   private String status;
-  private Date dDate;
+  private Date dueDate;
   private int userCount;
   private int goalCount;
   private Date completedDt;

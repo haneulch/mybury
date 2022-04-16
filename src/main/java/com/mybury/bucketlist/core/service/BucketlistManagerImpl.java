@@ -37,8 +37,8 @@ public class BucketlistManagerImpl implements BucketlistManager {
   public List<Bucketlist> getBucketlists(HomeRequestVO requestVO) {
     List<Bucketlist> bucketlists = bucketlistRepository.getBucketlists(requestVO);
     for (Bucketlist bucketlist : bucketlists) {
-      if (bucketlist.getDDate() != null) {
-        bucketlist.setDDay(DateUtil.getDday(bucketlist.getDDate()));
+      if (bucketlist.getDueDate() != null) {
+        bucketlist.setDDay(DateUtil.getDday(bucketlist.getDueDate()));
       }
     }
 
@@ -49,8 +49,8 @@ public class BucketlistManagerImpl implements BucketlistManager {
   public List<Bucketlist> getBucketlistByCategoryId(String categoryId) {
     List<Bucketlist> bucketlists = bucketlistRepository.getBucketlistByCategoryId(categoryId);
     for (Bucketlist bucketlist : bucketlists) {
-      if (bucketlist.getDDate() != null) {
-        bucketlist.setDDay(DateUtil.getDday(bucketlist.getDDate()));
+      if (bucketlist.getDueDate() != null) {
+        bucketlist.setDDay(DateUtil.getDday(bucketlist.getDueDate()));
       }
     }
 
@@ -67,7 +67,7 @@ public class BucketlistManagerImpl implements BucketlistManager {
     List<Bucketlist> bucketlists = bucketlistRepository.getDDayBucketlist(userId, filter);
 
     for (Bucketlist bucketlist : bucketlists) {
-      bucketlist.setDDay(DateUtil.getDday(bucketlist.getDDate()));
+      bucketlist.setDDay(DateUtil.getDday(bucketlist.getDueDate()));
     }
 
     return bucketlists;
@@ -90,7 +90,7 @@ public class BucketlistManagerImpl implements BucketlistManager {
     bucketlist.setOpen(requestVO.isOpen());
     bucketlist.setStatus("1");
     bucketlist.setGoalCount(requestVO.getGoalCount());
-    bucketlist.setDDate(requestVO.getDDate());
+    bucketlist.setDueDate(requestVO.getDDate());
     bucketlist.setMemo(requestVO.getMemo());
 
     if (requestVO.getImage1() != null) {
@@ -128,7 +128,7 @@ public class BucketlistManagerImpl implements BucketlistManager {
     bucketlist.setTitle(requestVO.getTitle());
     bucketlist.setOpen(requestVO.isOpen());
     bucketlist.setGoalCount(requestVO.getGoalCount());
-    bucketlist.setDDate(requestVO.getDDate());
+    bucketlist.setDueDate(requestVO.getDDate());
     bucketlist.setMemo(requestVO.getMemo());
 
     if (requestVO.isRemoveImg3())
@@ -200,13 +200,13 @@ public class BucketlistManagerImpl implements BucketlistManager {
   @Override
   public Map<String, List<Bucketlist>> findBydDateIsNotNullAndUser_Id(String userId) {
 
-    List<Bucketlist> list = bucketlistRepository.findBydDateIsNotNullAndUser_Id(userId);
+    List<Bucketlist> list = bucketlistRepository.findByDueDateIsNotNullAndUser_Id(userId);
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     Map<String, List<Bucketlist>> map = list
       .stream()
-      .collect(Collectors.groupingBy(n -> sdf.format(n.getDDate())));
+      .collect(Collectors.groupingBy(n -> sdf.format(n.getDueDate())));
     return map;
   }
 

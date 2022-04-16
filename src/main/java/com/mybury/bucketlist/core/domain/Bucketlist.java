@@ -56,7 +56,7 @@ public class Bucketlist extends BaseTimestampEntity<String> {
 
 //	@JsonIgnore
 	@Column(name = "d_date")
-	private Date dDate;
+	private Date dueDate;
 
 	@Transient
 	private Integer dDay;

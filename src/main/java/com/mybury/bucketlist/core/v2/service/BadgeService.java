@@ -1,10 +1,22 @@
 package com.mybury.bucketlist.core.v2.service;
 
 import com.mybury.bucketlist.core.domain.Badge;
+import com.mybury.bucketlist.core.v2.repository.BadgeRepository;
+import com.mybury.bucketlist.core.v2.repository.BadgeUserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-public interface BadgeService {
+@Service
+@RequiredArgsConstructor
+public class BadgeService {
+	private final BadgeRepository badgeRepository;
+	private final BadgeUserRepository badgeUserRepository;
 
-	void save(Badge badge);
+	public void save(Badge badge) {
+		badgeRepository.save(badge);
+	}
 
-	Object findByUserId(String userId);
+	public Object findByUserId(String userId) {
+		return badgeUserRepository.findByUserId(userId);
+	}
 }

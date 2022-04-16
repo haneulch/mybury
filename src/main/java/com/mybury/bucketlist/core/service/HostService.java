@@ -57,7 +57,8 @@ public class HostService {
 				searchResponseVO.setCategories(categoryResDTOS);
 				break;
 			case "dday" :
-				bucketlistVOS = bucketlistRepository.findBydDateNotNullAndTitleContainingAndUser_Id(request.getSearchText(), request.getUserId());
+				bucketlistVOS = bucketlistRepository.findByDueDateNotNullAndTitleContainingAndUser_Id(request.getSearchText(),
+					request.getUserId());
 				bucketlistResDTOS = bucketlistVOS.stream()
 					.filter(b -> b.getCompletedDt() == null)
 					.map(b -> new BucketlistResDTO(b).init())

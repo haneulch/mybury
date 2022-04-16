@@ -205,7 +205,7 @@ public class HostController {
 		int day = -1;
 		for (Bucketlist bucketlist : dDayBucketlists) {
 			if (day != bucketlist.getDDay()) {
-				List<Bucketlist> bucketlists = bucketlistManager.getBucketlistsByDDate(bucketlist.getDDate(),
+				List<Bucketlist> bucketlists = bucketlistManager.getBucketlistsByDDate(bucketlist.getDueDate(),
 						requestVO.getUserId());
 				DDayResponseVO.DDayVO dDayVO = new DDayResponseVO.DDayVO(bucketlist.getDDay(), bucketlists);
 				dDayVOList.add(dDayVO);

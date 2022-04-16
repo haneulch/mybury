@@ -58,9 +58,9 @@ public class BucketlistViewResponseVO extends BaseResponseVO {
 		this.title = bucketlist.getTitle();
 		this.open = bucketlist.isOpen();
 		this.category = bucketlist.getCategory().getName();
-		this.dDate = bucketlist.getDDate();
-		if (bucketlist.getDDate() != null)
-			this.dDay = DateUtil.getDday(bucketlist.getDDate());
+		this.dDate = bucketlist.getDueDate();
+		if (bucketlist.getDueDate() != null)
+			this.dDay = DateUtil.getDday(bucketlist.getDueDate());
 		this.completedDt = bucketlist.getCompletedDt();
 		this.userCount = bucketlist.getUserCount();
 		this.goalCount = bucketlist.getGoalCount();

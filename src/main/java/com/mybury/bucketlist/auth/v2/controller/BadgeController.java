@@ -6,10 +6,13 @@ import com.mybury.bucketlist.core.util.ResponseUtils;
 import com.mybury.bucketlist.core.v2.service.BadgeService;
 import com.mybury.bucketlist.core.v2.vo.UserRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +35,9 @@ public class BadgeController {
 
 	@AccessTokenCheck
 	@Operation(summary = "뱃지 리스트")
-	@GetMapping("/list")
-	public ResponseEntity<Object> list(@RequestBody UserRequest request) {
-		return ResponseUtils.success(badgeService.findByUserId(request.getUserId()));
+	@GetMapping("/{userId}/list")
+	@Parameter(name = "userId", description = "사용자 ID", required = true, in = ParameterIn.PATH)
+	public ResponseEntity<Object> list(@PathVariable String userId) {
+		return ResponseUtils.success(badgeService.findByUserId(userId));
 	}
 }
