@@ -33,73 +33,76 @@ import org.springframework.web.multipart.MultipartFile;
 @DynamicUpdate
 public class Bucketlist extends BaseTimestampEntity<String> {
 
-	@Id
-	@Column
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")
-	@GeneratedValue(generator = "system-uuid")
-	private String id;
+  @Id
+  @Column
+  @GenericGenerator(name = "system-uuid", strategy = "uuid")
+  @GeneratedValue(generator = "system-uuid")
+  private String id;
 
-	@Lob
-	@Column(nullable = false)
-	private String title;
+  @Lob
+  @Column(nullable = false)
+  private String title;
 
-	@Column
-	@ColumnDefault("0")
-	private boolean open;
+  @Column
+  @ColumnDefault("0")
+  private boolean open;
 
-	@Column
-	@ColumnDefault("0")
-	private boolean pin;
+  @Column
+  @ColumnDefault("0")
+  private boolean pin;
 
-	@Column
-	private String status;
+  @Column
+  private String status;
 
-//	@JsonIgnore
-	@Column(name = "d_date")
-	private Date dueDate;
+  @JsonIgnore
+  @Column(name = "d_date")
+  private Date dueDate;
 
-	@Transient
-	private Integer dDay;
+  @Transient
+  private Date dDate;
 
-	@Column(name = "user_count")
-	@ColumnDefault("0")
-	private int userCount;
+  @Transient
+  private Integer dDay;
 
-	@Column(name = "goal_count")
-	@ColumnDefault("1")
-	private int goalCount;
+  @Column(name = "user_count")
+  @ColumnDefault("0")
+  private int userCount;
 
-	@Column(name = "completed_dt")
-	private Date completedDt;
+  @Column(name = "goal_count")
+  @ColumnDefault("1")
+  private int goalCount;
 
-	@Column(name = "buck_type")
-	@ColumnDefault("'O'")
-	private Character bucketType;
+  @Column(name = "completed_dt")
+  private Date completedDt;
 
-	@Column(name = "order_seq")
-	private int orderSeq;
+  @Column(name = "buck_type")
+  @ColumnDefault("'O'")
+  private Character bucketType;
 
-	@Lob
-	@Column
-	private String memo;
+  @Column(name = "order_seq")
+  private int orderSeq;
 
-	@Column(name = "img_url_1")
-	private String imgUrl1;
+  @Lob
+  @Column
+  private String memo;
 
-	@Column(name = "img_url_2")
-	private String imgUrl2;
+  @Column(name = "img_url_1")
+  private String imgUrl1;
 
-	@Column(name = "img_url_3")
-	private String imgUrl3;
+  @Column(name = "img_url_2")
+  private String imgUrl2;
 
-	@OneToOne
-	private Category category;
+  @Column(name = "img_url_3")
+  private String imgUrl3;
 
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+  @OneToOne
+  private Category category;
 
-	@Transient
-	private List<MultipartFile> files;
+  @JsonIgnore
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private User user;
+
+  @Transient
+  private List<MultipartFile> files;
 }

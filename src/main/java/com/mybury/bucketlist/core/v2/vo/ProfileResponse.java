@@ -1,10 +1,7 @@
 package com.mybury.bucketlist.core.v2.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import javax.annotation.Nullable;
-
 import com.mybury.bucketlist.core.domain.Badge;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,14 +13,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfileResponse {
-	
+
+	@Schema(description = "이름")
 	private String nickname;
-	
-	@Nullable
-	private String profileImg;
-	
+
+	@Schema(description = "프로필 이미지")
+	private String profileImage;
+
+	@Schema(description = "뱃지 정보")
 	private Badge badge;
-	
-	@Nullable
+
+	@Schema(description = "bio(한줄설명)")
 	private String bio;
+
+	@Schema(description = "팔로워 수")
+	private int followerCount;
+
+	@Schema(description = "팔로잉 수")
+	private int followingCount;
 }

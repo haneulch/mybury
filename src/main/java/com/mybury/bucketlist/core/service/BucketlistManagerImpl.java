@@ -36,25 +36,27 @@ public class BucketlistManagerImpl implements BucketlistManager {
   @Override
   public List<Bucketlist> getBucketlists(HomeRequestVO requestVO) {
     List<Bucketlist> bucketlists = bucketlistRepository.getBucketlists(requestVO);
-    for (Bucketlist bucketlist : bucketlists) {
-      if (bucketlist.getDueDate() != null) {
-        bucketlist.setDDay(DateUtil.getDday(bucketlist.getDueDate()));
-      }
-    }
 
-    return bucketlists;
+    return bucketlists.stream().map(v -> {
+      if (v.getDueDate() != null) {
+        v.setDDay(DateUtil.getDday(v.getDueDate()));
+        v.setDDate(v.getDueDate());
+      }
+      return v;
+    }).collect(Collectors.toList());
   }
 
   @Override
   public List<Bucketlist> getBucketlistByCategoryId(String categoryId) {
     List<Bucketlist> bucketlists = bucketlistRepository.getBucketlistByCategoryId(categoryId);
-    for (Bucketlist bucketlist : bucketlists) {
-      if (bucketlist.getDueDate() != null) {
-        bucketlist.setDDay(DateUtil.getDday(bucketlist.getDueDate()));
-      }
-    }
 
-    return bucketlists;
+    return bucketlists.stream().map(v -> {
+      if (v.getDueDate() != null) {
+        v.setDDay(DateUtil.getDday(v.getDueDate()));
+        v.setDDate(v.getDueDate());
+      }
+      return v;
+    }).collect(Collectors.toList());
   }
 
   @Override
@@ -66,11 +68,13 @@ public class BucketlistManagerImpl implements BucketlistManager {
   public List<Bucketlist> getDDayBucketlist(String userId, String filter) {
     List<Bucketlist> bucketlists = bucketlistRepository.getDDayBucketlist(userId, filter);
 
-    for (Bucketlist bucketlist : bucketlists) {
-      bucketlist.setDDay(DateUtil.getDday(bucketlist.getDueDate()));
-    }
-
-    return bucketlists;
+    return bucketlists.stream().map(v -> {
+      if (v.getDueDate() != null) {
+        v.setDDay(DateUtil.getDday(v.getDueDate()));
+        v.setDDate(v.getDueDate());
+      }
+      return v;
+    }).collect(Collectors.toList());
   }
 
   @Override

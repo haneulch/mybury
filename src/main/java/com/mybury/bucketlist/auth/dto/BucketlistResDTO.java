@@ -1,6 +1,8 @@
 package com.mybury.bucketlist.auth.dto;
 
+import javax.persistence.Transient;
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mybury.bucketlist.core.util.DateUtil;
 import com.mybury.bucketlist.core.vo.BucketlistVO;
@@ -36,6 +38,10 @@ public class BucketlistResDTO extends CommonDTO {
   @Schema(description = "d-date")
   private Date dDate;
 
+  @Transient
+  @JsonIgnore
+  private Date dueDate;
+
   @JsonProperty("dDay")
   @Schema(description = "d-day")
   private Integer dDay;
@@ -59,28 +65,30 @@ public class BucketlistResDTO extends CommonDTO {
     this.dataCopy(bucketlistVO);
   }
 
-  public BucketlistResDTO init() {
-    if(getDDate() != null) {
-      setDDay(DateUtil.getDday(getDDate()));
-    }
-    return this;
-  }
-
   @QueryProjection
-  public BucketlistResDTO(String id, String title, boolean pin, String status, Date dDate, int userCount,
+  public BucketlistResDTO(String id, String title, boolean pin, String status, Date dueDate, int userCount,
     int goalCount, Date completedDt, int orderSeq, String categoryName) {
     this.id = id;
     this.title = title;
     this.pin = pin;
     this.status = status;
-    this.dDate = dDate;
-    if(dDate != null) {
-      this.dDay = DateUtil.getDday(dDate);
+    if (dueDate != null) {
+      this.dDate = dueDate;
+      this.dueDate = dueDate;
+      this.dDay = DateUtil.getDday(dueDate);
     }
     this.userCount = userCount;
     this.goalCount = goalCount;
     this.completedDt = completedDt;
     this.orderSeq = orderSeq;
     this.categoryName = categoryName;
+  }
+
+  public BucketlistResDTO init() {
+    if (getDueDate() != null) {
+      setDDate(getDueDate());
+      setDDay(DateUtil.getDday(getDueDate()));
+    }
+    return this;
   }
 }

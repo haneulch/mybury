@@ -11,7 +11,11 @@ import com.mybury.bucketlist.core.v2.service.FollowService;
 import com.mybury.bucketlist.core.v2.vo.ErrorResponse;
 import com.mybury.bucketlist.core.v2.vo.ProfileResponse;
 import com.mybury.bucketlist.core.v2.vo.UserRequest;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,45 +30,47 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v2/my")
 @RequiredArgsConstructor
 public class MyController {
-	private final UserManager userManager;
-	private final BadgeUserService badgeUserService;
-	private final FollowService followService;
+  private final UserManager userManager;
+  private final BadgeUserService badgeUserService;
+  private final FollowService followService;
 
-	@AccessTokenCheck
-	@Operation(summary = "my - 프로필 정보")
-	@GetMapping("/profile_info")
-	public ResponseEntity<Object> profileInfo(@RequestBody UserRequest request) {
-		User user = userManager.findById(request.getUserId());
+  @AccessTokenCheck
+  @Operation(summary = "my - 프로필 정보")
+  @ApiResponse(content = @Content(schema = @Schema(implementation = ProfileResponse.class)))
+  @GetMapping("/profile_info")
+  public ResponseEntity<Object> profileInfo(@RequestBody UserRequest request) {
+    User user = userManager.findById(request.getUserId());
 
-		if(user == null) {
-			ErrorResponse e = new ErrorResponse(MessageConstants.BAD_REQUEST_USER);
-			return ResponseUtils.error(e);
-		}
+    if (user == null) {
+      ErrorResponse e = new ErrorResponse(MessageConstants.BAD_REQUEST_USER);
+      return ResponseUtils.error(e);
+    }
 
-		BadgeUser badgeUser = badgeUserService.findByUseYnAndUserId(request.getUserId());
+    BadgeUser badgeUser = badgeUserService.findByUseYnAndUserId(request.getUserId());
 
-		ProfileResponse response = ProfileResponse.builder()
-										.nickname(user.getName())
-										.profileImg(user.getImgUrl())
-										.bio(user.getBio())
-										.badge(badgeUser.getBadge())
-										.build();
+    ProfileResponse response = ProfileResponse.builder()
+      .nickname(user.getName())
+      .profileImage(user.getImgUrl())
+      .bio(user.getBio())
+      .badge(badgeUser.getBadge())
+      .build();
 
-		return ResponseUtils.success(response);
-	}
+    return ResponseUtils.success(response);
+  }
 
-	@AccessTokenCheck
-	@Operation(summary = "my - 팔로우 정보")
-	@GetMapping("/state")
-	public ResponseEntity<Object> state(@RequestBody UserRequest request) {
-		return ResponseUtils.success(followService.getFollowInfo(request));
-	}
+  @Hidden
+  @AccessTokenCheck
+  @Operation(summary = "my - 팔로우 정보")
+  @GetMapping("/state")
+  public ResponseEntity<Object> state(@RequestBody UserRequest request) {
+    return ResponseUtils.success(followService.getFollowInfo(request));
+  }
 
-	@AccessTokenCheck
-	@Operation(summary = "my - 알림 유무 변경")
-	@PutMapping("/changeAlarm")
-	public ResponseEntity<Object> changeAlarm(@RequestBody UserRequest request) {
-		userManager.updateAlarmYn(request.getUserId());
-		return ResponseUtils.success();
-	}
+  @AccessTokenCheck
+  @Operation(summary = "my - 알림 유무 변경")
+  @PutMapping("/changeAlarm")
+  public ResponseEntity<Object> changeAlarm(@RequestBody UserRequest request) {
+    userManager.updateAlarmYn(request.getUserId());
+    return ResponseUtils.success();
+  }
 }

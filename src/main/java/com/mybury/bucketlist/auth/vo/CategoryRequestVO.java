@@ -6,8 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CategoryRequestVO {
-
-    private String userId;
-
-    private String categoryId;
+  private String userId;
+  private String categoryId;
 }

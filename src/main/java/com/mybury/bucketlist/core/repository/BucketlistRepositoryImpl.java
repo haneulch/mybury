@@ -26,7 +26,7 @@ public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
     JPAQuery query = new JPAQuery(entityManager);
     QBucketlist bucketlist = QBucketlist.bucketlist;
     QBucketlistResDTO result = new QBucketlistResDTO(bucketlist.id, bucketlist.title, bucketlist.pin,
-      bucketlist.status, bucketlist.dDate, bucketlist.userCount, bucketlist.goalCount, bucketlist.completedDt,
+      bucketlist.status, bucketlist.dueDate, bucketlist.userCount, bucketlist.goalCount, bucketlist.completedDt,
       bucketlist.orderSeq, bucketlist.category().name);
 
     query.from(bucketlist).where(bucketlist.user().id.eq(requestVO.getUserId()));
@@ -51,13 +51,13 @@ public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
 
     if (sort != null) {
       switch (sort) {
-        case "updatedDt" :
+        case "updatedDt":
           query.orderBy(bucketlist.updatedDt.desc());
           break;
-        case "createdDt" :
+        case "createdDt":
           query.orderBy(bucketlist.createdDt.asc());
           break;
-        case "custom" :
+        case "custom":
           query.orderBy(bucketlist.orderSeq.asc());
           break;
         default:
@@ -110,7 +110,7 @@ public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
     QBucketlist bucketlist = QBucketlist.bucketlist;
 
     query.from(bucketlist).where(bucketlist.user().id.eq(userId)
-      .and(bucketlist.dDate.eq(DateUtil.addDays(DateUtil.getToday(), popupPeriod))));
+      .and(bucketlist.dueDate.eq(DateUtil.addDays(DateUtil.getToday(), popupPeriod))));
 
     return query.exists();
   }
@@ -121,17 +121,17 @@ public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
     QBucketlist bucketlist = QBucketlist.bucketlist;
 
     query.from(bucketlist).where(bucketlist.user().id.eq(userId)
-      .and(bucketlist.status.eq(CommonCodes.BucketlistStatus.STARTED)).and(bucketlist.dDate.isNotNull()));
+      .and(bucketlist.status.eq(CommonCodes.BucketlistStatus.STARTED)).and(bucketlist.dueDate.isNotNull()));
 
     if (StringUtils.isNotBlank(filter)) {
       if (StringUtils.equals(filter, "minus"))
-        query.where(bucketlist.dDate.goe(DateUtil.getDate()));
+        query.where(bucketlist.dueDate.goe(DateUtil.getDate()));
 
       if (StringUtils.equals(filter, "plus"))
-        query.where(bucketlist.dDate.lt(DateUtil.getDate()));
+        query.where(bucketlist.dueDate.lt(DateUtil.getDate()));
     }
 
-    query.orderBy(bucketlist.dDate.asc());
+    query.orderBy(bucketlist.dueDate.asc());
 
     return query.list(bucketlist);
   }
@@ -141,7 +141,7 @@ public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
     JPAQuery query = new JPAQuery(entityManager);
     QBucketlist bucketlist = QBucketlist.bucketlist;
 
-    query.from(bucketlist).where(bucketlist.dDate.eq(date).and(bucketlist.user().id.eq(userId))
+    query.from(bucketlist).where(bucketlist.dueDate.eq(date).and(bucketlist.user().id.eq(userId))
       .and(bucketlist.status.eq(CommonCodes.BucketlistStatus.STARTED)));
 
     return query.list(bucketlist);
