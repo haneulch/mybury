@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class OAuthController {
 
-	private final JwtUtils jwtUtils;
+  private final JwtUtils jwtUtils;
 
-	@PostMapping("/refresh_token")
-	public RefreshTokenResponseVO refreshToken(@RequestBody RefreshTokenRequestVO requestVO) {
-		if (!jwtUtils.isValidateRefreshToken(requestVO)) {
-			throw new InvalidTokenException(MessageConstants.INVALID_TOKEN);
-		}
-		String accessToken = jwtUtils.createAccessToken(requestVO.getUserId());
-		String refreshToken = jwtUtils.createRefreshToken(requestVO.getUserId());
-		return new RefreshTokenResponseVO(accessToken, refreshToken);
-	}
+  @PostMapping("/refresh_token")
+  public RefreshTokenResponseVO refreshToken(@RequestBody RefreshTokenRequestVO requestVO) {
+    if (!jwtUtils.isValidateRefreshToken(requestVO).equals(requestVO.getUserId())) {
+      throw new InvalidTokenException(MessageConstants.INVALID_TOKEN);
+    }
+    String accessToken = jwtUtils.createAccessToken(requestVO.getUserId());
+    String refreshToken = jwtUtils.createRefreshToken(requestVO.getUserId());
+    return new RefreshTokenResponseVO(accessToken, refreshToken);
+  }
 }
