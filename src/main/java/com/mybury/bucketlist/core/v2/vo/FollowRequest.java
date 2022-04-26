@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 public class FollowRequest {
 
-	@Schema(description = "현재 사용자 ID")
-	private String userId;
+  @Schema(description = "현재 사용자 ID")
+  private String userId;
 
-	@Schema(description = "팔로우(취소)할 사용자 ID")
-	private String followingId;
+  @Schema(description = "팔로우(취소)할 사용자 ID")
+  private String followingId;
 }

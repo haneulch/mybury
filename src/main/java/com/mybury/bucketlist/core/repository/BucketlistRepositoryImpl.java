@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import com.mybury.bucketlist.auth.dto.BucketlistResDTO;
 import com.mybury.bucketlist.auth.dto.QBucketlistResDTO;
+import com.mybury.bucketlist.auth.v2.enums.CommonEnums;
 import com.mybury.bucketlist.core.constants.CommonCodes;
 import com.mybury.bucketlist.core.domain.Bucketlist;
 import com.mybury.bucketlist.core.domain.QBucketlist;
@@ -31,16 +32,16 @@ public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
 
     query.from(bucketlist).where(bucketlist.user().id.eq(requestVO.getUserId()));
 
-    String filter = requestVO.getFilter();
+    CommonEnums.BucketFilter filter = requestVO.getFilter();
 
     if (filter != null) {
       switch (filter) {
-        case "started":
+        case started:
           query.where(bucketlist.status.eq("1"));
           break;
-        case "completed":
+        case completed:
           query.where(bucketlist.status.eq("2"));
-        case "all":
+        case all:
           query.where(bucketlist.status.eq("1").or(bucketlist.status.eq("2")));
         default:
           break;
@@ -74,17 +75,18 @@ public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
 
     query.from(bucketlist).where(bucketlist.user().id.eq(requestVO.getUserId()));
 
-    String filter = requestVO.getFilter();
+    CommonEnums.BucketFilter filter = requestVO.getFilter();
 
-    if (StringUtils.isNotBlank(filter)) {
-      if (filter.equals("started"))
-        query.where(bucketlist.status.eq("1"));
+    if (filter.equals(CommonEnums.BucketFilter.started)) {
+      query.where(bucketlist.status.eq("1"));
+    }
 
-      if (filter.equals("completed"))
-        query.where(bucketlist.status.eq("2"));
+    if (filter.equals(CommonEnums.BucketFilter.completed)) {
+      query.where(bucketlist.status.eq("2"));
+    }
 
-      if (filter.equals("all"))
-        query.where(bucketlist.status.eq("1").or(bucketlist.status.eq("2")));
+    if (filter.equals(CommonEnums.BucketFilter.all)) {
+      query.where(bucketlist.status.eq("1").or(bucketlist.status.eq("2")));
     }
 
     String sort = requestVO.getSort();

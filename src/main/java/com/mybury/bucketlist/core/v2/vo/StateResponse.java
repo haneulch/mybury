@@ -13,10 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StateResponse {
 
-	private int followCount;
-	
-	private int followingCount;
+  @Schema(description = "팔로우수")
+  private int followCount;
 
-	@Schema(description = "알림유무")
-	private Character hasAlarm;
+  @Schema(description = "팔로잉수")
+  private int followingCount;
+
+  @Schema(description = "알림유무")
+  private Character hasAlarm;
 }

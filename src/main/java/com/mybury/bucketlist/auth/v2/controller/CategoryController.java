@@ -5,10 +5,14 @@ import com.mybury.bucketlist.core.util.ResponseUtils;
 import com.mybury.bucketlist.core.v2.service.CategoryService;
 import com.mybury.bucketlist.core.v2.vo.CategoryPriorityRequest;
 import com.mybury.bucketlist.core.v2.vo.CategoryRequest;
+import com.mybury.bucketlist.core.v2.vo.CategoryResponse;
 import com.mybury.bucketlist.core.v2.vo.NewCategory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +34,13 @@ public class CategoryController {
   private final CategoryService categoryService;
 
   @AccessTokenCheck
-  @Operation(summary = "my - category별 정보")
-  //  @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = CategoryResponse.class))))
-  @ApiResponse()
+  @Operation(summary = "my - category별 정보", responses = {
+    @ApiResponse(
+      responseCode = "200",
+      content = @Content(
+        mediaType = "application/json",
+        array = @ArraySchema(schema = @Schema(implementation = CategoryResponse.class))))
+  })
   @GetMapping("/{userId}")
   @Parameter(name = "userId", description = "사용자 ID", required = true, in = ParameterIn.PATH)
   public ResponseEntity<Object> category(@PathVariable String userId) {

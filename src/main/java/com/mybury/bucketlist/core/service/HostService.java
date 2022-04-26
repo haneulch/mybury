@@ -23,75 +23,76 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class HostService {
 
-	private final EntityManager em;
-	private final BucketlistRepository bucketlistRepository;
-	private final CategoryRepository categoryRepository;
-	private final SupportItemRepository supportItemRepository;
+  private final EntityManager em;
+  private final BucketlistRepository bucketlistRepository;
+  private final CategoryRepository categoryRepository;
+  private final SupportItemRepository supportItemRepository;
 
-	@Transactional
-	public void changeOrder(ChangeOrderListDTO dto) {
-		if (dto.getOrders().isEmpty()) {
-			return;
-		}
-		int i = 1;
-		for(String id : dto.getOrders()) {
-			Bucketlist bucketlist = em.find(Bucketlist.class, id);
-			bucketlist.setOrderSeq(i);
-			i ++;
-		}
-	}
-
-  public SearchResDTO searchBucketlist(SearchRequestDTO request) {
-		SearchResDTO searchResponseVO = new SearchResDTO();
-		List<CategoryVO> categoryVOS = null;
-		List<CategoryResDTO> categoryResDTOS = null;
-		List<BucketlistVO> bucketlistVOS = null;
-		List<BucketlistResDTO> bucketlistResDTOS = null;
-
-		switch (request.getFilter()) {
-			case "category" :
-				categoryVOS = categoryRepository.findByUser_IdAndNameContaining(request.getUserId(), request.getSearchText());
-				categoryResDTOS = categoryVOS.stream()
-					.map(c -> new CategoryResDTO(c.getId(), c.getName(), bucketlistRepository.countByCategory_Id(c.getId())))
-					.collect(Collectors.toList());
-				searchResponseVO.setCategories(categoryResDTOS);
-				break;
-			case "dday" :
-				bucketlistVOS = bucketlistRepository.findByDueDateNotNullAndTitleContainingAndUser_Id(request.getSearchText(),
-					request.getUserId());
-				bucketlistResDTOS = bucketlistVOS.stream()
-					.filter(b -> b.getCompletedDt() == null)
-					.map(b -> new BucketlistResDTO(b).init())
-					.collect(Collectors.toList());
-				searchResponseVO.setBucketlists(bucketlistResDTOS);
-				break;
-			default:
-				categoryVOS = categoryRepository.findByUser_IdAndNameContaining(request.getUserId(), request.getSearchText());
-				categoryResDTOS = categoryVOS.stream()
-					.map(c -> new CategoryResDTO(c.getId(), c.getName(), bucketlistRepository.countByCategory_Id(c.getId())))
-					.collect(Collectors.toList());
-				searchResponseVO.setCategories(categoryResDTOS);
-
-				bucketlistVOS = bucketlistRepository.findByTitleContainingAndUser_Id(request.getSearchText(), request.getUserId());
-				bucketlistResDTOS = bucketlistVOS.stream()
-					.map(b -> new BucketlistResDTO(b).init())
-					.collect(Collectors.toList());
-				searchResponseVO.setBucketlists(bucketlistResDTOS);
-				break;
-		}
-		return searchResponseVO;
+  @Transactional
+  public void changeOrder(ChangeOrderListDTO dto) {
+    if (dto.getOrders().isEmpty()) {
+      return;
+    }
+    int i = 1;
+    for (String id : dto.getOrders()) {
+      Bucketlist bucketlist = em.find(Bucketlist.class, id);
+      bucketlist.setOrderSeq(i);
+      i++;
+    }
   }
 
-	public List<CategoryVO> findCategoryByUserId(String userId) {
-		return categoryRepository.findDDByUser_IdOrderByPriority(userId);
-	}
+  public SearchResDTO searchBucketlist(SearchRequestDTO request) {
+    SearchResDTO searchResponseVO = new SearchResDTO();
+    List<CategoryVO> categoryVOS = null;
+    List<CategoryResDTO> categoryResDTOS = null;
+    List<BucketlistVO> bucketlistVOS = null;
+    List<BucketlistResDTO> bucketlistResDTOS = null;
 
-	public int countByCategoryId(String categoryId) {
-		return bucketlistRepository.countByCategory_Id(categoryId);
-	}
+    switch (request.getFilter()) {
+      case category:
+        categoryVOS = categoryRepository.findByUser_IdAndNameContaining(request.getUserId(), request.getSearchText());
+        categoryResDTOS = categoryVOS.stream()
+          .map(c -> new CategoryResDTO(c.getId(), c.getName(), bucketlistRepository.countByCategory_Id(c.getId())))
+          .collect(Collectors.toList());
+        searchResponseVO.setCategories(categoryResDTOS);
+        break;
+      case dday:
+        bucketlistVOS = bucketlistRepository.findByDueDateNotNullAndTitleContainingAndUser_Id(request.getSearchText(),
+          request.getUserId());
+        bucketlistResDTOS = bucketlistVOS.stream()
+          .filter(b -> b.getCompletedDt() == null)
+          .map(b -> new BucketlistResDTO(b).init())
+          .collect(Collectors.toList());
+        searchResponseVO.setBucketlists(bucketlistResDTOS);
+        break;
+      default:
+        categoryVOS = categoryRepository.findByUser_IdAndNameContaining(request.getUserId(), request.getSearchText());
+        categoryResDTOS = categoryVOS.stream()
+          .map(c -> new CategoryResDTO(c.getId(), c.getName(), bucketlistRepository.countByCategory_Id(c.getId())))
+          .collect(Collectors.toList());
+        searchResponseVO.setCategories(categoryResDTOS);
 
-	@Transactional
-	public List<SupportItem> findAllSupportItem() {
-		return supportItemRepository.findByOrderByItemPrice();
-	}
+        bucketlistVOS =
+          bucketlistRepository.findByTitleContainingAndUser_Id(request.getSearchText(), request.getUserId());
+        bucketlistResDTOS = bucketlistVOS.stream()
+          .map(b -> new BucketlistResDTO(b).init())
+          .collect(Collectors.toList());
+        searchResponseVO.setBucketlists(bucketlistResDTOS);
+        break;
+    }
+    return searchResponseVO;
+  }
+
+  public List<CategoryVO> findCategoryByUserId(String userId) {
+    return categoryRepository.findDDByUser_IdOrderByPriority(userId);
+  }
+
+  public int countByCategoryId(String categoryId) {
+    return bucketlistRepository.countByCategory_Id(categoryId);
+  }
+
+  @Transactional
+  public List<SupportItem> findAllSupportItem() {
+    return supportItemRepository.findByOrderByItemPrice();
+  }
 }

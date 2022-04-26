@@ -1,12 +1,13 @@
 package com.mybury.bucketlist.core.v2.vo;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-@Schema(description = "현재 사용자 ID")
 @Data
+@Schema(description = "현재 사용자 ID")
 public class UserRequest {
 
-	@Schema(description = "사용자 ID")
-	private String userId;
+  @Parameter(description = "사용자 ID")
+  private String userId;
 }

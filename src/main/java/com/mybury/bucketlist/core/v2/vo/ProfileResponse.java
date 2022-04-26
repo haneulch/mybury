@@ -14,21 +14,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProfileResponse {
 
-	@Schema(description = "이름")
-	private String nickname;
+  @Schema(description = "이름")
+  private String nickname;
 
-	@Schema(description = "프로필 이미지")
-	private String profileImage;
+  @Schema(description = "프로필 이미지")
+  private String profileImage;
 
-	@Schema(description = "뱃지 정보")
-	private Badge badge;
+  @Schema(description = "뱃지 정보")
+  private Badge badge;
 
-	@Schema(description = "bio(한줄설명)")
-	private String bio;
+  @Schema(description = "bio(한줄설명)")
+  private String bio;
 
-	@Schema(description = "팔로워 수")
-	private int followerCount;
+  @Schema(description = "팔로워 수")
+  private int followerCount;
 
-	@Schema(description = "팔로잉 수")
-	private int followingCount;
+  @Schema(description = "팔로잉 수")
+  private int followingCount;
 }

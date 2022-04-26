@@ -1,12 +1,14 @@
 package com.mybury.bucketlist.core.v2.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
 
 /**
  * fileName      : NewCategory
  * date         : 2022/04/17
  * description  :
  */
+@Getter
 @Schema(description = "카테고리 생성 Request")
 public class NewCategory {
   @Schema(description = "사용자 ID")

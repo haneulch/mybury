@@ -46,8 +46,14 @@ public class FollowController {
     return ResponseUtils.success();
   }
 
-  @Operation(summary = "나의 팔로워/팔로잉 리스트")
-  @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = FollowResponse.class))))
+  @Operation(
+    summary = "나의 팔로워/팔로잉 리스트",
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "목록",
+        content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = FollowResponse.class))))
+    })
   @GetMapping("/{userId}/list")
   @Parameter(name = "userId", description = "사용자 ID", required = true, in = ParameterIn.PATH)
   @Parameter(name = "type", description = "팔로워/팔로우 유형(FOLLOWER/FOLLOWING)", required = true, in = ParameterIn.QUERY)

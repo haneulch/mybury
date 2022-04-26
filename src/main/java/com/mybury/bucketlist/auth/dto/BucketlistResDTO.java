@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mybury.bucketlist.core.util.DateUtil;
 import com.mybury.bucketlist.core.vo.BucketlistVO;
 import com.mysema.query.annotations.QueryProjection;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,20 +23,20 @@ import lombok.ToString;
 @Schema(description = "버킷리스트 정보")
 @ToString
 public class BucketlistResDTO extends CommonDTO {
-  @Schema(description = "버킷리스트 id")
+  @Parameter(description = "버킷리스트 id")
   private String id;
 
-  @Schema(description = "제목")
+  @Parameter(description = "제목")
   private String title;
 
-  @Schema(description = "고정여부")
+  @Parameter(description = "고정여부")
   private boolean pin;
 
-  @Schema(description = "상태")
+  @Parameter(description = "상태")
   private String status;
 
   @JsonProperty("dDate")
-  @Schema(description = "d-date")
+  @Parameter(description = "d-date")
   private Date dDate;
 
   @Transient
@@ -43,22 +44,22 @@ public class BucketlistResDTO extends CommonDTO {
   private Date dueDate;
 
   @JsonProperty("dDay")
-  @Schema(description = "d-day")
+  @Parameter(description = "d-day")
   private Integer dDay;
 
-  @Schema(description = "달성횟수")
+  @Parameter(description = "달성횟수")
   private int userCount;
 
-  @Schema(description = "목표횟수")
+  @Parameter(description = "목표횟수")
   private int goalCount;
 
-  @Schema(description = "완료일시")
+  @Parameter(description = "완료일시")
   private Date completedDt;
 
-  @Schema(description = "정렬순서")
+  @Parameter(description = "정렬순서")
   private int orderSeq;
 
-  @Schema(description = "카테고리 id")
+  @Parameter(description = "카테고리 id")
   private String categoryName;
 
   public BucketlistResDTO(BucketlistVO bucketlistVO) {
