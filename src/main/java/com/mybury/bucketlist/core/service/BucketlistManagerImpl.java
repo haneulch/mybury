@@ -16,31 +16,27 @@ import com.mybury.bucketlist.core.util.DateUtil;
 import com.mybury.bucketlist.core.vo.BucketlistModifyRequestVO;
 import com.mybury.bucketlist.core.vo.BucketlistWriteRequestVO;
 import com.mybury.bucketlist.core.vo.HomeRequestVO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
+@AllArgsConstructor
 public class BucketlistManagerImpl implements BucketlistManager {
-  @Autowired
-  private BucketlistRepository bucketlistRepository;
-
-  @Autowired
-  private CategoryRepository categoryRepository;
-
-  @Autowired
-  private UserRepository userRepository;
-
-  @Autowired
-  private FileUploadService fileUploadService;
+  private final BucketlistRepository bucketlistRepository;
+  private final CategoryRepository categoryRepository;
+  private final UserRepository userRepository;
+  private final FileUploadService fileUploadService;
 
   @Override
   public List<Bucketlist> getBucketlists(HomeRequestVO requestVO) {
     List<Bucketlist> bucketlists = bucketlistRepository.getBucketlists(requestVO);
-    for (Bucketlist bucketlist : bucketlists) {
+    bucketlists.forEach((bucketlist -> {
       if (bucketlist.getDDate() != null) {
         bucketlist.setDDay(DateUtil.getDday(bucketlist.getDDate()));
       }
-    }
+    }));
 
     return bucketlists;
   }
@@ -48,11 +44,11 @@ public class BucketlistManagerImpl implements BucketlistManager {
   @Override
   public List<Bucketlist> getBucketlistByCategoryId(String categoryId) {
     List<Bucketlist> bucketlists = bucketlistRepository.getBucketlistByCategoryId(categoryId);
-    for (Bucketlist bucketlist : bucketlists) {
+    bucketlists.forEach((bucketlist -> {
       if (bucketlist.getDDate() != null) {
         bucketlist.setDDay(DateUtil.getDday(bucketlist.getDDate()));
       }
-    }
+    }));
 
     return bucketlists;
   }
@@ -66,9 +62,9 @@ public class BucketlistManagerImpl implements BucketlistManager {
   public List<Bucketlist> getDDayBucketlist(String userId, String filter) {
     List<Bucketlist> bucketlists = bucketlistRepository.getDDayBucketlist(userId, filter);
 
-    for (Bucketlist bucketlist : bucketlists) {
+    bucketlists.forEach((bucketlist -> {
       bucketlist.setDDay(DateUtil.getDday(bucketlist.getDDate()));
-    }
+    }));
 
     return bucketlists;
   }
@@ -204,10 +200,9 @@ public class BucketlistManagerImpl implements BucketlistManager {
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    Map<String, List<Bucketlist>> map = list
+    return list
       .stream()
       .collect(Collectors.groupingBy(n -> sdf.format(n.getDDate())));
-    return map;
   }
 
   @Override

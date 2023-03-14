@@ -55,12 +55,15 @@ public class BucketlistResDTO extends CommonDTO {
   @Schema(description = "카테고리 id")
   private String categoryName;
 
+  @Schema(description = "생성일시")
+  private Date createdDt;
+
   public BucketlistResDTO(BucketlistVO bucketlistVO) {
     this.dataCopy(bucketlistVO);
   }
 
   public BucketlistResDTO init() {
-    if(getDDate() != null) {
+    if (getDDate() != null) {
       setDDay(DateUtil.getDday(getDDate()));
     }
     return this;
@@ -68,13 +71,13 @@ public class BucketlistResDTO extends CommonDTO {
 
   @QueryProjection
   public BucketlistResDTO(String id, String title, boolean pin, String status, Date dDate, int userCount,
-    int goalCount, Date completedDt, int orderSeq, String categoryName) {
+    int goalCount, Date completedDt, int orderSeq, String categoryName, Date createdDt) {
     this.id = id;
     this.title = title;
     this.pin = pin;
     this.status = status;
     this.dDate = dDate;
-    if(dDate != null) {
+    if (dDate != null) {
       this.dDay = DateUtil.getDday(dDate);
     }
     this.userCount = userCount;
@@ -82,5 +85,6 @@ public class BucketlistResDTO extends CommonDTO {
     this.completedDt = completedDt;
     this.orderSeq = orderSeq;
     this.categoryName = categoryName;
+    this.createdDt = createdDt;
   }
 }

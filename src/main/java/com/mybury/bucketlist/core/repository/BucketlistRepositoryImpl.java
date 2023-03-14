@@ -27,7 +27,7 @@ public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
     QBucketlist bucketlist = QBucketlist.bucketlist;
     QBucketlistResDTO result = new QBucketlistResDTO(bucketlist.id, bucketlist.title, bucketlist.pin,
       bucketlist.status, bucketlist.dDate, bucketlist.userCount, bucketlist.goalCount, bucketlist.completedDt,
-      bucketlist.orderSeq, bucketlist.category().name);
+      bucketlist.orderSeq, bucketlist.category().name, bucketlist.createdDt);
 
     query.from(bucketlist).where(bucketlist.user().id.eq(requestVO.getUserId()));
 
@@ -51,13 +51,13 @@ public class BucketlistRepositoryImpl implements BucketlistRepositoryCustom {
 
     if (sort != null) {
       switch (sort) {
-        case "updatedDt" :
+        case "updatedDt":
           query.orderBy(bucketlist.updatedDt.desc());
           break;
-        case "createdDt" :
+        case "createdDt":
           query.orderBy(bucketlist.createdDt.asc());
           break;
-        case "custom" :
+        case "custom":
           query.orderBy(bucketlist.orderSeq.asc());
           break;
         default:

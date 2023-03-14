@@ -17,4 +17,5 @@ public class BucketlistVO {
   private Date completedDt;
   private int orderSeq;
   private String categoryName;
+  private Date createdDt;
 }

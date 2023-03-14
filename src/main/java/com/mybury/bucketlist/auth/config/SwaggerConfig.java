@@ -21,16 +21,6 @@ public class SwaggerConfig {
       .build();
   }
 
-  @Bean
-  public GroupedOpenApi NonSecurityGroupOpenApi() {
-    return GroupedOpenApi
-      .builder()
-      .group("BerryBucket")
-      .pathsToMatch("/v2/**")
-      .addOpenApiCustomiser(buildSecurityOpenApi())
-      .build();
-  }
-
   public OpenApiCustomiser buildSecurityOpenApi() {
     SecurityScheme securityScheme = new SecurityScheme()
       .name("X-Auth-Token")
