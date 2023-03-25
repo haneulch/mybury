@@ -52,6 +52,7 @@ public class BucketlistViewResponseVO extends BaseResponseVO {
   private String imgUrl3;
 
   @JsonProperty
+  @JsonFormat(pattern = "yyyy/MM/dd")
   private Date createdDt;
 
   public BucketlistViewResponseVO(Bucketlist bucketlist) {
