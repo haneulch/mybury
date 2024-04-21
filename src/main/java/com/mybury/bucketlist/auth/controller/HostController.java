@@ -100,6 +100,11 @@ public class HostController {
   @Value("${mybury.address}")
   private String authServerAddress;
 
+  @GetMapping("health")
+  public String health() {
+    return "OK";
+  }
+
   /**
    * Sign up check host sign up check response vo.
    *
