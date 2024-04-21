@@ -19,7 +19,7 @@ new Vue({
   },
   methods: {
     sendMail(title) {
-      location.href = `mailto:mybury.info@gamil.com?subject=${title}`;
+      location.href = `mailto:mybury.info@gmail.com?subject=${title}`;
     }
   }
 });
